@@ -43,5 +43,5 @@ Per iniziare con questo progetto, puoi clonare il repository e seguire le istruz
 ```bash
 git clone https://github.com/Ciraldos/Capstone_Project.git
 ```
-📞 Contatti
+## 📞 Contatti
 Per qualsiasi domanda, si prega di contattare andreaciraldo2@gmail.com.
