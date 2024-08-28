@@ -1,3 +1,6 @@
+using Capstone.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace Capstone
 {
     public class Program
@@ -5,6 +8,10 @@ namespace Capstone
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //Connessione Data Context
+            var conn = builder.Configuration.GetConnectionString("Db");
+            builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(conn));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

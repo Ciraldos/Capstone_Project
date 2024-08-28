@@ -3,6 +3,30 @@
   "WorkspaceRootPath": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Migrations\\20240828010943_Start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20240828010943_Start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\context\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:context\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\capstone.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:capstone.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\models\\reviewimg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:models\\reviewimg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -57,10 +81,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_project\\capstone\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,11 +90,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20240828010943_Start.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Migrations\\20240828010943_Start.cs",
+              "RelativeDocumentMoniker": "Migrations\\20240828010943_Start.cs",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Migrations\\20240828010943_Start.cs",
+              "RelativeToolTip": "Migrations\\20240828010943_Start.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwBcAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T01:09:44.035Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T01:06:37.943Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DataContext.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Context\\DataContext.cs",
+              "RelativeDocumentMoniker": "Context\\DataContext.cs",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Context\\DataContext.cs",
+              "RelativeToolTip": "Context\\DataContext.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAAAgAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T01:02:37.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Capstone",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Capstone.csproj",
+              "RelativeDocumentMoniker": "Capstone.csproj",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Capstone.csproj",
+              "RelativeToolTip": "Capstone.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-08-28T01:02:10.238Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-08-28T00:57:46.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "Cart.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Cart.cs",
               "RelativeDocumentMoniker": "Models\\Cart.cs",
@@ -82,12 +167,11 @@
               "RelativeToolTip": "Models\\Cart.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-28T00:18:22.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-28T00:18:22.678Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "CartItem.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\CartItem.cs",
               "RelativeDocumentMoniker": "Models\\CartItem.cs",
@@ -95,12 +179,11 @@
               "RelativeToolTip": "Models\\CartItem.cs",
               "ViewState": "AQIAAAkAAAAAAAAAAAAUwBoAAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-28T00:14:47.81Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-28T00:14:47.81Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 17,
               "Title": "TicketType.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\TicketType.cs",
               "RelativeDocumentMoniker": "Models\\TicketType.cs",
@@ -108,12 +191,11 @@
               "RelativeToolTip": "Models\\TicketType.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-28T00:11:51.317Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-28T00:11:51.317Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "Ticket.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Ticket.cs",
               "RelativeDocumentMoniker": "Models\\Ticket.cs",
@@ -121,12 +203,11 @@
               "RelativeToolTip": "Models\\Ticket.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAABgAAAA7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-28T00:07:50.116Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-28T00:07:50.116Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 9,
               "Title": "Comment.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Comment.cs",
               "RelativeDocumentMoniker": "Models\\Comment.cs",
@@ -134,25 +215,24 @@
               "RelativeToolTip": "Models\\Comment.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-28T00:04:24.696Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-28T00:04:24.696Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "ReviewImg.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\ReviewImg.cs",
               "RelativeDocumentMoniker": "Models\\ReviewImg.cs",
               "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\ReviewImg.cs",
               "RelativeToolTip": "Models\\ReviewImg.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-28T00:03:11.532Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "Review.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Review.cs",
               "RelativeDocumentMoniker": "Models\\Review.cs",
@@ -160,12 +240,11 @@
               "RelativeToolTip": "Models\\Review.cs",
               "ViewState": "AQIAAAUAAAAAAAAAAAAxwBwAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:57:16.795Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:57:16.795Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 13,
               "Title": "EventImg.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\EventImg.cs",
               "RelativeDocumentMoniker": "Models\\EventImg.cs",
@@ -173,12 +252,11 @@
               "RelativeToolTip": "Models\\EventImg.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:53:41.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:53:41.718Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "Genre.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Genre.cs",
               "RelativeDocumentMoniker": "Models\\Genre.cs",
@@ -186,12 +264,11 @@
               "RelativeToolTip": "Models\\Genre.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:47:12.995Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:47:12.995Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 14,
               "Title": "Location.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Location.cs",
               "RelativeDocumentMoniker": "Models\\Location.cs",
@@ -199,12 +276,11 @@
               "RelativeToolTip": "Models\\Location.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:44:37.907Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:44:37.907Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "Dj.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Dj.cs",
               "RelativeDocumentMoniker": "Models\\Dj.cs",
@@ -212,12 +288,11 @@
               "RelativeToolTip": "Models\\Dj.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:37:31.956Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:37:31.956Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "Event.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Event.cs",
               "RelativeDocumentMoniker": "Models\\Event.cs",
@@ -225,12 +300,11 @@
               "RelativeToolTip": "Models\\Event.cs",
               "ViewState": "AQIAABAAAAAAAAAAAADwvycAAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:27:00.969Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:27:00.969Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "Role.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\Role.cs",
               "RelativeDocumentMoniker": "Models\\Role.cs",
@@ -238,12 +312,11 @@
               "RelativeToolTip": "Models\\Role.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:21:50.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:21:50.58Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 16,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\Models\\User.cs",
               "RelativeDocumentMoniker": "Models\\User.cs",
@@ -251,12 +324,11 @@
               "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AQIAAC0AAAAAAAAAAAAmwEIAAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T23:15:53.56Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-27T23:15:53.56Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 3,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Project\\Capstone\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
