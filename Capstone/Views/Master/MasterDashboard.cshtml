@@ -1,0 +1,103 @@
+﻿@model Capstone.Models.ViewModels.MasterViewModel
+
+@{
+    ViewData["Title"] = "Users and Roles Management";
+}
+
+<h2>Users Management</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Current Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.Name</td>
+                <td>@user.Surname</td>
+                <td>
+                    <form asp-action="RemoveRoleFromUser" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="roleId" class="form-control d-inline w-auto">
+                            @foreach (var role in user.Roles)
+                            {
+                                <option value="@role.RoleId">@role.RoleName</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-danger">Remove Role</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="AddRoleToUser" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="roleId" class="form-control d-inline w-auto">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.RoleId">@role.RoleName</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add Role</button>
+                    </form>
+                    <a asp-action="DeleteUser" asp-route-id="@user.UserId" class="btn btn-danger">Delete user</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2 class="mt-5">Roles Management</h2>
+
+<h3 class="mb-0">Create New Role</h3>
+<form asp-action="CreateRole" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="RoleName">Role Name</label>
+        <input type="text" class="form-control" id="RoleName" name="RoleName" required>
+    </div>
+    <button type="submit" class="btn btn-primary mt-1">Create Role</button>
+</form>
+
+<h3 class="mb-0 mt-3">Existing Roles</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Role Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model.Roles)
+        {
+            <tr>
+                <form asp-action="UpdateRole" method="post">
+                    @Html.AntiForgeryToken()
+                <td>
+                    <input type="hidden" asp-for="@role.RoleId" />
+                    <input asp-for="@role.RoleName" class="form-control" />
+                </td>
+                <td>
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    <a asp-action="DeleteRole" asp-route-id="@role.RoleId" class="btn btn-danger">Delete</a>
+                </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

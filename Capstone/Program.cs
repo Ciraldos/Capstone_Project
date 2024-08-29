@@ -1,5 +1,12 @@
 using Capstone.Context;
+using Capstone.Services;
+using Capstone.Services.Auth;
+using Capstone.Services.Interfaces;
+using Capstone.Services.Interfaces.Auth;
+using Capstone.Services.Master;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Capstone
 {
@@ -9,9 +16,39 @@ namespace Capstone
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //Connessione Data Context
+            //Connection Data Context
             var conn = builder.Configuration.GetConnectionString("Db");
             builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(conn));
+
+            // Auth
+            builder.Services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/Login";
+                    options.AccessDeniedPath = "/Home/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                });
+
+            // Policies
+            builder.Services.AddAuthorization(options =>
+            {
+                // Master Policy
+                options.AddPolicy("MasterPolicy", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "master"); // [Authorize(Policy = "MasterPolicy")]
+                });
+            });
+
+            // Services
+            builder.Services
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IPasswordHelper, PasswordHelper>()
+                .AddScoped<IGenreService, GenreService>()
+                .AddScoped<IMasterService, MasterService>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IRoleService, RoleService>();
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -31,6 +68,7 @@ namespace Capstone
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
