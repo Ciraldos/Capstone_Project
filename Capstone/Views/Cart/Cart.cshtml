@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Capstone.Models.CartItem>
+
+@{
+    ViewBag.Title = "Carrello";
+}
+
+<h2>Carrello</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Evento</th>
+                <th>Tipo di Biglietto</th>
+                <th>Quantità</th>
+                <th>Prezzo Unitario</th>
+                <th>Prezzo Totale</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model)
+            {
+                <tr>
+                    <td>@cartItem.Event.Name</td>
+                    <td>@cartItem.TicketType.TicketTypeName</td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@cartItem.TicketType.Price.ToString("C")</td>
+                    <td>@(cartItem.Quantity * cartItem.TicketType.Price).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form asp-action="Purchase" method="post">
+        <button type="submit" class="btn btn-primary">Acquista Biglietti</button>
+    </form>
+}
+else
+{
+    <p>Il tuo carrello è vuoto.</p>
+}
