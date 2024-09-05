@@ -1,4 +1,4 @@
-﻿@model Capstone.Models.User
+﻿@model Capstone.Models.ViewModels.Profile.ProfileViewModel
 
 @{
     ViewData["Title"] = "Profile";
@@ -10,80 +10,86 @@
     <h4>User</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.UserId)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Username)
+        <dd>
+            @Html.DisplayFor(model => model.User.UserId) 
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.User.Username)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.User.Username)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
+            @Html.DisplayNameFor(model => model.User.Email)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            <span>Password</span>
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+           <span>********</span>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
+            @Html.DisplayNameFor(model => model.User.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
+            @Html.DisplayFor(model => model.User.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
+            @Html.DisplayNameFor(model => model.User.Surname)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
+            @Html.DisplayFor(model => model.User.Surname)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.DisplayNameFor(model => model.User.BirthDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.User.BirthDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
+            @Html.DisplayNameFor(model => model.User.Gender)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country)
+            @Html.DisplayFor(model => model.User.Gender)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.User.Country)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
+            @Html.DisplayFor(model => model.User.Country)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PostalCode)
+            @Html.DisplayNameFor(model => model.User.City)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PostalCode)
+            @Html.DisplayFor(model => model.User.City)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNum)
+            @Html.DisplayNameFor(model => model.User.PostalCode)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNum)
+            @Html.DisplayFor(model => model.User.PostalCode)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Img)
+            @Html.DisplayNameFor(model => model.User.PhoneNum)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.PhoneNum)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Img)
         </dt>
 
         <dd class="col-sm-10">
-            @if (Model.Img != null && Model.Img.Length > 0)
+            @if (Model.User.Img != null && Model.User.Img.Length > 0)
             {
-                var base64String = Convert.ToBase64String(Model.Img);
+                var base64String = Convert.ToBase64String(Model.User.Img);
                 var imgSrc = $"data:image/png;base64,{base64String}";
                 <img src="@imgSrc" alt="Img Profile" style="width: 100px; height: auto;" />
             }
@@ -92,9 +98,79 @@
                 <p>No image available</p>
             }
         </dd>
+
+        <h1>Generi Preferiti</h1>
+        <hr />
+        <form asp-action="UpdateFavoriteGenres" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @foreach (var genre in Model.AvailableGenres)
+                {
+                    var isChecked = Model.SelectedGenreIds.Contains(genre.GenreId);
+                    <div class="form-check">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="genre-@genre.GenreId"
+                               name="SelectedGenreIds"
+                               value="@genre.GenreId"
+                        @(isChecked ? "checked" : "") />
+                        <label class="form-check-label" for="genre-@genre.GenreId">
+                            @genre.Name
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Aggiorna Generi Preferiti" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <h1 class="mt-4">Aggiungi/Modifica Immagine del Profilo</h1>
+        <form asp-action="UpdateProfileImage" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="imageFile">Seleziona un'immagine</label>
+                <input type="file" name="imageFile" class="form-control" />
+            </div>
+            <div class="form-group mt-1">
+                <input type="submit" value="Aggiorna Immagine" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <h1 class="mt-4">Cambia Password</h1>
+        <form asp-action="ChangePassword" method="post">     
+            <input type="hidden" asp-for="User.UserId" />
+            <div class="form-group">
+                <label asp-for="OldPassword" class="control-label"></label>
+                <input asp-for="OldPassword" type="password" class="form-control" />
+                <span asp-validation-for="OldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPassword" class="control-label"></label>
+                <input asp-for="NewPassword" type="password" class="form-control" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-1">
+                <input type="submit" value="Cambia Password" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <h1 class="mt-4">Cambia Email</h1>
+        <form asp-action="ChangeEmail" method="post">
+            @* Pass UserId through hidden field *@
+            <input type="hidden" asp-for="User.UserId" />
+            <div class="form-group">
+                <label asp-for="User.Email" class="control-label">Old Email</label>
+                <input asp-for="User.Email" type="text" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="NewEmail" class="control-label">New Email</label>
+                <input asp-for="NewEmail" type="email" class="form-control" />
+                <span asp-validation-for="NewEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-1">
+                <input type="submit" value="Cambia Email" class="btn btn-primary" />
+            </div>
+        </form>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

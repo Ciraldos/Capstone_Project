@@ -1,4 +1,5 @@
 using Capstone.Context;
+using Capstone.Models.Spotify;
 using Capstone.Services;
 using Capstone.Services.Auth;
 using Capstone.Services.Interfaces;
@@ -40,6 +41,17 @@ namespace Capstone
                 });
             });
 
+
+            // Spotify Settings Configuration
+            builder.Services.Configure<SpotifySettings>(builder.Configuration.GetSection("Spotify"));
+
+            // Add HttpClient for API requests
+            builder.Services.AddHttpClient();
+
+            // Register SpotifyAuthService as a singleton
+            builder.Services.AddSingleton<SpotifyAuthService>();
+
+
             // Services
             builder.Services
                 .AddScoped<IAuthService, AuthService>()
@@ -47,7 +59,13 @@ namespace Capstone
                 .AddScoped<IGenreService, GenreService>()
                 .AddScoped<IMasterService, MasterService>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IRoleService, RoleService>();
+                .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IEventService, EventService>()
+                .AddScoped<ILocationService, LocationService>()
+                .AddScoped<IDjService, DjService>()
+                .AddScoped<ICommentService, CommentService>()
+                .AddScoped<ICartService, CartService>()
+                .AddScoped<IQrCodeService, QRCodeService>();
 
 
             // Add services to the container.
