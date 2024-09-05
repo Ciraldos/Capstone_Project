@@ -13,7 +13,7 @@ namespace Capstone.Models
         public required string ArtistName { get; set; }
 
         [Required]
-        public required string Img { get; set; }
+        public string Img { get; set; }
 
         [Required]
         [StringLength(255)]

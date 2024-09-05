@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Capstone.Models.Dj>
+
+@{
+    ViewData["Title"] = "DjList";
+}
+
+<h1>DjList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ArtistName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Img)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArtistSpotifyId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtistName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Img)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtistSpotifyId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DjId">Edit</a> |
+                <a asp-action="Detail" asp-route-id="@item.DjId">Detail</a> |
+                    <form asp-action="DeleteDj" asp-route-id="@item.DjId" method="post">
+                    <input type="submit" value="Elimina"> 
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

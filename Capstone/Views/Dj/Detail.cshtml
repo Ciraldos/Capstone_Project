@@ -1,0 +1,49 @@
+﻿@model Capstone.Models.Dj
+
+@{
+    ViewData["Title"] = "DJ Details";
+}
+
+<h2>@Model.ArtistName</h2>
+
+<div class="dj-details">
+    <div class="dj-image">
+        <img src="@Model.Img" alt="@Model.ArtistName's Image" class="img-thumbnail" style="max-width: 300px; height: auto;" />
+    </div>
+
+    <div class="dj-info">
+        <h3>Artist Name</h3>
+        <p>@Model.ArtistName</p>
+
+        <h3>Spotify ID</h3>
+        <p>@Model.ArtistSpotifyId</p>
+
+        <h3>Events</h3>
+        @if (Model.Events != null && Model.Events.Count > 0)
+        {
+            <ul>
+                @foreach (var evt in Model.Events)
+                {
+                    <li>@evt.Name - @evt.DateFrom.ToString("MMMM dd, yyyy") - @evt.DateTo.ToString("MMMM dd, yyyy") </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No events available for this DJ.</p>
+        }
+
+        <iframe style="border-radius:12px"
+                src="https://open.spotify.com/embed/artist/@Model.ArtistSpotifyId?utm_source=generator"
+                width="100%"
+                height="352"
+                frameborder="0"
+                allowfullscreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+        </iframe>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.DjId" class="btn btn-primary">Edit</a>
+<a asp-action="DjList" class="btn btn-secondary">Back to List</a>
