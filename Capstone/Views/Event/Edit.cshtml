@@ -1,0 +1,103 @@
+﻿@model Capstone.Models.Event
+
+@{
+    ViewBag.Title = "Edit Event";
+}
+
+<h2>Edit Event</h2>
+
+<form action="/Event/Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="EventId" value="@Model.EventId" />
+
+    <div class="form-group">
+        <label for="Name">Event Name</label>
+        <input type="text" id="Name" name="Name" class="form-control" placeholder="Enter event name" value="@Model?.Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Event Description</label>
+        <textarea id="Description" name="Description" class="form-control" placeholder="Enter event description">@Model?.Description</textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="DateFrom">Start Date</label>
+        <input type="date" id="DateFrom" name="DateFrom" class="form-control" value="@Model?.DateFrom.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="DateFrom" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="DateTo">End Date</label>
+        <input type="date" id="DateTo" name="DateTo" class="form-control" value="@Model?.DateTo.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="DateTo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Quantity">Number of Attendees</label>
+        <input type="number" id="Quantity" name="Quantity" class="form-control" placeholder="Enter number of attendees" value="@Model?.Quantity" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="HostName">Host Name</label>
+        <input type="text" id="HostName" name="HostName" class="form-control" placeholder="Enter host name" value="@Model?.HostName" />
+        <span asp-validation-for="HostName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="LocationId">Location</label>
+        <select id="LocationId" name="LocationId" class="form-control">
+            <option value="">Select Location</option>
+            @foreach (var location in ViewBag.Locations)
+            {
+                if (location.LocationId == Model?.LocationId)
+                {
+                    <option value="@location.LocationId" selected="selected">@location.LocationName</option>
+                }
+                else
+                {
+                    <option value="@location.LocationId">@location.LocationName</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="LocationId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="djIds">Select DJs</label>
+        <select id="djIds" name="djIds" multiple class="form-control">
+            @foreach (var dj in ViewBag.DJs)
+            {
+                bool isSelected = Model.Djs.Any(d => d.DjId == dj.DjId);
+                if (isSelected)
+                {
+                    <option value="@dj.DjId" selected="selected">@dj.ArtistName </option>
+                }
+                else
+                {
+                    <option value="@dj.DjId">@dj.ArtistName </option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="additionalImageFiles">Add Additional Images (these will be added to the existing images)</label>
+        <input type="file" id="additionalImageFiles" name="additionalImageFiles" class="form-control" multiple />
+    </div>
+    <div class="form-group">
+        <label for="imageFiles">Upload New Images (existing images will be replaced if new images are uploaded)</label>
+        <input type="file" id="imageFiles" name="imageFiles" class="form-control" multiple />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="@Url.Action("Index", "Event")" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

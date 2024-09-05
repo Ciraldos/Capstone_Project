@@ -1,0 +1,124 @@
+﻿@model Capstone.Models.Event
+
+@{
+    ViewBag.Title = "Event Details";
+}
+
+<h2>Event Details</h2>
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Date From</dt>
+        <dd class="col-sm-10">@Model.DateFrom.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-2">Date To</dt>
+        <dd class="col-sm-10">@Model.DateTo.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-2">Quantity</dt>
+        <dd class="col-sm-10">@Model.Quantity</dd>
+
+        <dt class="col-sm-2">Host Name</dt>
+        <dd class="col-sm-10">@Model.HostName</dd>
+
+        <dt class="col-sm-2">Location</dt>
+        <dd class="col-sm-10">@Model.Location?.LocationName</dd>
+
+        <dt class="col-sm-2">DJs</dt>
+        <dd class="col-sm-10">
+            @if (Model.Djs != null && Model.Djs.Count > 0)
+            {
+                <ul>
+                    @foreach (var dj in Model.Djs)
+                    {
+                        <li>@dj.ArtistName</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No DJs associated with this event.</p>
+            }
+        </dd>
+
+        <dt class="col-sm-2">Images</dt>
+        <dd class="col-sm-10">
+            @if (Model.EventImgs != null && Model.EventImgs.Count > 0)
+            {
+                foreach (var img in Model.EventImgs)
+                {
+                    var base64Image = Convert.ToBase64String(img.ImgData);
+                    var imgSrc = $"data:image;base64,{base64Image}";
+                    <img src="@imgSrc" alt="Event Image" style="width:200px; height:auto;" />
+                }
+            }
+            else
+            {
+                <p>No images available for this event.</p>
+            }
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    <h3>Buy Tickets</h3>
+    <form asp-action="AddToCart" asp-controller="Cart" method="post">
+        <input type="hidden" name="eventId" value="@Model.EventId" />
+        <div class="form-group">
+            <label for="ticketTypeId">Ticket Type</label>
+            <select id="ticketTypeId" name="ticketTypeId" class="form-control" required>
+                @foreach (var ticketType in Model.TicketTypes)
+                {
+                    <option value="@ticketType.TicketTypeId">@ticketType.TicketTypeName - @ticketType.Price.ToString("C") - @ticketType.TicketTypeDescription</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input id="quantity" type="number" name="quantity" class="form-control" value="1" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add to Cart</button>
+    </form>
+</div>
+
+<div>
+    <h3>Comments</h3>
+    <ul>
+        @if (Model.Comments != null && Model.Comments.Count > 0)
+        {
+            foreach (var comment in Model.Comments)
+            {
+                <li>
+                    <strong>@comment.User.Username:</strong> @comment.Description
+                    <br />
+                    <small>@comment.Like likes</small>
+                </li>
+            }
+        }
+        else
+        {
+            <p>No comments yet.</p>
+        }
+    </ul>
+
+    <h4>Add a Comment</h4>
+    <form asp-action="Create" asp-controller="Comment" method="post">
+        <div class="form-group">
+            <label for="Description">Your Comment</label>
+            <textarea id="Description" name="Description" class="form-control" required></textarea>
+        </div>
+        <input type="hidden" name="EventId" value="@Model.EventId" />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("Edit", "Event", new { id = Model.EventId })">Edit</a>
+    <a class="btn btn-danger" href="@Url.Action("Delete", "Event", new { id = Model.EventId })">Delete</a>
+    <a class="btn btn-secondary" href="@Url.Action("Index", "Event")">Back to List</a>
+</div>
