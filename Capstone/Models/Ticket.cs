@@ -29,5 +29,6 @@ namespace Capstone.Models
 
         [ForeignKey("EventId")]
         public required Event Event { get; set; }
+        public byte[] QRCodeImage { get; set; }
     }
 }

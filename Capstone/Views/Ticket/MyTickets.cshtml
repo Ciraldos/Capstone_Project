@@ -1,0 +1,37 @@
+﻿@model List<Ticket>
+
+@{
+    ViewData["Title"] = "MyTickets";
+}
+
+<h1>I tuoi biglietti</h1>
+<div>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var ticket in Model)
+        {
+            if (ticket.QRCodeImage != null)
+            {
+                <div class="ticket-card">
+                    <h2>Biglietto per: @ticket.Event.Name</h2>
+                    <p>Data di acquisto: @ticket.PurchaseDate.ToShortDateString()</p>
+                    <p>Numero del biglietto: @ticket.NumTicket</p>
+                    <img src="data:image/png;base64,@Convert.ToBase64String(ticket.QRCodeImage)" alt="QR Code" />
+                </div>
+            }
+            else
+            {
+                <div class="ticket-card">
+                    <h2>Biglietto per: @ticket.Event.Name</h2>
+                    <p>Data di acquisto: @ticket.PurchaseDate.ToShortDateString()</p>
+                    <p>Numero del biglietto: @ticket.NumTicket</p>
+                    <p>QR Code non disponibile</p>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p>Non hai biglietti.</p>
+    }
+</div>

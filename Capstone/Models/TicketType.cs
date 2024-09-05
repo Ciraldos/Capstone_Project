@@ -18,5 +18,10 @@ namespace Capstone.Models
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public required decimal Price { get; set; }
+
+        // EF reference
+
+        public List<Event> Events { get; set; } = [];
+
     }
 }
