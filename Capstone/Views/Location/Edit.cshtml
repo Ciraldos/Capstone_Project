@@ -1,0 +1,34 @@
+﻿@model Capstone.Models.Location
+
+@{
+    ViewBag.Title = "Edit Location";
+}
+
+<h2>Edit Location</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="LocationId" />
+
+    <div class="form-group">
+        <label asp-for="LocationName" class="control-label"></label>
+        <input asp-for="LocationName" class="form-control" />
+        <span asp-validation-for="LocationName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AddressGoogleApi" class="control-label"></label>
+        <input asp-for="AddressGoogleApi" class="form-control" />
+        <span asp-validation-for="AddressGoogleApi" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="List" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

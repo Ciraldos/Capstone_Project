@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Capstone.Models.Location>
+
+@{
+    ViewBag.Title = "Locations";
+}
+
+<h2>Locations</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Location</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Location Name</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model)
+        {
+            <tr>
+                <td>@location.LocationName</td>
+                <td>@location.AddressGoogleApi</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@location.LocationId" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@location.LocationId" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", "Location", new { id = location.LocationId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
