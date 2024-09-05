@@ -4,7 +4,10 @@ namespace Capstone.Services.Interfaces
 {
     public interface IGenreService
     {
-        Task<Genre> CreateGenre(Genre genre);
-
+        Task<IEnumerable<Genre>> GetAllGenresAsync();
+        Task<Genre> GetGenreByIdAsync(int genreId);
+        Task<Genre> CreateGenreAsync(Genre genre);
+        Task<Genre> UpdateGenreAsync(Genre genre);
+        Task<bool> DeleteGenreAsync(int genreId);
     }
 }

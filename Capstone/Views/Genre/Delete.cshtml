@@ -1,0 +1,16 @@
+﻿@model Capstone.Models.Genre
+
+@{
+    ViewBag.Title = "Delete Genre";
+}
+
+<h2>Delete Genre</h2>
+
+<h3>Are you sure you want to delete this genre?</h3>
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+</div>
+
+<a href="@Url.Action("Delete", "Genre", new { id = Model.GenreId, confirm = true })" class="btn btn-danger">Delete</a>
+<a href="@Url.Action("List", "Genre")" class="btn btn-secondary">Cancel</a>

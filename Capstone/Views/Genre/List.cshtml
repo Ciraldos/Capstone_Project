@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Capstone.Models.Genre>
+
+@{
+    ViewBag.Title = "Genres";
+}
+
+<h2>Genres</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Genre</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Genre Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in Model)
+        {
+            <tr>
+                <td>@genre.Name</td>
+                <td>
+@*                     <a asp-action="Details" asp-route-id="@genre.GenreId" class="btn btn-info">Details</a>
+ *@                    <a asp-action="Edit" asp-route-id="@genre.GenreId" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", "Genre", new { id = genre.GenreId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
