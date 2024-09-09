@@ -18,5 +18,7 @@ namespace Capstone.Models
         [ForeignKey("ReviewId")]
         [Required]
         public required Review Review { get; set; }
+
+
     }
 }

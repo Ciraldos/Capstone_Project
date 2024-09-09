@@ -20,7 +20,7 @@ namespace Capstone.Models
         public required string Description { get; set; }
 
         [Required]
-        public required DateTime ReviewDate { get; set; }
+        public required DateTime ReviewDate { get; set; } = DateTime.Now;
 
         // Foreign Key 
         public int EventId { get; set; }
@@ -34,5 +34,6 @@ namespace Capstone.Models
         [ForeignKey("UserId")]
         [Required]
         public required User User { get; set; }
+        public List<ReviewImg> ReviewImgs { get; set; } = [];
     }
 }
