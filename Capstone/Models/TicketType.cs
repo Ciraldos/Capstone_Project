@@ -22,6 +22,6 @@ namespace Capstone.Models
         // EF reference
 
         public List<Event> Events { get; set; } = [];
-
+        public List<EventTicketType> EventTicketType { get; set; } = [];
     }
 }
