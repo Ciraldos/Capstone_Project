@@ -11,8 +11,8 @@ namespace Capstone.Services
     {
         private readonly DataContext _ctx;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly SpotifyAuthService _spotifyAuthService;
-        public DjService(DataContext ctx, IHttpClientFactory httpClientFactory, SpotifyAuthService spotifyAuthService)
+        private readonly SpotifyService _spotifyAuthService;
+        public DjService(DataContext ctx, IHttpClientFactory httpClientFactory, SpotifyService spotifyAuthService)
         {
             _ctx = ctx;
             _httpClientFactory = httpClientFactory;

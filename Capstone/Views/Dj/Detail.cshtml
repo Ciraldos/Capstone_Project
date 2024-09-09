@@ -24,7 +24,11 @@
             <ul>
                 @foreach (var evt in Model.Events)
                 {
-                    <li>@evt.Name - @evt.DateFrom.ToString("MMMM dd, yyyy") - @evt.DateTo.ToString("MMMM dd, yyyy") </li>
+                    <li>
+                        <a href="@Url.Action("Details", "Event", new { id = evt.EventId })">
+                            @evt.Name - @evt.DateFrom.ToString("dd MMMM, yyyy") - @evt.DateTo.ToString("MMMM dd, yyyy")
+                        </a>
+                    </li>
                 }
             </ul>
         }
@@ -32,6 +36,7 @@
         {
             <p>No events available for this DJ.</p>
         }
+
 
         <iframe style="border-radius:12px"
                 src="https://open.spotify.com/embed/artist/@Model.ArtistSpotifyId?utm_source=generator"
@@ -46,4 +51,4 @@
 </div>
 
 <a asp-action="Edit" asp-route-id="@Model.DjId" class="btn btn-primary">Edit</a>
-<a asp-action="DjList" class="btn btn-secondary">Back to List</a>
+<a asp-action="List" class="btn btn-secondary">Back to List</a>
