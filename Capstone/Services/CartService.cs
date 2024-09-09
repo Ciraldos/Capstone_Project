@@ -8,18 +8,19 @@ namespace Capstone.Services
     public class CartService : ICartService
     {
         private readonly DataContext _dataContext;
+        private readonly IEmailService _emailService;
         private readonly IQrCodeService _qrCodeService;
 
-        public CartService(DataContext dataContext, IQrCodeService qrCodeService)
+        public CartService(DataContext dataContext, IQrCodeService qrCodeService, IEmailService emailService)
         {
             _dataContext = dataContext;
             _qrCodeService = qrCodeService;
+            _emailService = emailService;
         }
 
         public async Task<Cart> AddToCartAsync(int userId, int eventId, int ticketTypeId, int quantity)
         {
-
-            // Cerco il carrello dell'utente dentro il database. Se non esiste lo creo.
+            // Trova il carrello dell'utente dentro il database. Se non esiste lo creo.
             var cart = await _dataContext.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
 
             var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
@@ -30,9 +31,25 @@ namespace Capstone.Services
                 await _dataContext.SaveChangesAsync();
             }
 
-            var cartItem = await _dataContext.CartItems.FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
+            // Controlla la disponibilità dei biglietti
+            var eventTicketType = await _dataContext.EventTicketType
+                .FirstOrDefaultAsync(et => et.EventId == eventId && et.TicketTypeId == ticketTypeId);
+
+            if (eventTicketType == null || eventTicketType.AvailableQuantity < quantity)
+            {
+                throw new InvalidOperationException("Non ci sono abbastanza biglietti disponibili per il tipo di biglietto selezionato.");
+            }
+
+            // Se il biglietto esiste già nel carrello, aggiorna la quantità
+            var cartItem = await _dataContext.CartItems
+                .FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
+
             if (cartItem != null)
             {
+                if (eventTicketType.AvailableQuantity < cartItem.Quantity + quantity)
+                {
+                    throw new InvalidOperationException("Non ci sono abbastanza biglietti disponibili per il tipo di biglietto selezionato.");
+                }
                 cartItem.Quantity += quantity;
             }
             else
@@ -46,16 +63,21 @@ namespace Capstone.Services
                 };
                 _dataContext.CartItems.Add(cartItem);
             }
+
+            // Riduci la quantità disponibile nel database
+            eventTicketType.AvailableQuantity -= quantity;
+
             await _dataContext.SaveChangesAsync();
             return cart;
         }
+
 
         public async Task PurchaseCartAsync(int userId)
         {
             // Trova il carrello e i relativi articoli
             var cart = await _dataContext.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
             if (cart == null)
-                throw new InvalidOperationException("No cart found for this user");
+                throw new InvalidOperationException("Nessun carrello trovato per questo utente");
 
             var cartItems = await _dataContext.CartItems
                 .Where(ci => ci.CartId == cart.CartId)
@@ -64,30 +86,47 @@ namespace Capstone.Services
                 .ToListAsync();
 
             if (!cartItems.Any())
-                throw new InvalidOperationException("No items in cart");
+                throw new InvalidOperationException("Nessun articolo nel carrello");
+
+            var user = await _dataContext.Users.FindAsync(userId);
+            string emailBody = "<h1>Grazie per il tuo acquisto!</h1><ul>";
+
+            var generatedTickets = new List<Ticket>();
 
             foreach (var cartItem in cartItems)
             {
                 for (int i = 0; i < cartItem.Quantity; i++)
                 {
                     var ticketNumber = await GenerateUniqueTicketNumberAsync();
+                    var qrCodeImage = _qrCodeService.GenerateQRCode(ticketNumber);
+
                     var ticket = new Ticket
                     {
                         PurchaseDate = DateTime.Now,
                         NumTicket = ticketNumber,
                         TicketType = cartItem.TicketType,
-                        User = await _dataContext.Users.FindAsync(userId),
+                        User = user,
                         Event = cartItem.Event,
-                        QRCodeImage = _qrCodeService.GenerateQRCode(ticketNumber)
+                        QRCodeImage = qrCodeImage
                     };
                     _dataContext.Tickets.Add(ticket);
+                    generatedTickets.Add(ticket);  // Aggiungi il biglietto alla lista dei biglietti generati
+
+                    // Aggiungi dettagli del biglietto all'email
+                    emailBody += $"<li>Biglietto per {cartItem.Event.Name}, Tipo: {cartItem.TicketType.TicketTypeName} ,Descrizione:  {cartItem.TicketType.TicketTypeDescription}, Codice: {ticketNumber}</li>";
                 }
             }
 
-            // Rimuove gli articoli dal carrello dopo l'acquisto
+            emailBody += "</ul>";
+
             _dataContext.CartItems.RemoveRange(cartItems);
             await _dataContext.SaveChangesAsync();
+
+            // Invia l'email con i QR code dei biglietti generati
+            await _emailService.SendEmailAsync(user.Email, "I tuoi biglietti", emailBody, generatedTickets);
         }
+
+
 
 
         public async Task<string> GenerateUniqueTicketNumberAsync()

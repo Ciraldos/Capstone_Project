@@ -26,7 +26,7 @@
                     <td>@cartItem.TicketType.TicketTypeName</td>
                     <td>@cartItem.Quantity</td>
                     <td>@cartItem.TicketType.Price.ToString("C")</td>
-                    <td>@(cartItem.Quantity * cartItem.TicketType.Price).ToString("C")</td>
+                    <td>€@(cartItem.Quantity * cartItem.TicketType.Price)</td>
                 </tr>
             }
         </tbody>
