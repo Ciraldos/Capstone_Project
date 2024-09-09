@@ -21,7 +21,7 @@ namespace Capstone.Services
             }
 
             comment.UserId = userId;
-            comment.Like = 0; // Inizializza i likes a 0
+
 
             await _dataContext.Comments.AddAsync(comment);
             await _dataContext.SaveChangesAsync();

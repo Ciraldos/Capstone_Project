@@ -13,7 +13,10 @@ namespace Capstone.Models
         public required string Description { get; set; }
 
         [Required]
-        public required int Like { get; set; }
+        public DateTime PublishedAt { get; set; } = DateTime.Now;
+
+        [MaxLength(500)] // Puoi regolare la lunghezza se necessario
+        public string? GifUrl { get; set; }
 
         //Foreign Keys
 
@@ -30,5 +33,7 @@ namespace Capstone.Models
 
         [ForeignKey("UserId")]
         public required User User { get; set; }
+        public List<CommentLike> CommentLikes { get; set; } = [];
+
     }
 }
