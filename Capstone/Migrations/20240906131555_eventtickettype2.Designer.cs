@@ -4,6 +4,7 @@ using Capstone.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Capstone.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240906131555_eventtickettype2")]
+    partial class eventtickettype2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,6 +191,9 @@ namespace Capstone.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("EventId");
 
                     b.HasIndex("LocationId");
@@ -240,7 +246,7 @@ namespace Capstone.Migrations
 
                     b.HasIndex("TicketTypeId");
 
-                    b.ToTable("EventTicketType");
+                    b.ToTable("EventTicketTypes");
                 });
 
             modelBuilder.Entity("Capstone.Models.Genre", b =>
@@ -667,13 +673,13 @@ namespace Capstone.Migrations
             modelBuilder.Entity("Capstone.Models.EventTicketType", b =>
                 {
                     b.HasOne("Capstone.Models.Event", "Event")
-                        .WithMany("EventTicketType")
+                        .WithMany("EventTicketTypes")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Capstone.Models.TicketType", "TicketType")
-                        .WithMany("EventTicketType")
+                        .WithMany("EventTicketTypes")
                         .HasForeignKey("TicketTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -811,7 +817,7 @@ namespace Capstone.Migrations
 
                     b.Navigation("EventImgs");
 
-                    b.Navigation("EventTicketType");
+                    b.Navigation("EventTicketTypes");
                 });
 
             modelBuilder.Entity("Capstone.Models.Review", b =>
@@ -821,7 +827,7 @@ namespace Capstone.Migrations
 
             modelBuilder.Entity("Capstone.Models.TicketType", b =>
                 {
-                    b.Navigation("EventTicketType");
+                    b.Navigation("EventTicketTypes");
                 });
 #pragma warning restore 612, 618
         }

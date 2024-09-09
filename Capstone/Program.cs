@@ -7,6 +7,7 @@ using Capstone.Services.Interfaces.Auth;
 using Capstone.Services.Master;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System.Security.Claims;
 
 namespace Capstone
@@ -41,6 +42,8 @@ namespace Capstone
                 });
             });
 
+            //Stripe Settings Configuration
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             // Spotify Settings Configuration
             builder.Services.Configure<SpotifySettings>(builder.Configuration.GetSection("Spotify"));
@@ -49,7 +52,7 @@ namespace Capstone
             builder.Services.AddHttpClient();
 
             // Register SpotifyAuthService as a singleton
-            builder.Services.AddSingleton<SpotifyAuthService>();
+            builder.Services.AddSingleton<SpotifyService>();
 
 
             // Services
@@ -60,12 +63,17 @@ namespace Capstone
                 .AddScoped<IMasterService, MasterService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IRoleService, RoleService>()
-                .AddScoped<IEventService, EventService>()
+                .AddScoped<IEventService, Services.EventService>()
                 .AddScoped<ILocationService, LocationService>()
                 .AddScoped<IDjService, DjService>()
                 .AddScoped<ICommentService, CommentService>()
                 .AddScoped<ICartService, CartService>()
-                .AddScoped<IQrCodeService, QRCodeService>();
+                .AddScoped<IQrCodeService, QRCodeService>()
+                .AddScoped<ICommentLikeService, CommentLikeService>()
+                .AddScoped<ISpotifyService, SpotifyService>()
+                .AddScoped<ITicketTypeService, TicketTypeService>()
+                .AddScoped<IEmailService, EmailService>()
+                .AddScoped<IReviewService, Services.ReviewService>();
 
 
             // Add services to the container.

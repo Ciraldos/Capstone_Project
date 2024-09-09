@@ -4,6 +4,7 @@ using Capstone.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Capstone.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240905150359_updated_commentLike")]
+    partial class updated_commentLike
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,6 +191,9 @@ namespace Capstone.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("EventId");
 
                     b.HasIndex("LocationId");
@@ -215,32 +221,6 @@ namespace Capstone.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("EventImgs");
-                });
-
-            modelBuilder.Entity("Capstone.Models.EventTicketType", b =>
-                {
-                    b.Property<int>("EventTicketTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventTicketTypeId"));
-
-                    b.Property<int>("AvailableQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventTicketTypeId");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("TicketTypeId");
-
-                    b.ToTable("EventTicketType");
                 });
 
             modelBuilder.Entity("Capstone.Models.Genre", b =>
@@ -521,6 +501,21 @@ namespace Capstone.Migrations
                     b.ToTable("DjEvent");
                 });
 
+            modelBuilder.Entity("EventTicketType", b =>
+                {
+                    b.Property<int>("EventsEventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketTypesTicketTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventsEventId", "TicketTypesTicketTypeId");
+
+                    b.HasIndex("TicketTypesTicketTypeId");
+
+                    b.ToTable("EventTicketType");
+                });
+
             modelBuilder.Entity("EventUser", b =>
                 {
                     b.Property<int>("EventsEventId")
@@ -664,25 +659,6 @@ namespace Capstone.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("Capstone.Models.EventTicketType", b =>
-                {
-                    b.HasOne("Capstone.Models.Event", "Event")
-                        .WithMany("EventTicketType")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Capstone.Models.TicketType", "TicketType")
-                        .WithMany("EventTicketType")
-                        .HasForeignKey("TicketTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("TicketType");
-                });
-
             modelBuilder.Entity("Capstone.Models.Review", b =>
                 {
                     b.HasOne("Capstone.Models.Event", "Event")
@@ -705,7 +681,7 @@ namespace Capstone.Migrations
             modelBuilder.Entity("Capstone.Models.ReviewImg", b =>
                 {
                     b.HasOne("Capstone.Models.Review", "Review")
-                        .WithMany("ReviewImgs")
+                        .WithMany()
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -751,6 +727,21 @@ namespace Capstone.Migrations
                     b.HasOne("Capstone.Models.Event", null)
                         .WithMany()
                         .HasForeignKey("EventsEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventTicketType", b =>
+                {
+                    b.HasOne("Capstone.Models.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventsEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Capstone.Models.TicketType", null)
+                        .WithMany()
+                        .HasForeignKey("TicketTypesTicketTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -810,18 +801,6 @@ namespace Capstone.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("EventImgs");
-
-                    b.Navigation("EventTicketType");
-                });
-
-            modelBuilder.Entity("Capstone.Models.Review", b =>
-                {
-                    b.Navigation("ReviewImgs");
-                });
-
-            modelBuilder.Entity("Capstone.Models.TicketType", b =>
-                {
-                    b.Navigation("EventTicketType");
                 });
 #pragma warning restore 612, 618
         }

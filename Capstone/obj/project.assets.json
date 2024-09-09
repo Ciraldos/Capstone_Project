@@ -2446,6 +2446,23 @@
           }
         }
       },
+      "Stripe.net/45.11.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "System.Configuration.ConfigurationManager": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Stripe.net.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Stripe.net.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Buffers/4.5.0": {
         "type": "package",
         "compile": {
@@ -7337,6 +7354,30 @@
         "version.txt"
       ]
     },
+    "Stripe.net/45.11.0": {
+      "sha512": "nTUZr5XBXqhgIzy5Bo2MvS3cEBCUKp9WiIzsb+d689/AGgy1cmasSAu4gNtLZm3tkJ/QuM4spH77uBdu1sRSRw==",
+      "type": "package",
+      "path": "stripe.net/45.11.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "icon.png",
+        "lib/net461/Stripe.net.dll",
+        "lib/net461/Stripe.net.xml",
+        "lib/net5.0/Stripe.net.dll",
+        "lib/net5.0/Stripe.net.xml",
+        "lib/net6.0/Stripe.net.dll",
+        "lib/net6.0/Stripe.net.xml",
+        "lib/netcoreapp3.1/Stripe.net.dll",
+        "lib/netcoreapp3.1/Stripe.net.xml",
+        "lib/netstandard2.0/Stripe.net.dll",
+        "lib/netstandard2.0/Stripe.net.xml",
+        "stripe.net.45.11.0.nupkg.sha512",
+        "stripe.net.nuspec"
+      ]
+    },
     "System.Buffers/4.5.0": {
       "sha512": "pL2ChpaRRWI/p4LXyy4RgeWlYF2sgfj/pnVMvBqwNFr5cXg7CXNnWZWxrOONLg8VGdFB8oB+EG2Qw4MLgTOe+A==",
       "type": "package",
@@ -8866,6 +8907,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.8",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 8.0.4",
       "QRCoder >= 1.6.0",
+      "Stripe.net >= 45.11.0",
       "System.Data.SqlClient >= 4.8.6"
     ]
   },
@@ -8949,6 +8991,10 @@
           "QRCoder": {
             "target": "Package",
             "version": "[1.6.0, )"
+          },
+          "Stripe.net": {
+            "target": "Package",
+            "version": "[45.11.0, )"
           },
           "System.Data.SqlClient": {
             "target": "Package",
