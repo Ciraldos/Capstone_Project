@@ -1,4 +1,5 @@
 ﻿using Capstone.Models.Spotify;
+using Capstone.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text;
@@ -6,14 +7,14 @@ using System.Text.Json;
 
 namespace Capstone.Services
 {
-    public class SpotifyAuthService
+    public class SpotifyService : ISpotifyService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly SpotifySettings _spotifySettings;
         private string _accessToken;
         private DateTime _tokenExpiration;
 
-        public SpotifyAuthService(IHttpClientFactory httpClientFactory, IOptions<SpotifySettings> spotifySettings)
+        public SpotifyService(IHttpClientFactory httpClientFactory, IOptions<SpotifySettings> spotifySettings)
         {
             _httpClientFactory = httpClientFactory;
             _spotifySettings = spotifySettings.Value;
