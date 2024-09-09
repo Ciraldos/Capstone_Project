@@ -91,6 +91,8 @@ namespace Capstone.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Registrazione fallita: " + ex.Message);
+                var genres = await _dataContext.Genres.ToListAsync();
+                ViewBag.Genres = genres;
                 return View(model);
             }
         }
