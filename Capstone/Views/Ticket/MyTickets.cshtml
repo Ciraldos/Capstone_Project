@@ -13,7 +13,9 @@
             if (ticket.QRCodeImage != null)
             {
                 <div class="ticket-card">
-                    <h2>Biglietto per: @ticket.Event.Name</h2>
+                    <h2>Biglietto per: <a asp-action="Details" asp-controller="Event" asp-route-id="@ticket.Event.EventId">@ticket.Event.Name</a></h2>
+                    <p>Tipo Biglietto: @ticket.TicketType.TicketTypeName</p>
+                    <p>Descrizione Biglietto: @ticket.TicketType.TicketTypeDescription</p>
                     <p>Data di acquisto: @ticket.PurchaseDate.ToShortDateString()</p>
                     <p>Numero del biglietto: @ticket.NumTicket</p>
                     <img src="data:image/png;base64,@Convert.ToBase64String(ticket.QRCodeImage)" alt="QR Code" />
