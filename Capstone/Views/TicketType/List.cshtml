@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Capstone.Models.TicketType>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TicketTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TicketTypeDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketTypeDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TicketTypeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TicketTypeId">Details</a> |
+                    <form asp-action="Delete" method="post" asp-route-id="@item.TicketTypeId">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

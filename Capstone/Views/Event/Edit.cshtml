@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Edit Event";
+    var djs = ViewBag.DJs as List<Dj>;
+    var locations = ViewBag.Locations as List<Location>;
+    var ticketTypes = ViewBag.TicketTypes as List<TicketType>;
 }
 
 <h2>Edit Event</h2>
@@ -34,11 +37,6 @@
         <span asp-validation-for="DateTo" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="Quantity">Number of Attendees</label>
-        <input type="number" id="Quantity" name="Quantity" class="form-control" placeholder="Enter number of attendees" value="@Model?.Quantity" />
-        <span asp-validation-for="Quantity" class="text-danger"></span>
-    </div>
 
     <div class="form-group">
         <label for="HostName">Host Name</label>
@@ -50,15 +48,15 @@
         <label for="LocationId">Location</label>
         <select id="LocationId" name="LocationId" class="form-control">
             <option value="">Select Location</option>
-            @foreach (var location in ViewBag.Locations)
+            @foreach (var l in locations)
             {
-                if (location.LocationId == Model?.LocationId)
+                if (l.LocationId == Model?.LocationId)
                 {
-                    <option value="@location.LocationId" selected="selected">@location.LocationName</option>
+                    <option value="@l.LocationId" selected="selected">@l.LocationName</option>
                 }
                 else
                 {
-                    <option value="@location.LocationId">@location.LocationName</option>
+                    <option value="@l.LocationId">@l.LocationName</option>
                 }
             }
         </select>
@@ -68,7 +66,7 @@
     <div class="form-group">
         <label for="djIds">Select DJs</label>
         <select id="djIds" name="djIds" multiple class="form-control">
-            @foreach (var dj in ViewBag.DJs)
+            @foreach (var dj in djs)
             {
                 bool isSelected = Model.Djs.Any(d => d.DjId == dj.DjId);
                 if (isSelected)
@@ -84,6 +82,24 @@
     </div>
 
     <div class="form-group">
+        <label for="ticketTypesIds">Select Ticket Types:</label>
+        <select id="ticketTypesIds" name="ticketTypesIds" multiple class="form-control">
+            @foreach (var t in ticketTypes)
+            {
+                bool isSelected = Model.TicketTypes.Any(t => t.TicketTypeId == t.TicketTypeId);
+                if (isSelected)
+                {
+                    <option value="@t.TicketTypeId" selected="selected">@t.TicketTypeName - @t.TicketTypeDescription</option>
+                }
+                else
+                {
+                    <option value="@t.TicketTypeId">@t.TicketTypeName - @t.TicketTypeDescription</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
         <label for="additionalImageFiles">Add Additional Images (these will be added to the existing images)</label>
         <input type="file" id="additionalImageFiles" name="additionalImageFiles" class="form-control" multiple />
     </div>
@@ -93,7 +109,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a href="@Url.Action("Index", "Event")" class="btn btn-secondary">Back to List</a>
+    <a href="@Url.Action("List", "Event")" class="btn btn-secondary">Back to List</a>
 </form>
 
 @section Scripts {

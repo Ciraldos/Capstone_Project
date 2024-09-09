@@ -6,7 +6,6 @@ using Capstone.Services.Interfaces.Auth;
 
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using ProfileViewModel = Capstone.Models.ViewModels.Profile.ProfileViewModel;
 
 namespace Capstone.Controllers
 {

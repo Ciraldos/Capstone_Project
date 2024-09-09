@@ -23,9 +23,6 @@ namespace Capstone.Models
         public required DateTime DateTo { get; set; }
 
         [Required]
-        public required int Quantity { get; set; }
-
-        [Required]
         [StringLength(100)]
         public required string HostName { get; set; }
 
@@ -47,6 +44,7 @@ namespace Capstone.Models
         public List<Comment> Comments { get; set; } = [];
         public List<TicketType> TicketTypes { get; set; } = [];
 
+        public List<EventTicketType> EventTicketType { get; set; } = [];
 
     }
 }
