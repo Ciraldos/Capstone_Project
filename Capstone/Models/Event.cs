@@ -43,6 +43,7 @@ namespace Capstone.Models
         public List<EventImg> EventImgs { get; set; } = [];
         public List<Comment> Comments { get; set; } = [];
         public List<TicketType> TicketTypes { get; set; } = [];
+        public List<Genre> Genres { get; set; } = [];
 
         public List<EventTicketType> EventTicketType { get; set; } = [];
 

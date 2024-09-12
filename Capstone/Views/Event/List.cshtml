@@ -14,6 +14,7 @@
             <th>Date From</th>
             <th>Date To</th>
             <th>Host Name</th>
+            <th>Genres</th>
             <th>Location</th>
             <th>Actions</th>
         </tr>
@@ -27,6 +28,13 @@
                 <td>@eventItem.DateFrom.ToShortDateString()</td>
                 <td>@eventItem.DateTo.ToShortDateString()</td>
                 <td>@eventItem.HostName</td>
+                <td>
+                    @foreach(var eventGenre in eventItem.Genres)
+                    {
+                        <li>@eventGenre.Name</li>
+                    }
+
+                </td>
                 <td>@eventItem.Location?.LocationName</td>
                 <td>
                     <a class="btn btn-info" href="@Url.Action("Details", "Event", new { id = eventItem.EventId })">Details</a>

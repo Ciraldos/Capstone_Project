@@ -25,6 +25,7 @@ namespace Capstone.Models
 
         [Required]
         public int UserId { get; set; }
+        public int? ParentCommentId { get; set; }
 
 
         // Riferimenti EF
@@ -33,7 +34,11 @@ namespace Capstone.Models
 
         [ForeignKey("UserId")]
         public required User User { get; set; }
+
+        [ForeignKey("ParentCommentId")]
+        public Comment? ParentComment { get; set; }
         public List<CommentLike> CommentLikes { get; set; } = [];
+        public List<Comment> Replies { get; set; } = [];
 
     }
 }

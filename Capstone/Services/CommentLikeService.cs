@@ -7,15 +7,15 @@ namespace Capstone.Services
 {
     public class CommentLikeService : ICommentLikeService
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _ctx;
 
         public CommentLikeService(DataContext dataContext)
         {
-            _dataContext = dataContext;
+            _ctx = dataContext;
         }
         public async Task<(int likeCount, List<string> likes)> GetCommentLikesAsync(int commentId)
         {
-            var comment = await _dataContext.Comments
+            var comment = await _ctx.Comments
                 .Include(c => c.CommentLikes)
                 .ThenInclude(cl => cl.User)
                 .FirstOrDefaultAsync(c => c.CommentId == commentId);
@@ -36,7 +36,7 @@ namespace Capstone.Services
         {
             try
             {
-                var comment = await _dataContext.Comments
+                var comment = await _ctx.Comments
                     .Include(c => c.CommentLikes)
                     .FirstOrDefaultAsync(c => c.CommentId == commentId);
 
@@ -50,15 +50,15 @@ namespace Capstone.Services
 
                 if (existingLike != null)
                 {
-                    _dataContext.CommentLikes.Remove(existingLike);
+                    _ctx.CommentLikes.Remove(existingLike);
                 }
                 else
                 {
-                    var user = _dataContext.Users.FirstOrDefault(u => u.UserId == userId);
+                    var user = _ctx.Users.FirstOrDefault(u => u.UserId == userId);
                     comment.CommentLikes.Add(new CommentLike { Comment = comment, User = user });
                 }
 
-                await _dataContext.SaveChangesAsync();
+                await _ctx.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

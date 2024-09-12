@@ -5,6 +5,7 @@
     var djs = ViewBag.DJs as List<Dj>;
     var locations = ViewBag.Locations as List<Location>;
     var ticketTypes = ViewBag.TicketTypes as List<TicketType>;
+    var genres = ViewBag.Genres as List<Genre>;
 }
 
 <h2>Edit Event</h2>
@@ -79,6 +80,27 @@
                 }
             }
         </select>
+    </div>
+    <div class="form-group mt-3">
+        <label class="control-label mb-1">Inserisci generi musicali :</label>
+        <div id="genresCheckboxes">
+            @foreach (var g in genres)
+            {
+                bool isSelected = Model.Genres.Any(eg => eg.GenreId == g.GenreId);
+                <div class="form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           id="genre-@g.GenreId"
+                           name="SelectedGenres"
+                           value="@g.GenreId"
+                    @(isSelected ? "checked" : "") />
+                    <label class="form-check-label" for="genre-@g.GenreId">
+                        @g.Name
+                    </label>
+                </div>
+            }
+        </div>
+        <span asp-validation-for="Genres" class="text-danger"></span>
     </div>
 
     <div class="form-group">

@@ -1,8 +1,6 @@
-﻿using Capstone.Context;
-using Capstone.Models;
+﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Capstone.Controllers
@@ -13,18 +11,20 @@ namespace Capstone.Controllers
         private readonly ILocationService _locationSvc;
         private readonly IDjService _djSvc;
         private readonly IReviewService _reviewSvc;
-        private readonly ITicketTypeService _ticketTypeService;
-        private readonly DataContext _dataContext;
+        private readonly ITicketTypeService _ticketTypeSvc;
+        private readonly IGenreService _genreSvc;
+        private readonly IConfiguration _configuration;
 
 
-        public EventController(IEventService eventService, ILocationService locationService, IDjService djService, IReviewService reviewService, DataContext dataContext, ITicketTypeService ticketTypeService)
+        public EventController(IEventService eventService, ILocationService locationService, IDjService djService, IReviewService reviewService, ITicketTypeService ticketTypeService, IGenreService genreService, IConfiguration configuration)
         {
             _eventSvc = eventService;
             _locationSvc = locationService;
             _djSvc = djService;
             _reviewSvc = reviewService;
-            _dataContext = dataContext;
-            _ticketTypeService = ticketTypeService;
+            _ticketTypeSvc = ticketTypeService;
+            _genreSvc = genreService;
+            _configuration = configuration;
         }
 
         // GET: Event
@@ -41,6 +41,11 @@ namespace Capstone.Controllers
             var reviews = await _reviewSvc.GetReviewsByEventIdAsync(id);
             ViewBag.Reviews = reviews;
 
+            var googleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
+
+            var giphyApiKey = _configuration["Giphy:ApiKey"];
+            ViewBag.GiphyApiKey = giphyApiKey;
             return View(eventDetails);
         }
 
@@ -49,29 +54,19 @@ namespace Capstone.Controllers
         {
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
             ViewBag.DJs = await _djSvc.GetAllDjAsync();
-            ViewBag.TicketTypes = await _ticketTypeService.GetAllTicketTypesAsync();
+            ViewBag.TicketTypes = await _ticketTypeSvc.GetAllTicketTypesAsync();
+            ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View();
         }
 
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Event eventModel, List<int> djIds, List<IFormFile> imageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
+        public async Task<ActionResult> Create(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
         {
-            var imageStreams = new List<MemoryStream>();
-
-            foreach (var imageFile in imageFiles)
-            {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var imageStream = new MemoryStream();
-                    await imageFile.CopyToAsync(imageStream);
-                    imageStreams.Add(imageStream);
-                }
-            }
             try
             {
-                await _eventSvc.CreateEventAsync(eventModel, djIds, imageStreams, ticketTypesIds, ticketQuantities);
+                await _eventSvc.CreateEventAsync(eventModel, selectedGenres, djIds, imageFiles, ticketTypesIds, ticketQuantities);
                 return RedirectToAction("List");
             }
             catch (Exception ex)
@@ -81,7 +76,8 @@ namespace Capstone.Controllers
 
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
             ViewBag.DJs = await _djSvc.GetAllDjAsync();
-            ViewBag.TicketTypes = await _ticketTypeService.GetAllTicketTypesAsync();
+            ViewBag.TicketTypes = await _ticketTypeSvc.GetAllTicketTypesAsync();
+            ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View(eventModel);
         }
 
@@ -92,43 +88,50 @@ namespace Capstone.Controllers
 
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
             ViewBag.DJs = await _djSvc.GetAllDjAsync();
-            ViewBag.TicketTypes = await _ticketTypeService.GetAllTicketTypesAsync();
+            ViewBag.TicketTypes = await _ticketTypeSvc.GetAllTicketTypesAsync();
+            ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View(eventToEdit);
         }
 
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Event eventModel, List<int> djIds, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds)
+        public async Task<ActionResult> Edit(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds)
         {
-            var replaceImageStreams = new List<MemoryStream>();
-            var additionalImageStreams = new List<MemoryStream>();
+            // Percorsi per i file di immagine
+            var replaceImagePaths = new List<string>();
+            var additionalImagePaths = new List<string>();
 
-            // Handle image files for replacement
-            foreach (var imageFile in imageFiles)
+            // Salva le immagini per la sostituzione
+            if (imageFiles != null && imageFiles.Any())
             {
-                if (imageFile != null && imageFile.Length > 0)
+                foreach (var imageFile in imageFiles)
                 {
-                    var imageStream = new MemoryStream();
-                    await imageFile.CopyToAsync(imageStream);
-                    replaceImageStreams.Add(imageStream);
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        // Salva il file nel file system e ottieni il percorso
+                        var imagePath = await SaveImageToFileSystem(imageFile, "events", eventModel.EventId);
+                        replaceImagePaths.Add(imagePath);
+                    }
                 }
             }
 
-            // Handle additional image files to add to existing ones
-            foreach (var additionalImageFile in additionalImageFiles)
+            // Salva le immagini aggiuntive
+            if (additionalImageFiles != null && additionalImageFiles.Any())
             {
-                if (additionalImageFile != null && additionalImageFile.Length > 0)
+                foreach (var additionalImageFile in additionalImageFiles)
                 {
-                    var additionalImageStream = new MemoryStream();
-                    await additionalImageFile.CopyToAsync(additionalImageStream);
-                    additionalImageStreams.Add(additionalImageStream);
+                    if (additionalImageFile != null && additionalImageFile.Length > 0)
+                    {
+                        var additionalImagePath = await SaveImageToFileSystem(additionalImageFile, "events", eventModel.EventId);
+                        additionalImagePaths.Add(additionalImagePath);
+                    }
                 }
             }
 
             try
             {
-                await _eventSvc.UpdateEventAsync(eventModel, djIds, replaceImageStreams, additionalImageStreams, ticketTypesIds);
+                await _eventSvc.UpdateEventAsync(eventModel, djIds, selectedGenres, replaceImagePaths, additionalImagePaths, ticketTypesIds);
                 return RedirectToAction("List");
             }
             catch (ArgumentException ex)
@@ -138,8 +141,34 @@ namespace Capstone.Controllers
 
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
             ViewBag.DJs = await _djSvc.GetAllDjAsync();
+            ViewBag.TicketTypes = await _ticketTypeSvc.GetAllTicketTypesAsync();
+            ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View(eventModel);
         }
+
+        // Metodo di supporto per salvare le immagini nel file system
+        private async Task<string> SaveImageToFileSystem(IFormFile imageFile, string folder, int eventId)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", folder, eventId.ToString());
+
+            // Crea la cartella se non esiste
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var fileName = Path.GetFileName(imageFile.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            // Restituisci il percorso relativo da salvare nel database
+            return $"/uploads/{folder}/{eventId}/{fileName}";
+        }
+
 
 
         // GET: Event/Delete/5
@@ -163,39 +192,22 @@ namespace Capstone.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReview(Review reviewModel, List<IFormFile> imageFiles)
         {
-            // Get the currently logged-in user's ID
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out int userId))
             {
                 return Json(new { success = false, error = "Unable to retrieve User ID." });
             }
 
-            // Check if the user has already posted a review for this event
-            var existingReview = await _dataContext.Reviews
-                .FirstOrDefaultAsync(r => r.EventId == reviewModel.EventId && r.UserId == userId);
+            var existingReview = await _reviewSvc.GetReviewByEventIdAndUserIdAsync(reviewModel.EventId, userId);
 
             if (existingReview != null)
             {
-                // User has already posted a review, return an error
                 ModelState.AddModelError("", "You have already posted a review for this event.");
                 return RedirectToAction("Details", new { id = reviewModel.EventId });
             }
 
-            // Proceed with creating the new review
             reviewModel.UserId = userId;
-            var imageStreams = new List<MemoryStream>();
-
-            foreach (var imageFile in imageFiles)
-            {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var imageStream = new MemoryStream();
-                    await imageFile.CopyToAsync(imageStream);
-                    imageStreams.Add(imageStream);
-                }
-            }
-
-            await _reviewSvc.CreateReviewAsync(reviewModel, imageStreams);
+            await _reviewSvc.CreateReviewAsync(reviewModel, imageFiles);
 
             return RedirectToAction("Details", new { id = reviewModel.EventId });
         }
@@ -205,32 +217,16 @@ namespace Capstone.Controllers
         [HttpPost]
         public async Task<IActionResult> EditReview(Review reviewModel, List<IFormFile> imageFiles)
         {
-            var imageStreams = new List<MemoryStream>();
-
-            foreach (var imageFile in imageFiles)
-            {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var imageStream = new MemoryStream();
-                    await imageFile.CopyToAsync(imageStream);
-                    imageStreams.Add(imageStream);
-                }
-            }
-
-            // Retrieve the logged-in user's UserId from the claims
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (int.TryParse(userIdString, out int userId))
-            {
-                reviewModel.UserId = userId; // Assign the UserId to the review
-            }
-            else
+            if (!int.TryParse(userIdString, out int userId))
             {
                 return Json(new { success = false, error = "Unable to retrieve User ID." });
             }
 
-            var updatedReview = await _reviewSvc.UpdateReviewAsync(reviewModel, imageStreams, null);
+            reviewModel.UserId = userId; // Assign the UserId to the review
 
-            // Return success response as JSON
+            var updatedReview = await _reviewSvc.UpdateReviewAsync(reviewModel, imageFiles);
+
             return Json(new
             {
                 success = true,

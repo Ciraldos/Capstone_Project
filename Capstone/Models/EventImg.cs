@@ -9,7 +9,7 @@ namespace Capstone.Models
         public int EventImgId { get; set; }
 
         [Required]
-        public required byte[] ImgData { get; set; }
+        public string FilePath { get; set; }
 
         // Foreign Key
         [Required]
