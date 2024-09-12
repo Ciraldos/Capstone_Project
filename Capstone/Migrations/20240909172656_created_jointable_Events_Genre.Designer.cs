@@ -4,6 +4,7 @@ using Capstone.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Capstone.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240909172656_created_jointable_Events_Genre")]
+    partial class created_jointable_Events_Genre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,9 +94,6 @@ namespace Capstone.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("datetime2");
 
@@ -103,8 +103,6 @@ namespace Capstone.Migrations
                     b.HasKey("CommentId");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("UserId");
 
@@ -211,9 +209,9 @@ namespace Capstone.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FilePath")
+                    b.Property<byte[]>("ImgData")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("EventImgId");
 
@@ -336,9 +334,9 @@ namespace Capstone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewImgId"));
 
-                    b.Property<string>("FilePath")
+                    b.Property<byte[]>("ImgData")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
@@ -632,10 +630,6 @@ namespace Capstone.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Capstone.Models.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId");
-
                     b.HasOne("Capstone.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -643,8 +637,6 @@ namespace Capstone.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
-
-                    b.Navigation("ParentComment");
 
                     b.Navigation("User");
                 });
@@ -844,8 +836,6 @@ namespace Capstone.Migrations
             modelBuilder.Entity("Capstone.Models.Comment", b =>
                 {
                     b.Navigation("CommentLikes");
-
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Capstone.Models.Event", b =>
