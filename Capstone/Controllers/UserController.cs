@@ -1,9 +1,6 @@
-﻿using Capstone.Context;
-using Capstone.Models.ViewModels;
+﻿using Capstone.Models.ViewModels;
 using Capstone.Models.ViewModels.Profile;
 using Capstone.Services.Interfaces;
-using Capstone.Services.Interfaces.Auth;
-
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,17 +8,12 @@ namespace Capstone.Controllers
 {
     public class UserController : Controller
     {
-        private IUserService _userSvc;
-        private IPasswordHelper _passwordHelper;
-        private DataContext _ctx;
-        private readonly IGenreService _genreService;
-        public UserController(IUserService userService, IPasswordHelper passwordHelper, DataContext dataContext, IGenreService genreService)
+        private readonly IUserService _userSvc;
+        private readonly IGenreService _genreSvc;
+        public UserController(IUserService userService, IGenreService genreService)
         {
             _userSvc = userService;
-            _passwordHelper = passwordHelper;
-            _ctx = dataContext;
-            _genreService = genreService;
-            _genreService = genreService;
+            _genreSvc = genreService;
         }
 
         public async Task<IActionResult> Profile()
@@ -32,7 +24,11 @@ namespace Capstone.Controllers
             {
                 var user = await _userSvc.GetUserByIdAsync(userId);
 
-                var availableGenres = await _genreService.GetAllGenresAsync();
+                // Load available genres
+                var availableGenres = await _genreSvc.GetAllGenresAsync();
+
+                // Store genres in ViewBag
+                ViewBag.AvailableGenres = availableGenres.ToList(); // Ensure it's populated
 
                 var viewModel = new ProfileViewModel
                 {
@@ -40,7 +36,6 @@ namespace Capstone.Controllers
                     OldPassword = "",
                     NewPassword = "",
                     NewEmail = "",
-                    AvailableGenres = availableGenres.ToList(), // Ensure this is populated
                     SelectedGenreIds = user.Genres.Select(g => g.GenreId).ToList() // Ensure this is populated
                 };
 
@@ -51,6 +46,7 @@ namespace Capstone.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
+
 
         // POST: User/UpdateFavoriteGenres
         [HttpPost]
@@ -81,10 +77,28 @@ namespace Capstone.Controllers
                 return View("Profile", new ProfileViewModel { OldPassword = model.OldPassword, NewPassword = model.NewPassword });
             }
 
-            var result = await _userSvc.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
+            try
+            {
+                var result = await _userSvc.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
+                if (result)
+                {
+                    // Password changed successfully
+                    return RedirectToAction("Profile");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("", ex.Message); // Add the exception message to the model state
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message); // Handle other service exceptions
+            }
 
-            return RedirectToAction("Profile");
+            // If we reach here, something went wrong, return the view with error messages
+            return View("Profile", new ProfileViewModel { OldPassword = model.OldPassword, NewPassword = model.NewPassword });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -95,13 +109,32 @@ namespace Capstone.Controllers
             if (!int.TryParse(userIdString, out int userId))
             {
                 ModelState.AddModelError("", "Impossibile recuperare l'ID utente.");
-                return View("Profile");
+                return View("Profile", new ProfileViewModel { NewEmail = model.NewEmail });
             }
 
-            var result = await _userSvc.ChangeEmailAsync(userId, model.NewEmail);
+            try
+            {
+                var result = await _userSvc.ChangeEmailAsync(userId, model.NewEmail);
+                if (result)
+                {
+                    // Email changed successfully
+                    return RedirectToAction("Profile");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("", ex.Message); // Add the exception message to the model state
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message); // Handle other service exceptions
+            }
 
-            return RedirectToAction("Profile");
+            // If we reach here, something went wrong, return the view with error messages
+            return View("Profile", new ProfileViewModel { NewEmail = model.NewEmail });
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,8 +1,9 @@
 ﻿using Capstone.Context;
+using Capstone.Helpers;
 using Capstone.Models;
 using Capstone.Services.Interfaces;
-using Capstone.Services.Interfaces.Auth;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Capstone.Services
 {
@@ -10,11 +11,26 @@ namespace Capstone.Services
     {
         private readonly DataContext _ctx;
         private readonly IPasswordHelper _passwordHelper;
-        public UserService(DataContext dataContext, IPasswordHelper passwordHelper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserService(DataContext dataContext, IPasswordHelper passwordHelper, IHttpContextAccessor httpContextAccessor)
         {
             _ctx = dataContext;
             _passwordHelper = passwordHelper;
+            _httpContextAccessor = httpContextAccessor;
+        }
+        public int GetUserId()
+        {
+            // Retrieve the User ID from the claims, assuming it is stored as a string and is convertible to an integer
+            var userIdClaim = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out var userId))
+            {
+                return userId;
+            }
+            else
+            {
+                throw new InvalidOperationException("User ID is not available or invalid.");
+            }
         }
         public async Task<List<User>> GetAllUsersAsync()
         {
@@ -23,7 +39,8 @@ namespace Capstone.Services
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            return await _ctx.Users.Include(u => u.Roles).Include(u => u.Genres).FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = await _ctx.Users.Include(u => u.Roles).Include(u => u.Genres).FirstOrDefaultAsync(u => u.UserId == userId);
+            return user!;
         }
 
         public async Task<bool> DeleteUserAsync(int userId)
@@ -33,13 +50,18 @@ namespace Capstone.Services
             await _ctx.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)  // New method
+        public async Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
         {
             var user = await _ctx.Users.FindAsync(userId);
 
-            if (!_passwordHelper.VerifyPassword(oldPassword, user!.PasswordHash))
+            if (user == null)
             {
-                return false;
+                throw new InvalidOperationException("User not found.");
+            }
+
+            if (!_passwordHelper.VerifyPassword(oldPassword, user.PasswordHash))
+            {
+                throw new ArgumentException("Incorrect current password.");
             }
 
             user.PasswordHash = _passwordHelper.HashPassword(newPassword);
@@ -48,22 +70,43 @@ namespace Capstone.Services
 
             return true;
         }
+
         public async Task<bool> ChangeEmailAsync(int userId, string newEmail)
         {
+            if (string.IsNullOrEmpty(newEmail))
+            {
+                throw new ArgumentException("Email cannot be empty.");
+            }
+
             var user = await _ctx.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
 
             var emailExists = await _ctx.Users.AnyAsync(u => u.Email == newEmail && u.UserId != userId);
             if (emailExists)
             {
-                return false;
+                throw new ArgumentException("The email is already in use by another account.");
             }
 
-            user!.Email = newEmail;
-            _ctx.Update(user);
-            await _ctx.SaveChangesAsync();
+            user.Email = newEmail;
+
+            try
+            {
+                _ctx.Update(user);
+                await _ctx.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log or examine the inner exception
+                throw new Exception("An error occurred while updating the email: " + ex.InnerException?.Message, ex);
+            }
 
             return true;
         }
+
+
 
         public async Task<bool> UpdateUserProfileImageAsync(int userId, MemoryStream imageStream)
         {
@@ -98,5 +141,7 @@ namespace Capstone.Services
 
             await _ctx.SaveChangesAsync();
         }
+
+
     }
 }

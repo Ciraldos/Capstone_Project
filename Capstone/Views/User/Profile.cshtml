@@ -87,7 +87,7 @@
         </dt>
 
         <dd class="col-sm-10">
-            @if (Model.User.Img != null && Model.User.Img.Length > 0)
+            @if (Model.User != null && Model.User.Img != null && Model.User.Img.Length > 0)
             {
                 var base64String = Convert.ToBase64String(Model.User.Img);
                 var imgSrc = $"data:image/png;base64,{base64String}";
@@ -99,25 +99,33 @@
             }
         </dd>
 
+
         <h1>Generi Preferiti</h1>
         <hr />
         <form asp-action="UpdateFavoriteGenres" method="post">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                @foreach (var genre in Model.AvailableGenres)
+                @if (ViewBag.AvailableGenres != null && ViewBag.AvailableGenres.Count > 0)
                 {
-                    var isChecked = Model.SelectedGenreIds.Contains(genre.GenreId);
-                    <div class="form-check">
-                        <input type="checkbox"
-                               class="form-check-input"
-                               id="genre-@genre.GenreId"
-                               name="SelectedGenreIds"
-                               value="@genre.GenreId"
-                        @(isChecked ? "checked" : "") />
-                        <label class="form-check-label" for="genre-@genre.GenreId">
-                            @genre.Name
-                        </label>
-                    </div>
+                    foreach (var genre in ViewBag.AvailableGenres)
+                    {
+                        var isChecked = Model.SelectedGenreIds.Contains(genre.GenreId);
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="genre-@genre.GenreId"
+                                   name="SelectedGenreIds"
+                                   value="@genre.GenreId"
+                            @(isChecked ? "checked" : "") />
+                            <label class="form-check-label" for="genre-@genre.GenreId">
+                                @genre.Name
+                            </label>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No genres available</p>
                 }
             </div>
             <div class="form-group mt-3">
@@ -130,6 +138,7 @@
             <div class="form-group">
                 <label for="imageFile">Seleziona un'immagine</label>
                 <input type="file" name="imageFile" class="form-control" />
+
             </div>
             <div class="form-group mt-1">
                 <input type="submit" value="Aggiorna Immagine" class="btn btn-primary" />
@@ -156,17 +165,19 @@
 
         <h1 class="mt-4">Cambia Email</h1>
         <form asp-action="ChangeEmail" method="post">
-            @* Pass UserId through hidden field *@
             <input type="hidden" asp-for="User.UserId" />
+
             <div class="form-group">
                 <label asp-for="User.Email" class="control-label">Old Email</label>
                 <input asp-for="User.Email" type="text" class="form-control" readonly />
             </div>
+
             <div class="form-group">
                 <label asp-for="NewEmail" class="control-label">New Email</label>
                 <input asp-for="NewEmail" type="email" class="form-control" />
                 <span asp-validation-for="NewEmail" class="text-danger"></span>
             </div>
+
             <div class="form-group mt-1">
                 <input type="submit" value="Cambia Email" class="btn btn-primary" />
             </div>

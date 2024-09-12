@@ -11,5 +11,6 @@ namespace Capstone.Services.Interfaces
         Task<bool> ChangeEmailAsync(int userId, string newEmail);
         Task<bool> UpdateUserProfileImageAsync(int userId, MemoryStream imageStream);
         Task UpdateUserGenresAsync(int userId, List<int> genreIds);
+        int GetUserId();
     }
 }
