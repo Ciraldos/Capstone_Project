@@ -13,7 +13,12 @@ namespace Capstone.Services
         {
             _ctx = context;
         }
-
+        public async Task<Review> GetReviewByEventIdAndUserIdAsync(int eventId, int userId)
+        {
+            var review = await _ctx.Reviews
+             .FirstOrDefaultAsync(r => r.EventId == eventId && r.UserId == userId);
+            return review!;
+        }
         public async Task<IEnumerable<Review>> GetReviewsByEventIdAsync(int eventId)
         {
             return await _ctx.Reviews
@@ -23,23 +28,33 @@ namespace Capstone.Services
                 .ToListAsync();
         }
 
-        public async Task<Review> CreateReviewAsync(Review reviewModel, List<MemoryStream> imageStreams)
+        public async Task<Review> CreateReviewAsync(Review reviewModel, List<IFormFile> imageFiles)
         {
-            var eventObj = await _ctx.Events.FindAsync(reviewModel.EventId);
+            // Aggiungi la recensione al database e salva le modifiche per ottenere l'ID
+            _ctx.Reviews.Add(reviewModel);
+            await _ctx.SaveChangesAsync();
 
-            reviewModel.Event = eventObj!;
+            // Ora che la recensione ha un ID, crea la cartella per le immagini
+            var reviewDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews", reviewModel.ReviewId.ToString());
 
-            // Handle the image streams
-            var reviewImages = await HandleReviewImagesAsync(imageStreams, reviewModel);
+            if (!Directory.Exists(reviewDirectory))
+            {
+                Directory.CreateDirectory(reviewDirectory);
+            }
+
+            // Gestisci le immagini con il percorso corretto
+            var reviewImages = await HandleReviewImagesAsync(imageFiles, reviewModel);
             reviewModel.ReviewImgs = reviewImages;
 
-            _ctx.Reviews.Add(reviewModel);
+            // Salva nuovamente per aggiornare i percorsi delle immagini nel database
+            _ctx.Reviews.Update(reviewModel);
             await _ctx.SaveChangesAsync();
 
             return reviewModel;
         }
 
-        public async Task<Review> UpdateReviewAsync(Review reviewModel, List<MemoryStream> replaceImageStreams, List<MemoryStream> additionalImageStreams)
+
+        public async Task<Review> UpdateReviewAsync(Review reviewModel, List<IFormFile> imageFiles)
         {
             var existingReview = await _ctx.Reviews
                 .Include(r => r.ReviewImgs)
@@ -55,24 +70,50 @@ namespace Capstone.Services
             existingReview.Title = reviewModel.Title;
             existingReview.Description = reviewModel.Description;
 
-            // Replace existing images if needed
-            if (replaceImageStreams != null && replaceImageStreams.Any())
+            // Handle replacing existing images
+            if (imageFiles != null && imageFiles.Any())
             {
-                _ctx.ReviewImgs.RemoveRange(existingReview.ReviewImgs);
-                var replacementImages = await HandleReviewImagesAsync(replaceImageStreams, existingReview);
-                existingReview.ReviewImgs.AddRange(replacementImages);
-            }
+                var reviewDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews", reviewModel.ReviewId.ToString());
 
-            // Add additional images
-            if (additionalImageStreams != null && additionalImageStreams.Any())
-            {
-                var additionalImages = await HandleReviewImagesAsync(additionalImageStreams, existingReview);
-                existingReview.ReviewImgs.AddRange(additionalImages);
+                foreach (var img in existingReview.ReviewImgs)
+                {
+
+                    // Remove 'wwwroot' from the beginning of the path for file deletion
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", img.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+
+                    Console.WriteLine($"Attempting to delete file: {imagePath}");
+
+                    if (File.Exists(imagePath))
+                    {
+                        try
+                        {
+                            File.Delete(imagePath);
+                            Console.WriteLine($"Successfully deleted file: {imagePath}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error deleting file {imagePath}: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File not found: {imagePath}");
+                    }
+                }
+
+                _ctx.ReviewImgs.RemoveRange(existingReview.ReviewImgs);
+
+                var replacementImages = await HandleReviewImagesAsync(imageFiles, existingReview);
+                existingReview.ReviewImgs.AddRange(replacementImages);
             }
 
             await _ctx.SaveChangesAsync();
             return existingReview;
         }
+
+
+
+
 
         public async Task<bool> DeleteReviewAsync(int reviewId)
         {
@@ -85,28 +126,60 @@ namespace Capstone.Services
                 return false;
             }
 
+            var reviewDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews", reviewId.ToString());
+
+            // Delete images from file system
+            foreach (var img in review.ReviewImgs)
+            {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", img.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                if (File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
+                }
+            }
+
+            // Delete the directory after images are removed
+            if (Directory.Exists(reviewDirectory))
+            {
+                Directory.Delete(reviewDirectory, true);
+            }
+
+            // Remove the images and review from the database
             _ctx.ReviewImgs.RemoveRange(review.ReviewImgs);
             _ctx.Reviews.Remove(review);
             await _ctx.SaveChangesAsync();
             return true;
         }
 
-        private async Task<List<ReviewImg>> HandleReviewImagesAsync(List<MemoryStream> imageStreams, Review review)
+        private async Task<List<ReviewImg>> HandleReviewImagesAsync(List<IFormFile> imageFiles, Review review)
         {
             var reviewImages = new List<ReviewImg>();
+            var reviewDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews", review.ReviewId.ToString());
 
-            foreach (var stream in imageStreams)
+            if (!Directory.Exists(reviewDirectory))
             {
-                // Reset the stream position to the beginning
-                stream.Position = 0;
+                Directory.CreateDirectory(reviewDirectory);
+            }
 
-                using (var memoryStream = new MemoryStream())
+            foreach (var file in imageFiles)
+            {
+                if (file != null && file.Length > 0)
                 {
-                    await stream.CopyToAsync(memoryStream);
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine(reviewDirectory, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    // Save the relative path to be used in the URL
+                    var relativeFilePath = $"/uploads/reviews/{review.ReviewId}/{fileName}";
+
                     var reviewImg = new ReviewImg
                     {
-                        ImgData = memoryStream.ToArray(),  // Convert MemoryStream to byte array
-                        Review = review
+                        Review = review,
+                        FilePath = relativeFilePath
                     };
                     reviewImages.Add(reviewImg);
                 }
@@ -114,5 +187,6 @@ namespace Capstone.Services
 
             return reviewImages;
         }
+
     }
 }

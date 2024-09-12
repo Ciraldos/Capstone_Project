@@ -9,7 +9,7 @@ namespace Capstone.Models
         public int ReviewImgId { get; set; }
 
         [Required]
-        public required byte[] ImgData { get; set; }
+        public string? FilePath { get; set; }
 
         // Foreign Key 
         public int ReviewId { get; set; }
@@ -18,7 +18,6 @@ namespace Capstone.Models
         [ForeignKey("ReviewId")]
         [Required]
         public required Review Review { get; set; }
-
 
     }
 }
