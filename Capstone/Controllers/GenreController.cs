@@ -6,17 +6,17 @@ namespace Capstone.Controllers
 {
     public class GenreController : Controller
     {
-        private readonly IGenreService _genreService;
+        private readonly IGenreService _genreSvc;
 
         public GenreController(IGenreService genreService)
         {
-            _genreService = genreService;
+            _genreSvc = genreService;
         }
 
         // GET: Genre
         public async Task<ActionResult> List()
         {
-            var genres = await _genreService.GetAllGenresAsync();
+            var genres = await _genreSvc.GetAllGenresAsync();
             return View(genres);
         }
 
@@ -42,7 +42,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _genreService.CreateGenreAsync(genre);
+                await _genreSvc.CreateGenreAsync(genre);
                 return RedirectToAction("List");
             }
             return View(genre);
@@ -51,7 +51,7 @@ namespace Capstone.Controllers
         // GET: Genre/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var genre = await _genreService.GetGenreByIdAsync(id);
+            var genre = await _genreSvc.GetGenreByIdAsync(id);
 
 
             return View(genre);
@@ -64,7 +64,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updatedGenre = await _genreService.UpdateGenreAsync(genre);
+                var updatedGenre = await _genreSvc.UpdateGenreAsync(genre);
 
                 return RedirectToAction("List");
             }
@@ -76,11 +76,11 @@ namespace Capstone.Controllers
         {
             if (confirm)
             {
-                await _genreService.DeleteGenreAsync(id);
+                await _genreSvc.DeleteGenreAsync(id);
                 return RedirectToAction("List");
             }
 
-            var genreToDelete = await _genreService.GetGenreByIdAsync(id);
+            var genreToDelete = await _genreSvc.GetGenreByIdAsync(id);
 
 
             return View(genreToDelete);

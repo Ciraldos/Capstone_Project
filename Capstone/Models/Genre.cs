@@ -13,6 +13,7 @@ namespace Capstone.Models
 
         //EF Reference
         public List<User> Users { get; set; } = [];
+        public List<Event> Events { get; set; } = [];
 
 
     }
