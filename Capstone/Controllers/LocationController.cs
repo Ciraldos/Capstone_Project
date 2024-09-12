@@ -6,24 +6,26 @@ namespace Capstone.Controllers
 {
     public class LocationController : Controller
     {
-        private readonly ILocationService _locationService;
+        private readonly ILocationService _locationSvc;
+        private readonly IConfiguration _configuration;
 
-        public LocationController(ILocationService locationService)
+        public LocationController(ILocationService locationService, IConfiguration configuration)
         {
-            _locationService = locationService;
+            _locationSvc = locationService;
+            _configuration = configuration;
         }
 
         // GET: Location
         public async Task<ActionResult> List()
         {
-            var locations = await _locationService.GetAllLocationsAsync();
+            var locations = await _locationSvc.GetAllLocationsAsync();
             return View(locations);
         }
 
         // GET: Location/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var location = await _locationService.GetLocationByIdAsync(id);
+            var location = await _locationSvc.GetLocationByIdAsync(id);
 
 
             return View(location);
@@ -32,6 +34,8 @@ namespace Capstone.Controllers
         // GET: Location/Create
         public ActionResult Create()
         {
+            var googleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
             return View();
         }
 
@@ -42,7 +46,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _locationService.CreateLocationAsync(location);
+                await _locationSvc.CreateLocationAsync(location);
                 return RedirectToAction("List");
             }
             return View(location);
@@ -51,9 +55,9 @@ namespace Capstone.Controllers
         // GET: Location/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var location = await _locationService.GetLocationByIdAsync(id);
-
-
+            var location = await _locationSvc.GetLocationByIdAsync(id);
+            var googleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
             return View(location);
         }
 
@@ -64,7 +68,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updatedLocation = await _locationService.UpdateLocationAsync(location);
+                var updatedLocation = await _locationSvc.UpdateLocationAsync(location);
 
 
                 return RedirectToAction("List");
@@ -77,11 +81,11 @@ namespace Capstone.Controllers
         {
             if (confirm)
             {
-                await _locationService.DeleteLocationAsync(id);
+                await _locationSvc.DeleteLocationAsync(id);
                 return RedirectToAction("List");
             }
 
-            var locationToDelete = await _locationService.GetLocationByIdAsync(id);
+            var locationToDelete = await _locationSvc.GetLocationByIdAsync(id);
 
             return View(locationToDelete);
         }
