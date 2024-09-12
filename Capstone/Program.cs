@@ -1,4 +1,5 @@
 using Capstone.Context;
+using Capstone.Helpers;
 using Capstone.Models.Spotify;
 using Capstone.Services;
 using Capstone.Services.Auth;
@@ -58,24 +59,25 @@ namespace Capstone
             // Services
             builder.Services
                 .AddScoped<IAuthService, AuthService>()
-                .AddScoped<IPasswordHelper, PasswordHelper>()
-                .AddScoped<IGenreService, GenreService>()
-                .AddScoped<IMasterService, MasterService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IMasterService, MasterService>()
+                .AddScoped<IAdminService, AdminService>()
                 .AddScoped<IEventService, Services.EventService>()
+                .AddScoped<IGenreService, GenreService>()
                 .AddScoped<ILocationService, LocationService>()
                 .AddScoped<IDjService, DjService>()
+                .AddScoped<IReviewService, Services.ReviewService>()
                 .AddScoped<ICommentService, CommentService>()
-                .AddScoped<ICartService, CartService>()
-                .AddScoped<IQrCodeService, QRCodeService>()
                 .AddScoped<ICommentLikeService, CommentLikeService>()
-                .AddScoped<ISpotifyService, SpotifyService>()
                 .AddScoped<ITicketTypeService, TicketTypeService>()
-                .AddScoped<IEmailService, EmailService>()
-                .AddScoped<IReviewService, Services.ReviewService>();
+                .AddScoped<ICartService, CartService>()
+                .AddScoped<IPasswordHelper, PasswordHelper>()
+                .AddScoped<ISpotifyService, SpotifyService>()
+                .AddScoped<IQrCodeService, QRCodeService>()
+                .AddScoped<IEmailService, EmailService>();
 
-
+            builder.Services.AddHttpContextAccessor();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

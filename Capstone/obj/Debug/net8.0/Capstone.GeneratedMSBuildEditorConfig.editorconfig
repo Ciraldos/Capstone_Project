@@ -26,6 +26,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\andre\Desktop\Epicode1\Capstone_Project\Capstone
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/andre/Desktop/Epicode1/Capstone_Project/Capstone/Views/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/andre/Desktop/Epicode1/Capstone_Project/Capstone/Views/Auth/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -152,6 +156,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/andre/Desktop/Epicode1/Capstone_Project/Capstone/Views/TicketType/List.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0VHlwZVxMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/andre/Desktop/Epicode1/Capstone_Project/Capstone/Views/Ticket/List.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XExpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/andre/Desktop/Epicode1/Capstone_Project/Capstone/Views/Ticket/MyTickets.cshtml]
