@@ -1,6 +1,7 @@
 ﻿using Capstone.Services.Interfaces;
 using QRCoder;
 
+namespace Capstone.Services;
 public class QRCodeService : IQrCodeService
 {
     public byte[] GenerateQRCode(string text)

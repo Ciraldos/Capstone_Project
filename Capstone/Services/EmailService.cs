@@ -15,13 +15,13 @@ public class EmailService : IEmailService
 
     public EmailService(IConfiguration configuration)
     {
-        _smtpHost = configuration["SmtpSettings:Host"];
-        _smtpPort = int.Parse(configuration["SmtpSettings:Port"]);
-        _smtpUsername = configuration["SmtpSettings:Username"];
-        _smtpPassword = configuration["SmtpSettings:Password"];
-        _enableSsl = bool.Parse(configuration["SmtpSettings:EnableSsl"]);
-        _fromEmail = configuration["SmtpSettings:FromEmail"];
-        _fromName = configuration["SmtpSettings:FromName"];
+        _smtpHost = configuration["SmtpSettings:Host"]!;
+        _smtpPort = int.Parse(configuration["SmtpSettings:Port"]!);
+        _smtpUsername = configuration["SmtpSettings:Username"]!;
+        _smtpPassword = configuration["SmtpSettings:Password"]!;
+        _enableSsl = bool.Parse(configuration["SmtpSettings:EnableSsl"]!);
+        _fromEmail = configuration["SmtpSettings:FromEmail"]!;
+        _fromName = configuration["SmtpSettings:FromName"]!;
     }
 
     public async Task SendEmailAsync(string toEmail, string subject, string body, List<Ticket> tickets)

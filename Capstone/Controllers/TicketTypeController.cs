@@ -6,11 +6,11 @@ namespace Capstone.Controllers
 {
     public class TicketTypeController : Controller
     {
-        private readonly ITicketTypeService _ticketTypeService;
+        private readonly ITicketTypeService _ticketTypeSvc;
 
         public TicketTypeController(ITicketTypeService ticketTypeService)
         {
-            _ticketTypeService = ticketTypeService;
+            _ticketTypeSvc = ticketTypeService;
         }
 
         public IActionResult Create()
@@ -23,7 +23,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _ticketTypeService.CreateAsync(ticketType);
+                await _ticketTypeSvc.CreateAsync(ticketType);
                 return RedirectToAction("List");
             }
             return View(ticketType);
@@ -31,7 +31,7 @@ namespace Capstone.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var ticketType = await _ticketTypeService.GetTicketTypeByIdAsync(id);
+            var ticketType = await _ticketTypeSvc.GetTicketTypeByIdAsync(id);
             return View(ticketType);
         }
 
@@ -41,7 +41,7 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _ticketTypeService.UpdateAsync(ticketType);
+                await _ticketTypeSvc.UpdateAsync(ticketType);
                 return RedirectToAction("List");
             }
             return View(ticketType);
@@ -49,20 +49,20 @@ namespace Capstone.Controllers
 
         public async Task<IActionResult> List()
         {
-            var ticketTypes = await _ticketTypeService.GetAllTicketTypesAsync();
+            var ticketTypes = await _ticketTypeSvc.GetAllTicketTypesAsync();
             return View(ticketTypes);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _ticketTypeService.DeleteAsync(id);
+            await _ticketTypeSvc.DeleteAsync(id);
             return RedirectToAction("List");
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var ticketType = await _ticketTypeService.GetTicketTypeByIdAsync(id);
+            var ticketType = await _ticketTypeSvc.GetTicketTypeByIdAsync(id);
             return View(ticketType);
         }
     }

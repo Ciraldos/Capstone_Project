@@ -1,32 +1,28 @@
 ﻿using Capstone.Context;
+using Capstone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
     public class TicketController : Controller
     {
-        private readonly DataContext _dataContext;
-        public TicketController(DataContext dataContext)
+        private readonly DataContext _ctx;
+        private readonly IUserService _userSvc;
+        public TicketController(DataContext dataContext, IUserService userService)
         {
-            _dataContext = dataContext;
+            _ctx = dataContext;
+            _userSvc = userService;
         }
-        public async Task<IActionResult> MyTickets()
+        public async Task<IActionResult> List()
         {
-            var userId = GetUserId(); // Ottieni l'ID dell'utente loggato
-            var tickets = await _dataContext.Tickets
+            var userId = _userSvc.GetUserId(); // Ottieni l'ID dell'utente loggato
+            var tickets = await _ctx.Tickets
                 .Include(t => t.Event)       // Assicurati che l'evento sia caricato
                 .Include(t => t.TicketType)  // Assicurati che il tipo di biglietto sia caricato
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
             return View(tickets);
-        }
-
-        private int GetUserId()
-        {
-            // Implementa un metodo per ottenere l'ID dell'utente loggato, ad esempio:
-            return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
     }
 }
