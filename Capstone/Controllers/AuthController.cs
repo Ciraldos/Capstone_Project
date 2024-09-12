@@ -1,22 +1,21 @@
-﻿using Capstone.Context;
-using Capstone.Models.ViewModels.Auth;
+﻿using Capstone.Models.ViewModels.Auth;
+using Capstone.Services.Interfaces;
 using Capstone.Services.Interfaces.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IAuthService _authService;
-        private readonly DataContext _dataContext;
-        public AuthController(IAuthService authService, DataContext dataContext)
+        private readonly IAuthService _authSvc;
+        private readonly IGenreService _genreSvc;
+        public AuthController(IAuthService authService, IGenreService genreService)
         {
-            _authService = authService;
-            _dataContext = dataContext;
+            _authSvc = authService;
+            _genreSvc = genreService;
         }
 
         public IActionResult Index()
@@ -40,7 +39,7 @@ namespace Capstone.Controllers
 
             try
             {
-                var existingUser = await _authService.LoginAsync(model);
+                var existingUser = await _authSvc.LoginAsync(model);
 
                 var claims = new List<Claim>
                 {
@@ -69,7 +68,7 @@ namespace Capstone.Controllers
 
         public async Task<IActionResult> Register()
         {
-            var genres = await _dataContext.Genres.ToListAsync();
+            var genres = await _genreSvc.GetAllGenresAsync();
             ViewBag.Genres = genres;
             return View();
         }
@@ -85,13 +84,13 @@ namespace Capstone.Controllers
 
             try
             {
-                await _authService.RegisterAsync(model);
+                await _authSvc.RegisterAsync(model);
                 return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Registrazione fallita: " + ex.Message);
-                var genres = await _dataContext.Genres.ToListAsync();
+                var genres = await _genreSvc.GetAllGenresAsync();
                 ViewBag.Genres = genres;
                 return View(model);
             }

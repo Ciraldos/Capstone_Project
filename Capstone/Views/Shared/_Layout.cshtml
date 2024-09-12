@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - Capstone</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Capstone.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -53,7 +52,10 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Cart">Carrello</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="MyTickets">I miei biglietti</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="List">I miei biglietti</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bolder text-danger" asp-area="" asp-controller="Admin" asp-action="Dashboard">Admin</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link fw-bolder text-danger" asp-area="" asp-controller="Auth" asp-action="Logout">Esci</a>
