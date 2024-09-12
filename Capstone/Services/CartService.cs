@@ -7,32 +7,46 @@ namespace Capstone.Services
 {
     public class CartService : ICartService
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _ctx;
         private readonly IEmailService _emailService;
         private readonly IQrCodeService _qrCodeService;
 
         public CartService(DataContext dataContext, IQrCodeService qrCodeService, IEmailService emailService)
         {
-            _dataContext = dataContext;
+            _ctx = dataContext;
             _qrCodeService = qrCodeService;
             _emailService = emailService;
         }
-
+        public async Task<List<CartItem>> GetCartItemsByUserIdAsync(int userId)
+        {
+            return await _ctx.CartItems
+                .Where(ci => ci.Cart.UserId == userId)
+                .Include(ci => ci.Event)
+                .Include(ci => ci.TicketType)
+                .ToListAsync();
+        }
+        public async Task<Cart> GetCartByUserIdAsync(int userId)
+        {
+            var cart = await _ctx.Carts
+                .Where(c => c.UserId == userId)
+                .SingleOrDefaultAsync();
+            return cart!;
+        }
         public async Task<Cart> AddToCartAsync(int userId, int eventId, int ticketTypeId, int quantity)
         {
             // Trova il carrello dell'utente dentro il database. Se non esiste lo creo.
-            var cart = await _dataContext.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await _ctx.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
 
-            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = await _ctx.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (cart == null)
             {
                 cart = new Cart { User = user };
-                await _dataContext.Carts.AddAsync(cart);
-                await _dataContext.SaveChangesAsync();
+                await _ctx.Carts.AddAsync(cart);
+                await _ctx.SaveChangesAsync();
             }
 
             // Controlla la disponibilità dei biglietti
-            var eventTicketType = await _dataContext.EventTicketType
+            var eventTicketType = await _ctx.EventTicketType
                 .FirstOrDefaultAsync(et => et.EventId == eventId && et.TicketTypeId == ticketTypeId);
 
             if (eventTicketType == null || eventTicketType.AvailableQuantity < quantity)
@@ -41,7 +55,7 @@ namespace Capstone.Services
             }
 
             // Se il biglietto esiste già nel carrello, aggiorna la quantità
-            var cartItem = await _dataContext.CartItems
+            var cartItem = await _ctx.CartItems
                 .FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
 
             if (cartItem != null)
@@ -58,16 +72,16 @@ namespace Capstone.Services
                 {
                     Cart = cart,
                     Quantity = quantity,
-                    Event = await _dataContext.Events.FindAsync(eventId),
-                    TicketType = await _dataContext.TicketTypes.FindAsync(ticketTypeId)
+                    Event = await _ctx.Events.FindAsync(eventId),
+                    TicketType = await _ctx.TicketTypes.FindAsync(ticketTypeId)
                 };
-                _dataContext.CartItems.Add(cartItem);
+                _ctx.CartItems.Add(cartItem);
             }
 
             // Riduci la quantità disponibile nel database
             eventTicketType.AvailableQuantity -= quantity;
 
-            await _dataContext.SaveChangesAsync();
+            await _ctx.SaveChangesAsync();
             return cart;
         }
 
@@ -75,11 +89,11 @@ namespace Capstone.Services
         public async Task PurchaseCartAsync(int userId)
         {
             // Trova il carrello e i relativi articoli
-            var cart = await _dataContext.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await _ctx.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
             if (cart == null)
                 throw new InvalidOperationException("Nessun carrello trovato per questo utente");
 
-            var cartItems = await _dataContext.CartItems
+            var cartItems = await _ctx.CartItems
                 .Where(ci => ci.CartId == cart.CartId)
                 .Include(ci => ci.Event)
                 .Include(ci => ci.TicketType)
@@ -88,7 +102,7 @@ namespace Capstone.Services
             if (!cartItems.Any())
                 throw new InvalidOperationException("Nessun articolo nel carrello");
 
-            var user = await _dataContext.Users.FindAsync(userId);
+            var user = await _ctx.Users.FindAsync(userId);
             string emailBody = "<h1>Grazie per il tuo acquisto!</h1><ul>";
 
             var generatedTickets = new List<Ticket>();
@@ -109,7 +123,7 @@ namespace Capstone.Services
                         Event = cartItem.Event,
                         QRCodeImage = qrCodeImage
                     };
-                    _dataContext.Tickets.Add(ticket);
+                    _ctx.Tickets.Add(ticket);
                     generatedTickets.Add(ticket);  // Aggiungi il biglietto alla lista dei biglietti generati
 
                     // Aggiungi dettagli del biglietto all'email
@@ -119,8 +133,8 @@ namespace Capstone.Services
 
             emailBody += "</ul>";
 
-            _dataContext.CartItems.RemoveRange(cartItems);
-            await _dataContext.SaveChangesAsync();
+            _ctx.CartItems.RemoveRange(cartItems);
+            await _ctx.SaveChangesAsync();
 
             // Invia l'email con i QR code dei biglietti generati
             await _emailService.SendEmailAsync(user.Email, "I tuoi biglietti", emailBody, generatedTickets);
@@ -138,7 +152,7 @@ namespace Capstone.Services
                 // Genera un numero di biglietto
                 ticketNumber = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
                 // Verifica se il numero di biglietto esiste già
-                isUnique = !await _dataContext.Tickets.AnyAsync(t => t.NumTicket == ticketNumber);
+                isUnique = !await _ctx.Tickets.AnyAsync(t => t.NumTicket == ticketNumber);
             } while (!isUnique); // Continua a generare fino a trovare un numero unico
 
             return ticketNumber;

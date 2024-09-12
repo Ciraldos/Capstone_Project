@@ -1,45 +1,35 @@
-﻿using Capstone.Context;
-using Capstone.Models;
+﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
-using System.Security.Claims;
 
 namespace Capstone.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _cartService;
-        private readonly DataContext _dataContext;
-        private readonly IConfiguration _configuration;
+        private readonly ICartService _cartSvc;
+        private readonly IUserService _userSvc;
 
-
-        public CartController(ICartService cartService, DataContext dataContext, IConfiguration configuration)
+        public CartController(ICartService cartService, IUserService userService)
         {
-            _cartService = cartService;
-            _dataContext = dataContext;
-            _configuration = configuration;
+            _cartSvc = cartService;
+            _userSvc = userService;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(int eventId, int ticketTypeId, int quantity)
         {
-            var userId = GetUserId(); // Ottieni l'ID dell'utente loggato
-            await _cartService.AddToCartAsync(userId, eventId, ticketTypeId, quantity);
+            var userId = _userSvc.GetUserId(); // Ottieni l'ID dell'utente loggato
+            await _cartSvc.AddToCartAsync(userId, eventId, ticketTypeId, quantity);
             return RedirectToAction("List", "Event");
         }
 
         public async Task<IActionResult> Cart()
         {
-            var userId = GetUserId();  // Assumendo che GetUserId() recuperi l'ID dell'utente corrente
+            var userId = _userSvc.GetUserId();  // Assumendo che GetUserId() recuperi l'ID dell'utente corrente
 
             // Recupera tutti i cart items associati all'utente corrente
-            var cartItems = await _dataContext.CartItems
-                .Where(ci => ci.Cart.UserId == userId)
-                .Include(ci => ci.Event)
-                .Include(ci => ci.TicketType)
-                .ToListAsync();
+            var cartItems = await _cartSvc.GetCartItemsByUserIdAsync(userId);
 
             if (!cartItems.Any())
             {
@@ -47,9 +37,7 @@ namespace Capstone.Controllers
             }
 
             // Recupera il carrello dell'utente (se necessario per ulteriori dettagli)
-            var cart = await _dataContext.Carts
-                .Where(c => c.UserId == userId)
-                .SingleOrDefaultAsync();
+            await _cartSvc.GetCartByUserIdAsync(userId);
 
             return View(cartItems);
         }
@@ -59,14 +47,9 @@ namespace Capstone.Controllers
         [HttpPost]
         public async Task<IActionResult> Purchase()
         {
-            var userId = GetUserId();
+            var userId = _userSvc.GetUserId();
 
-            // Retrieve the cart items and calculate the total price
-            var cartItems = await _dataContext.CartItems
-                .Where(ci => ci.Cart.UserId == userId)
-                .Include(ci => ci.Event)
-                .Include(ci => ci.TicketType)
-                .ToListAsync();
+            var cartItems = await _cartSvc.GetCartItemsByUserIdAsync(userId);
 
             if (!cartItems.Any())
                 throw new InvalidOperationException("No items in cart");
@@ -119,8 +102,8 @@ namespace Capstone.Controllers
 
             if (session.PaymentStatus == "paid")
             {
-                var userId = GetUserId();
-                await _cartService.PurchaseCartAsync(userId);
+                var userId = _userSvc.GetUserId();
+                await _cartSvc.PurchaseCartAsync(userId);
                 return View("ConfirmPurchase"); // Optionally show a confirmation page
             }
             else
@@ -130,13 +113,6 @@ namespace Capstone.Controllers
         }
 
 
-
-
-        private int GetUserId()
-        {
-            // Implementa un metodo per ottenere l'ID dell'utente loggato, ad esempio:
-            return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        }
 
     }
 }
