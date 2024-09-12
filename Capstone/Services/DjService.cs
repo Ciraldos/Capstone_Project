@@ -11,12 +11,12 @@ namespace Capstone.Services
     {
         private readonly DataContext _ctx;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly SpotifyService _spotifyAuthService;
+        private readonly SpotifyService _spotifyAuthSvc;
         public DjService(DataContext ctx, IHttpClientFactory httpClientFactory, SpotifyService spotifyAuthService)
         {
             _ctx = ctx;
             _httpClientFactory = httpClientFactory;
-            _spotifyAuthService = spotifyAuthService;
+            _spotifyAuthSvc = spotifyAuthService;
         }
 
         public async Task<Dj> CreateDjAsync(Dj dj)
@@ -46,7 +46,7 @@ namespace Capstone.Services
 
         private async Task<string> GetSpotifyArtistImageUrlAsync(string artistSpotifyId)
         {
-            var accessToken = await _spotifyAuthService.GetAccessTokenAsync();
+            var accessToken = await _spotifyAuthSvc.GetAccessTokenAsync();
             var client = _httpClientFactory.CreateClient();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

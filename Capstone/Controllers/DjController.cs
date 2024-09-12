@@ -5,12 +5,12 @@ using System.Net.Http.Headers;
 
 public class DjController : Controller
 {
-    private readonly IDjService _djService;
+    private readonly IDjService _djSvc;
     private readonly ISpotifyService _spotifySvc;
     private readonly IHttpClientFactory _httpClientFactory;
     public DjController(IDjService djService, IHttpClientFactory httpClientFactory, ISpotifyService spotifyService)
     {
-        _djService = djService;
+        _djSvc = djService;
         _spotifySvc = spotifyService;
         _httpClientFactory = httpClientFactory;
     }
@@ -23,32 +23,32 @@ public class DjController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Dj dj)
     {
-        var createdDj = await _djService.CreateDjAsync(dj);
+        var createdDj = await _djSvc.CreateDjAsync(dj);
         return RedirectToAction("Detail", new { id = createdDj.DjId });
     }
 
     public async Task<IActionResult> Detail(int id)
     {
-        var dj = await _djService.GetDjByIdAsync(id);
+        var dj = await _djSvc.GetDjByIdAsync(id);
         return View(dj);
     }
 
     public async Task<IActionResult> List()
     {
-        var djList = await _djService.GetAllDjAsync();
+        var djList = await _djSvc.GetAllDjAsync();
         return View(djList);
     }
 
     [HttpPost]
     public async Task<IActionResult> DeleteDj(int id)
     {
-        await _djService.DeleteDjAsync(id);
+        await _djSvc.DeleteDjAsync(id);
         return RedirectToAction("List");
     }
 
     public async Task<IActionResult> Edit(int id)
     {
-        var dj = await _djService.GetDjByIdAsync(id);
+        var dj = await _djSvc.GetDjByIdAsync(id);
 
 
         return View(dj);
@@ -64,7 +64,7 @@ public class DjController : Controller
 
         try
         {
-            var updatedDj = await _djService.UpdateDjAsync(dj);
+            var updatedDj = await _djSvc.UpdateDjAsync(dj);
             return RedirectToAction("List");
         }
 
