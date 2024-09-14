@@ -46,3 +46,21 @@ function submitEditForm(reviewId) {
     // Prevent the form from submitting the traditional way
     return false;
 }
+
+
+    let prevScrollPos = window.pageYOffset; // Posizione iniziale dello scroll
+    const navbar = document.getElementById("navbar");
+
+    window.onscroll = function() {
+        let currentScrollPos = window.pageYOffset;
+
+        if (prevScrollPos > currentScrollPos) {
+        // Quando si scorre verso l'alto, la navbar ricompare
+        navbar.style.top = "0";
+        } else {
+        // Quando si scorre verso il basso, la navbar si nasconde
+        navbar.style.top = "-150px"; // Altezza della navbar o simile
+        }
+
+    prevScrollPos = currentScrollPos;
+    }

@@ -1,4 +1,17 @@
-﻿.main-comment {
+﻿body{
+    font-family: 'Oswald', sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+p {
+    font-weight: 400;
+}
+
+.main-comment {
     margin-left: 0;
 }
 
@@ -16,3 +29,5 @@
     padding-left: 10px;
     border-left: 2px dashed #ccc;
 }
+
+

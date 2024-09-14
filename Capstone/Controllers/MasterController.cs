@@ -90,8 +90,25 @@ namespace Capstone.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveRoleFromUser(int userId, int roleId)
         {
-            await _masterSvc.RemoveRoleFromUserAsync(userId, roleId);
-            return RedirectToAction("MasterDashboard");
+            var viewModel = new MasterViewModel
+            {
+                Users = await _userSvc.GetAllUsersAsync(),
+                Roles = await _roleSvc.GetAllRolesAsync()
+            };
+
+            try
+            {
+                await _masterSvc.RemoveRoleFromUserAsync(userId, roleId);
+                return RedirectToAction("MasterDashboard");
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Add the error message to ModelState
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                // Return the same view with the error
+                return View("MasterDashboard", viewModel);
+            }
         }
     }
 }

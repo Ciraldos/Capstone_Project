@@ -2,8 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1>@User.Identity.Name</h1>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="row gx-0">
+        <div class="col-12 position-relative">
+            <img src="~/images/Bg-Home.png" alt="background" class="fullscreen-bg">
+            <div class="text-overlay">
+                <h1 >Entra nel ritmo dell’ignoto</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-md-row flex-column px-4 px-md-0 justify-content-center align-items-center mt-5 py-4">
+        <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+            <video src="/images/video.mp4" autoplay loop muted class="video"></video>    
+        </div>
+        <div class="col-2"></div>
+        <div class="col-12 col-md-4">
+            <h1 class="myTitle">BENVENUTO SU TON?GHT!</h1>
+            <p class="myText">Scopri la scena musicale più vibrante della città con TON?GHT. La nostra piattaforma ti offre accesso esclusivo ai migliori eventi del panorama elettronico. Unisciti alla festa e vivi ogni notte come una celebrazione.</p>
+        </div>
+    </div>
+
+    <div class="d-flex flex-md-row flex-column-reverse px-4 px-md-0 justify-content-center align-items-center mt-5 mybg py-4 ">
+        <div class="col-12 col-md-4">
+            <h1 class="text-white">Scopri i nostri eventi</h1>
+            <p class="text-light">Dai un’occhiata agli eventi più attesi del mese. Prenota i tuoi biglietti ora e preparati a vivere serate indimenticabili con artisti di fama e atmosfere mozzafiato.</p>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+            <video src="/images/Afterlife.mp4" autoplay loop muted class="video"></video>
+        </div>
+    </div>
+
+
+

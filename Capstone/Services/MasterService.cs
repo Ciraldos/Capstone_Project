@@ -39,6 +39,13 @@ namespace Capstone.Services.Master
             if (user == null || role == null)
                 return false;
 
+            // Check if the user only has one role
+            if (user.Roles.Count == 1)
+            {
+                throw new InvalidOperationException("Cannot remove the last role from the user.");
+            }
+
+            // Remove role if there is more than one role
             if (user.Roles.Contains(role))
             {
                 user.Roles.Remove(role);
