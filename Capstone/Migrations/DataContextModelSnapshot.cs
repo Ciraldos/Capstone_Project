@@ -142,6 +142,9 @@ namespace Capstone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DjId"));
 
+                    b.Property<string>("ArtistDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ArtistName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -177,8 +180,8 @@ namespace Capstone.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("HostName")
                         .IsRequired()
