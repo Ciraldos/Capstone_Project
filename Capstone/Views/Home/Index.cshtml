@@ -1,37 +1,151 @@
-﻿@{
+﻿@model List<Event>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="row gx-0">
-        <div class="col-12 position-relative">
-            <img src="~/images/Bg-Home.png" alt="background" class="fullscreen-bg">
-            <div class="text-overlay">
-                <h1 >Entra nel ritmo dell’ignoto</h1>
+
+<div class="row position-relative justify-content-center" id="bg">
+    <div id="blur">
+
+        <div class="text-overlay-bottom-left">
+            <h1 class="display-1 fw-bolder" id="typing-text-bottom-left"></h1>
+        </div>
+        <div class="text-overlay-top-right">
+            <h1 class="display-1 fw-bolder" id="typing-text-top-right"></h1>
+        </div>
+        <div class="text-overlay-bottom-right">
+            <h1 class="display-1 fw-bolder" id="typing-text-bottom-right"></h1>
+        </div>
+        <div class="text-overlay-top-left">
+            <h1 class="display-1 fw-bolder" id="typing-text-top-left"></h1>
+        </div>
+        <div class="text-overlay-center">
+            <h1 class="display-1 fw-bolder text-center" id="typing-text-center"></h1>
+        </div>
+        <h1 class="text-white text-center" id="start">Dove la musica prende vita</h1>
+    </div>
+</div>
+
+<div class="row flex-md-row flex-column px-4  justify-content-center align-items-center mt-5 py-4">
+    <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+        <video src="/images/video.mp4" autoplay loop muted class="video"></video>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-12 col-md-4">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <h1>Bentornato @User.Identity.Name!</h1>
+        }
+        else
+        {
+
+            <h1 class="myTitle">Benvenuto su TON?GHT</h1>
+        }
+        <p class="myText">Scopri la scena musicale più vibrante della città con TON?GHT. La nostra piattaforma ti offre
+            accesso esclusivo ai migliori eventi del panorama elettronico. Unisciti alla festa e vivi ogni notte come
+            una celebrazione.</p>
+    </div>
+</div>
+
+<div class="row flex-md-row flex-column-reverse px-4  justify-content-center align-items-center mt-5 mybg py-4 ">
+    <div class="col-12 col-md-4">
+        <h1 class="text-white">Scopri i nostri eventi</h1>
+        <p class="text-light">Dai un’occhiata agli eventi più attesi del mese. Prenota i tuoi biglietti ora e preparati
+            a vivere serate indimenticabili con artisti di fama e atmosfere mozzafiato.</p>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+        <video src="/images/Afterlife.mp4" autoplay loop muted class="video"></video>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <h1 class="text-center my-5 myTitle">Trending <i class="bi bi-graph-up-arrow fs-3"></i></h1>
+
+    @foreach (var item in Model)
+    {
+        <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
+            class="col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+            <div class="event-wrapper text-center relative" style="width:200px">
+                <span class="bg-danger rounded text-decoration-none text-white" id="pill"><i class="bi bi-fire"></i></span>
+                <img src="@item.EventImgs.FirstOrDefault().FilePath" alt="img" class="event-img" />
+                <div class="event-text text-start mt-1">
+                    <h4 class="text-dark">@item.Name</h4>
+                    <small class="event-date text-dark">@item.DateFrom.Day/@item.DateFrom.Month -
+                        @item.DateTo.Day/@item.DateTo.Month</small><br />
+                    <small class="event-location myText">@item.Location.LocationName</small>
+                    <p class="event price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault().Price
+                    </p>
+                </div>
+            </div>
+        </a>
+    }
+</div>
+<div class="row flex-md-row flex-column-reverse px-4 justify-content-center align-items-center mt-5 mybg py-4">
+    <div class="col-12 col-md-4">
+        <h1 class="text-white">Scarica la nostra app</h1>
+        <p class="text-light">Scarica l'app TON?GHT e resta aggiornato sugli eventi esclusivi ovunque ti trovi. La festa è sempre con te!</p>
+        <a href="#" class="myBtn btn-danger mt-3 px-4 py-2 fw-bolder">Scarica ora</a>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+        <img src="/images/shotsnapp-1726325334.081 (1).png" alt="Scarica l'app TON?GHT" class="img-fluid">
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center bg-white py-5">
+    <div class="col-12 text-center">
+        <h2 class="myTitle">Come Funziona</h2>
+        <p class="myText">TON?GHT rende facile scoprire eventi e acquistare biglietti. Segui questi semplici passi:</p>
+        <div class="row mt-4">
+            <div class="col-md-4 text-center">
+                <i class="bi bi-search display-4 text-danger"></i>
+                <h4 class="myTitle mt-2">1. Cerca Eventi</h4>
+                <p>Usa la nostra barra di ricerca per trovare i migliori eventi vicino a te.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-ticket display-4 text-danger"></i>
+                <h4 class="myTitle mt-2">2. Acquista Biglietti</h4>
+                <p>Seleziona l'evento e scegli il tuo biglietto direttamente dalla piattaforma.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-music-note display-4 text-danger"></i>
+                <h4 class="myTitle mt-2">3. Goditi la Musica</h4>
+                <p>Mostra il tuo ticket all'entrata e goditi l'esperienza.</p>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="d-flex flex-md-row flex-column px-4 px-md-0 justify-content-center align-items-center mt-5 py-4">
-        <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
-            <video src="/images/video.mp4" autoplay loop muted class="video"></video>    
-        </div>
-        <div class="col-2"></div>
-        <div class="col-12 col-md-4">
-            <h1 class="myTitle">BENVENUTO SU TON?GHT!</h1>
-            <p class="myText">Scopri la scena musicale più vibrante della città con TON?GHT. La nostra piattaforma ti offre accesso esclusivo ai migliori eventi del panorama elettronico. Unisciti alla festa e vivi ogni notte come una celebrazione.</p>
+<div class="row justify-content-center align-items-center bg-black py-5">
+    <div class="col-12 text-center">
+        <h2 class="text-white">Seguici sui Social</h2>
+        <p class="text-light">Non perderti nessuna novità! Seguici sui nostri canali social per aggiornamenti e offerte speciali.</p>
+        <div class="d-flex justify-content-center mt-4">
+            
+            <a href="https://www.facebook.com" class="btn btn-outline-light rounded-circle mx-1 mx-md-3">
+                <i class="bi bi-facebook fs-2 fs-md-"></i>
+            </a>
+           
+            <a href="https://www.instagram.com" class="btn btn-outline-light rounded-circle mx-1 mx-md-3">
+                <i class="bi bi-instagram fs-2 fs-md-"></i>
+            </a>
+            
+            <a href="https://www.x.com" class="btn btn-outline-light rounded-circle  mx-1 mx-md-3">
+                <i class="bi bi-twitter-x fs-2 fs-md-"></i>
+            </a>
+
+            <a href="https://www.threads.net" class="btn btn-outline-light rounded-circle  mx-1 mx-md-3">
+                <i class="bi bi-threads fs-2 fs-md-"></i>
+            </a>
+
+            <a href="https://www.tiktok.com" class="btn btn-outline-light rounded-circle  mx-1 mx-md-3">
+                <i class="bi bi-tiktok fs-2 fs-md-3"></i>
+            </a>
         </div>
     </div>
-
-    <div class="d-flex flex-md-row flex-column-reverse px-4 px-md-0 justify-content-center align-items-center mt-5 mybg py-4 ">
-        <div class="col-12 col-md-4">
-            <h1 class="text-white">Scopri i nostri eventi</h1>
-            <p class="text-light">Dai un’occhiata agli eventi più attesi del mese. Prenota i tuoi biglietti ora e preparati a vivere serate indimenticabili con artisti di fama e atmosfere mozzafiato.</p>
-        </div>
-        <div class="col-2"></div>
-        <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
-            <video src="/images/Afterlife.mp4" autoplay loop muted class="video"></video>
-        </div>
-    </div>
+</div>
 
 
-
+<script src="/js/index.js"></script>

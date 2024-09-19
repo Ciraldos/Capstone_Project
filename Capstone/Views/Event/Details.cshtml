@@ -9,363 +9,383 @@
 
     bool isEventOver = DateTime.Now > Model.DateTo;
     bool userHasPostedReview = ViewBag.Reviews != null && ((IEnumerable<Capstone.Models.Review>)ViewBag.Reviews).Any(r => r.UserId == currentUserId);
-
     var totalTickets = Model.EventTicketType.Sum(ett => ett.AvailableQuantity);
 }
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/event_details.css" />
-
-    
+    <link rel="stylesheet" href="/css/event_details.css?v=@DateTime.Now.Ticks">
 </head>
-<h2>Event Details</h2>
 
-<div>
-    <h4>@Model.Name</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
+<div class="row" id="bgEvent" style="--bg-image: url('@Model.EventImgs.FirstOrDefault()?.FilePath');">
+    <div class="bgOverlay">
+        <div class="col-12">
+                <!-- Colonna per le immagini -->
+            <div class="row justify-content-center p-1 p-md-5">
+            
+                <div class="col-12 col-md-3">
+                    <div class="sticky-top p-3 p-md-0 mb-2 mb-md-0" style="top:15vh">
+                        @if (Model.EventImgs != null && Model.EventImgs.Count > 1)
+                        {
+                            <!-- Carosello per più immagini -->
+                            <div id="eventCarousel" class="carousel slide">
+                                <div class="carousel-inner">
+                                    @foreach (var img in Model.EventImgs)
+                                    {
+                                        <div class="carousel-item @(Model.EventImgs.IndexOf(img) == 0 ? "active" : "")">
+                                            <div class="image-wrapper">
+                                                <img src="@img.FilePath" class="d-block w-100" alt="Event image" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            
 
-        <dt class="col-sm-2">Date From</dt>
-        <dd class="col-sm-10">@Model.DateFrom.ToString("yyyy-MM-dd")</dd>
+                        }
+                        else @if (Model.EventImgs.Count == 1)
+                        {
+                            <div class="image-wrapper">
+                                <img src="@Model.EventImgs.FirstOrDefault()?.FilePath" alt="Event image" class="img-fluid" />
+                            </div>
+                        }
 
-        <dt class="col-sm-2">Date To</dt>
-        <dd class="col-sm-10">@Model.DateTo.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-2">Host Name</dt>
-        <dd class="col-sm-10">@Model.HostName</dd>
-
-        <h3>Location</h3>
-        <dd class="col-sm-10">@Model.Location?.LocationName</dd>
-        <dd class="col-sm-10">@Model.Location?.AddressGoogleApi</dd>
-
-        <div class="row">
-            <!-- Google Maps Iframe -->
-            <div class="col-md-6">
-                <div id="map" style="height: 300px; width: 100%;"></div>
-            </div>
-        </div>
-
-        <dt class="col-sm-2">DJs</dt>
-        <dd class="col-sm-10">
-            @if (Model.Djs != null && Model.Djs.Count > 0)
-            {
-                <ul>
-                    @foreach (var dj in Model.Djs)
-                    {
-                        <li>
-                            <a href="@Url.Action("Detail", "DJ", new { id = dj.DjId })">@dj.ArtistName</a>
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p>No DJs associated with this event.</p>
-            }
-        </dd>
-        <dt class="col-sm-2">Genres</dt>
-        <dd class="col-sm-10">
-            @if (Model.Genres != null )
-            {
-                <ul>
-                    @foreach (var genre in Model.Genres)
-                    {
-                        <li>
-                            <p>@genre.Name</p>
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p>No DJs associated with this event.</p>
-            }
-        </dd>
-
-        <dt class="col-sm-2">Images</dt>
-        <dd class="col-sm-10">
-            @if (Model.EventImgs != null && Model.EventImgs.Count > 0)
-            {
-                foreach (var img in Model.EventImgs)
-                {
-                    <div class="event-image">
-                        <img src="@img.FilePath" alt="Event image" class="img-fluid" />
+                        else
+                        {
+                            <!-- Nessuna immagine -->
+                            <p>Nessuna immagine disponibile per questo evento.</p>
+                        }
                     </div>
-                }
-            }
-            else
-            {
-                <p>No images available for this event.</p>
-            }
-        </dd>
+                </div>
+                    <!-- Colonna per altri contenuti -->
+                    <div class="col-12 col-md-5">
+                        <!-- Aggiungi qui i tuoi altri contenuti -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h1>@Model.Name.ToUpper()</h1>
+                            <div class="my-3 d-flex align-items-center text-center">
+                                <a class="eventBtn mx-1" href="@Url.Action("List", "Event")">Eventi</a>
+                                <a class="editBtn mx-1" href="@Url.Action("Edit", "Event", new { id = Model.EventId })">Modifica</a>
+                                <a class="btn-danger myBtnCart mx-1 " href="@Url.Action("Delete", "Event", new { id = Model.EventId })">Cancella</a>
+                            </div>
+                                <p class="mt-3">@Model.Description</p>
+                                <p class="text-danger fw-bolder">Dal @Model.DateFrom.Day/@Model.DateFrom.Month al @Model.DateTo.Day/@Model.DateTo.Month</p>
+                                <p><i class="bi bi-geo-fill me-2"></i> @Model.Location.LocationName</p>
+                                <p>
+                                    <i class="bi bi-tags-fill me-2">
+                                        @foreach (var genre in Model.Genres)
+                                        {
+                                            <span class="genre">@genre.Name</span>
+                                        }
+                                    </i>
+                                </p>
+                                <div class="my-4" id="ticket">
+                                    <h3>Acquista tickets</h3>
+                                    <p class="fs-4">@totalTickets <i class="bi bi-ticket-perforated-fill ms-1"></i> </p>
+                                    <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                                        <input type="hidden" name="eventId" value="@Model.EventId" />
+                                        <div class="d-flex">
+                                            <div class="form-group">
+                                                <input id="quantity" type="number" name="quantity" class="form-control quantitybar shadow-none border-0 me-2" value="1" min="1" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <select id="ticketTypeId" name="ticketTypeId" class="form-control quantitybar shadow-none border-0" required>
+                                                    @foreach (var eventTicketType in Model.EventTicketType)
+                                                    {
+                                                        var isSoldOut = eventTicketType.AvailableQuantity == 0;
+                                                        var optionText = $"{eventTicketType.TicketType.TicketTypeName} - {eventTicketType.TicketType.Price.ToString("C")} - {eventTicketType.TicketType.TicketTypeDescription} - {(isSoldOut ? "Sold Out" : $"Disponibili: {eventTicketType.AvailableQuantity}")}";
+                                                        var optionValue = eventTicketType.TicketType.TicketTypeId.ToString();
+                                                        var optionAttributes = isSoldOut ? new { disabled = "disabled" } : null;
 
-    </dl>
-</div>
-<div class="mt-3">
-    <a class="btn btn-primary" href="@Url.Action("Edit", "Event", new { id = Model.EventId })">Edit event</a>
-    <a class="btn btn-danger" href="@Url.Action("Delete", "Event", new { id = Model.EventId })">Delete event</a>
-    <a class="btn btn-secondary" href="@Url.Action("List", "Event")">Back to List</a>
-</div>
-<div class="mt-5 mb-5">
-    <h3>Buy Tickets</h3>
-    <p>Biglietti disponibili: @totalTickets</p>
-    <form asp-action="AddToCart" asp-controller="Cart" method="post">
-        <input type="hidden" name="eventId" value="@Model.EventId" />
-        <div class="form-group">
-            <label for="ticketTypeId">Ticket Type</label>
-            <select id="ticketTypeId" name="ticketTypeId" class="form-control" required>
-                @foreach (var eventTicketType in Model.EventTicketType)
-                {
-                    var isSoldOut = eventTicketType.AvailableQuantity == 0;
-                    var optionText = $"{eventTicketType.TicketType.TicketTypeName} - {eventTicketType.TicketType.Price.ToString("C")} - {eventTicketType.TicketType.TicketTypeDescription} - {(isSoldOut ? "Sold Out" : $"Available: {eventTicketType.AvailableQuantity}")}";
-                    var optionValue = eventTicketType.TicketType.TicketTypeId.ToString();
-                    var optionAttributes = isSoldOut ? new { disabled = "disabled" } : null;
+                                                        if (isSoldOut)
+                                                        {
+                                                            <option value="@optionValue" disabled>@optionText</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@optionValue">@optionText</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="myBtnCart bg-danger text-end mt-3">Aggiungi al carrello</button>
+                                    </form>
+                                </div>
+                                <div class="col-12">
+                                    <hr />
+                                    <h3 class="mb-2">Line Up</h3>
+                                
+                                        @if (Model.Djs != null && Model.Djs.Count > 0)
+                                        {
+                                            <ul>
+                                                @foreach (var dj in Model.Djs)
+                                                {
+                                                    <li>
+                                                    <a class="myLink" href="@Url.Action("Details", "DJ", new { id = dj.DjId })"><img src="@dj.Img" class="rounded-circle my-2 me-2" style="height:40px; width:40px" alt="Artist Img" />@dj.ArtistName</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <p>Nessun artista associato all'evento.</p>
+                                        }
+                                
+                                    <hr />
+                                </div>
+                                <div class="col-12 my-2">
+                                    <h3 class="mb-2">Promoter</h3>
+                                    <p class="text-white"><i class="bi bi-person-fill me-2"></i>@Model.HostName</p>
+                                    <hr />
+                                </div>
+                                <div class="col-12">
+                                    <h3 class="mb-2">Location</h3>
+                                    <p class="text-white mt-2"><i class="bi bi-geo-fill me-2"></i>@Model.Location?.LocationName</p>
+                                    <p class="text-white"><i class="bi bi-compass-fill me-2"></i>@Model.Location?.AddressGoogleApi</p>
 
-                    if (isSoldOut)
+                                    <div class="row">
+                                        <!-- Google Maps Iframe -->
+                                        <div class="col-md-10">
+                                            <div id="map" style="height: 300px; width: 100%; border-radius:25px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center p-2 p-md-5 my-3">
+                <div class="col-12 col-md-8">
+                    <h3>Recensioni</h3>
+                                <hr />
+                    <div class="row">
+                        @foreach (var review in ViewBag.Reviews as IEnumerable<Capstone.Models.Review>)
+                        {
+                            var isCurrentUserReview = review.UserId == currentUserId;
+
+                            <div id="review-content-@review.ReviewId" class="review d-flex col-12 col-md-10 col-lg-8 col-xl-10 col-xxl-7 my-4 align-items-center" data-title="@review.Title"
+                                 data-description="@review.Description"
+                                 data-rating="@review.Rating">
+
+                                <div class="row flex-grow-1 align-items-center position-relative">
+
+                                    <!-- Review Text Section -->
+                                    <div class="col-6" id="reviewText">
+                                        <small>Utente: @review.User.Username</small><br />
+                                        <small id="review-title-@review.ReviewId">Titolo: @review.Title</small><br />
+                                        <small id="review-description-@review.ReviewId">Contenuto: @review.Description</small><br />
+                                        <small id="review-rating-@review.ReviewId">
+                                            Valutazione:
+                                            @for (int i = 0; i < review.Rating; i++)
+                                            {
+                                                <i class="fa fa-star text-orange"></i>
+                                            }
+                                        </small><br />
+                                    </div>
+
+                                    <!-- Action Buttons (Edit/Delete) -->
+                                    <div class="d-flex justify-content-end position-absolute" style="top:-51px; right:0;">
+                                        @if (isCurrentUserReview)
+                                        {
+                                            <span onclick="toggleEditMode(@review.ReviewId)" style="cursor:pointer" class="bgEdit rounded text-decoration-none text-white pill me-2">
+                                                <i class="bi bi-pencil"></i>
+                                            </span>
+                                        }
+                                        <form style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="button" class="deleteReviewBtn bg-danger rounded text-decoration-none noBtn text-white pill" data-review-id="@review.ReviewId" style="cursor:pointer;">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Review Image Section -->
+                                    <div class="col-6 position-relative">
+                                        <div class="d-flex justify-content-end">
+                                            <img id="reviewSectionImg-@review.ReviewId" src="@review.ReviewImgs.FirstOrDefault()?.FilePath" alt="Review Image" style="object-fit: cover; border-radius:15px; width:170px; height:120px;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Edit Review Form (Hidden by Default) -->
+                            <div id="edit-review-form-@review.ReviewId" class="col-12 col-md-10 col-lg-8 my-4 d-none" style="margin-top:15px;">
+                                <form method="post" action="@Url.Action("EditReview", "Event")" onsubmit="return submitEditForm(@review.ReviewId);">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="EventId" value="@Model.EventId" />
+                                    <input type="hidden" name="ReviewId" value="@review.ReviewId" />
+
+                                    <div class="form-group">
+                                        <label for="Title-@review.ReviewId" class="mb-1 ps-2">Modifica titolo:</label>
+                                        <input type="text" id="Title-@review.ReviewId" name="Title" class="form-control quantitybar shadow-none" required />
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="Description-@review.ReviewId" class="mb-1 ps-2">Modifica descrizione:</label>
+                                        <textarea id="Description-@review.ReviewId" name="Description" class="form-control quantitybar shadow-none" required></textarea>
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="Rating-@review.ReviewId" class="mb-1 ps-2">Modifica valutazione (da 1 a 5):</label>
+                                        <input type="number" id="Rating-@review.ReviewId" name="Rating" class="form-control quantitybar shadow-none" min="1" max="5" required />
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="imageFiles-@review.ReviewId" class="mb-1 ps-2">Sostituici foto (opzionale):</label>
+                                        <input type="file" id="imageFiles-@review.ReviewId" name="imageFiles" multiple class="form-control d-none" accept="image/*" onchange="previewImage(@review.ReviewId)" />
+                                        <label for="imageFiles-@review.ReviewId" class="bg-danger myBtnCart ms-1" style="cursor:pointer">Scegli file</label>
+                                        <span id="fileName-@review.ReviewId" class="ps-2"></span>
+
+                                        <!-- Anteprima immagine caricata -->
+                                        <div class="mt-3">
+                                            <img id="previewImg-@review.ReviewId" src="@review.ReviewImgs.FirstOrDefault()?.FilePath" alt="Immagine anteprima" style="object-fit: cover; border-radius:25px; width:170px; height:120px;" />
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="myLink fs-1 me-2 noBtn" id="toggleEditBtn-@review.ReviewId"><i class="bi bi-x-circle"></i></button>
+                                        <button type="submit" class="myLink fs-1 noBtn" ><i class="bi bi-send"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                           
+                        }
+                        
+                        <!-- Add New Review Form -->
+                        @if (isEventOver && !userHasPostedReview && User.Identity.IsAuthenticated)
+                        {
+                            <h4 id="reviewBtn" class="myLink mb-4" style="cursor:pointer">Aggiungi una recensione <i class="bi bi-pencil-square"></i></h4>
+                            <div id="reviewForm" class="col-12 col-md-10 col-lg-6 col-xl-5 my-4" style="display: none;">
+                                <form asp-action="CreateReview" asp-controller="Event" method="post" enctype="multipart/form-data">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="EventId" value="@Model.EventId" />
+
+                                    <div class="form-group">
+                                        <label for="Title" class="mb-1 ps-2">Inserisci un titolo:</label>
+                                        <input type="text" id="Title" name="Title" class="form-control quantitybar shadow-none" required />
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="Description" class="mb-1 ps-2">Inserisci una descrizione:</label>
+                                        <textarea id="Description" name="Description" class="form-control quantitybar shadow-none" required></textarea>
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="Rating" class="mb-1 ps-2">Inserisci una valutazione (da 1 a 5):</label>
+                                        <input type="number" id="Rating" name="Rating" class="form-control quantitybar shadow-none" min="1" max="5" required />
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <label for="imageFiles" class="mb-1 ps-2">Carica una foto (opzionale):</label>
+                                        <input type="file" id="imageFiles" name="imageFiles" multiple class="form-control d-none" />
+                                        <label for="imageFiles" class="bg-danger myBtnCart ms-1" style="cursor:pointer">Scegli file</label>
+                                        <span id="fileName" class="ps-2"></span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="myLink fs-1 noBtn"><i class="bi bi-send"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                        else if (userHasPostedReview)
+                        {
+                            <p><strong>Hai già scritto una recensione per questo evento.</strong></p>
+                        }
+                        else if (!User.Identity.IsAuthenticated)
+                        {
+                            <p>Devi essere autenticato per lasciare una recensione.</p>
+                        }
+                        else
+                        {
+                            <p>Puoi lasciare una recensione solo se l'evento è concluso.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center p-2 p-md-5 my-3">
+                <div class="col-12 col-md-8">
+
+                    <h3>Commenti</h3>
+                    <hr />
+                    <div class="comment-list row">
+                        @if (Model.Comments != null && Model.Comments.Count > 0)
+                        {
+                            @foreach (var comment in Model.Comments.Where(c => c.ParentCommentId == null))
+                            {
+                                @Html.Partial("_CommentPartial", comment)
+                            }
+                        }
+                        else
+                        {
+                            <p>Ancora nessun commento.</p>
+                        }
+                    </div>
+                    <hr />
+                    <!-- Comment Form -->
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <option value="@optionValue" disabled>@optionText</option>
+                        <h4 id="commentBtn" class="myLink mb-4" style="cursor:pointer">Aggiungi un commento <i class="bi bi-pencil-square"></i></h4>
+                        <div id="commentForm" class="col-12 col-md-10 col-lg-6 col-xl-5 my-4" style="display: none;">
+                            <form asp-action="Create" asp-controller="Comment" method="post">
+                                <div class="form-group">
+                                    <textarea id="Description" name="Description" class="form-control quantitybar shadow-none place pt-3 px-3 border-0" placeholder="Scrivi un commento..." required></textarea>
+                                </div>
+                                <div id="gifSection" style="display:none;">
+                                    <div class="form-group">
+                                        <input type="text" id="gifSearch" class="form-control quantitybar place shadow-none border-0 mt-2" placeholder="Cerca una GIF...">
+                                    </div>
+                                    <div id="gifResults" class="d-flex flex-wrap mt-3"></div>
+                                    <div id="selectedGifContainer" style="display:none;">
+                                        <h5>GIF selezionata:</h5>
+                                        <img id="selectedGif" src="" alt="Selected GIF" class="img-fluid" style="max-width:100px; border-radius:15px;height:auto;">
+                                        <input type="hidden" name="GifUrl" id="hiddenGifUrl" />
+                                    </div>
+                                </div>
+                                <input type="hidden" name="EventId" value="@Model.EventId" />
+                                <div class="mt-2">
+                                    <button type="submit" class="myLink fs-1 noBtn"><i class="bi bi-send"></i></button>
+                                    <button id="addGifSectionBtn" type="button" class="myLink fs-1 noBtn"><i class="bi bi-filetype-gif"></i></button>
+                                </div>
+                            </form>
+                        </div>
                     }
                     else
                     {
-                        <option value="@optionValue">@optionText</option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input id="quantity" type="number" name="quantity" class="form-control" value="1" min="1" required />
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Add to Cart</button>
-    </form>
-</div>
-
-<div class="mt-5 mb-5">
-    <h3>Comments</h3>
-    <ul class="comment-list">
-        @if (Model.Comments != null && Model.Comments.Count > 0)
-        {
-            @foreach (var comment in Model.Comments)
-            {
-                <li class="@(comment.ParentCommentId != null ? "reply-comment mb-4" : "main-comment mb-4") border p-3 rounded">
-
-                    <!-- Parent Comment Preview for Replies -->
-                    @if (comment.ParentCommentId != null)
-                    {
-                        <div class="parent-comment-preview mb-2">
-                            <strong>In reply to @comment.ParentComment.User.Username:</strong>
-                            <span class="small text-muted">"@comment.ParentComment.Description"</span>
-                        </div>
-                    }
-                    
-                    <!-- Comment Content -->
-                    <div class="comment-content">
-                        <strong>@comment.User.Username</strong>
-                        <p>@comment.Description</p>
-
-                        <!-- Attached GIF -->
-                        @if (!string.IsNullOrEmpty(comment.GifUrl))
-                        {
-                            <div class="attached-gif mb-2">
-                                <img src="@comment.GifUrl" alt="Comment GIF" class="img-fluid" style="max-width:200px; height:auto;" />
-                            </div>
-                        }
-                        
-                        <span class="text-muted small">Date: @comment.PublishedAt.ToShortDateString()</span>
-
-                        <!-- Like & Reply Buttons -->
-                        <div class="action-buttons d-flex justify-content-end align-items-center mt-2">
-                            <button class="btn btn-primary like-button me-2" data-comment-id="@comment.CommentId">
-                                <span class="like-count me-1" data-comment-id="@comment.CommentId"></span>
-                                <i class="fa-solid fa-thumbs-up"></i>
-                            </button>
-                            <span class="me-2 text-muted small">Liked by:</span>
-                            <ul data-comment-id="@comment.CommentId">
-                                @foreach (var like in comment.CommentLikes)
-                                {
-                                    <li class="small text-danger">@like.User.Username</li>
-                                }
-                            </ul>
-
-                            <button class="btn btn-success reply-button" data-comment-id="@comment.CommentId">
-                                <i class="fa-solid fa-reply"></i> Reply
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Reply Form (Hidden by default) -->
-                    <div class="reply-form mt-3" id="replyForm-@comment.CommentId" style="display:none;">
-                        <h5>Reply to @comment.User.Username</h5>
-                        <form asp-action="Reply" asp-controller="Comment" method="post">
-                            <div class="form-group">
-                                <textarea name="Description" class="form-control" placeholder="Write your reply" required></textarea>
-                            </div>
-                            <input type="hidden" name="ParentCommentId" value="@comment.CommentId" />
-                            <input type="hidden" name="EventId" value="@Model.EventId" />
-                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                            <button type="button" class="btn btn-secondary mt-2 cancel-reply" data-comment-id="@comment.CommentId">Cancel</button>
-                        </form>
-                    </div>
-
-                    <hr />
-                </li>
-            }
-        }
-        else
-        {
-            <p>No comments yet.</p>
-        }
-    </ul>
-
-    <!-- Comment Form -->
-    <h4>Add a Comment</h4>
-    <form asp-action="Create" asp-controller="Comment" method="post">
-        <div class="form-group">
-            <textarea id="Description" name="Description" class="form-control" placeholder="Write a comment..." required></textarea>
-        </div>
-        <div id="gifSection" style="display:none;">
-            <div class="form-group">
-                <input type="text" id="gifSearch" class="form-control" placeholder="Search GIF...">
-            </div>
-            <div id="gifResults" class="d-flex flex-wrap mt-3"></div>
-            <div id="selectedGifContainer" style="display:none;">
-                <h5>Selected GIF:</h5>
-                <img id="selectedGif" src="" alt="Selected GIF" class="img-fluid" style="max-width:100px; height:auto;">
-                <input type="hidden" name="GifUrl" id="hiddenGifUrl" />
-            </div>
-        </div>
-        <input type="hidden" name="EventId" value="@Model.EventId" />
-        <div class="mt-2">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button id="addGifSectionBtn" type="button" class="btn btn-secondary">Add GIF</button>
-        </div>
-    </form>
-</div>
-<hr />
-
-
-<h3>Reviews</h3>
-@foreach (var review in ViewBag.Reviews as IEnumerable<Capstone.Models.Review>)
-{
-    var isCurrentUserReview = review.UserId == currentUserId;
-
-    <div id="review-content-@review.ReviewId">
-        <strong>@review.User.Username</strong> - <span id="review-rating-@review.ReviewId">@review.Rating</span>/5
-        <h4 id="review-title-@review.ReviewId">@review.Title</h4>
-        <p id="review-description-@review.ReviewId">@review.Description</p>
-
-        @if (review.ReviewImgs.Any())
-        {
-            <div>
-                <h5>Images:</h5>
-                @foreach (var img in review.ReviewImgs)
-                {
-                    <img src="@img.FilePath" alt="Review Image" style="width:150px; margin-right: 10px;" />
-                }
-            </div>
-        }
-
-        @if (isCurrentUserReview)
-        {
-            <button type="button" class="btn btn-primary" onclick="toggleEditMode(@review.ReviewId)">Edit</button>
-        }
-
-        <form asp-action="DeleteReview" method="post" style="display:inline;">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="reviewId" value="@review.ReviewId" />
-            <input type="hidden" name="eventId" value="@Model.EventId" />
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-    </div>
-
-    <!-- Inline Edit Form (hidden by default) -->
-    <div id="edit-review-form-@review.ReviewId" style="display:none; margin-top: 15px;">
-        <form method="post" action="@Url.Action("EditReview", "Event")" onsubmit="return submitEditForm(@review.ReviewId);">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="EventId" value="@Model.EventId" />
-            <input type="hidden" name="ReviewId" value="@review.ReviewId" />
-
-            <div class="form-group">
-                <label for="Title">Title</label>
-                <input type="text" id="Title-@review.ReviewId" name="Title" class="form-control" value="@review.Title" required />
-            </div>
-
-            <div class="form-group">
-                <label for="Description">Description</label>
-                <textarea id="Description-@review.ReviewId" name="Description" class="form-control" required>@review.Description</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="Rating">Rating</label>
-                <input type="number" id="Rating-@review.ReviewId" name="Rating" class="form-control" min="1" max="5" value="@review.Rating" required />
-            </div>
-            @if (review.ReviewImgs.Any())
-            {
-                <div>
-                    <h5>Current Uploaded Images:</h5>
-                    @foreach (var img in review.ReviewImgs)
-                    {
-                        <img src="@img.FilePath" alt="Review Image" style="width:100px; margin-right: 10px;" />
+                        <p>Devi essere autenticato per lasciare un commento.</p>
                     }
                 </div>
-            }
-            <div class="form-group">
-                <label for="imageFiles">Upload New Images</label>
-                <input type="file" id="imageFiles-@review.ReviewId" name="imageFiles" multiple class="form-control" />
             </div>
-
-            <button type="submit" class="btn btn-success">Save</button>
-            <button type="button" class="btn btn-secondary" onclick="toggleEditMode(@review.ReviewId)">Cancel</button>
-        </form>
+        </div>
     </div>
+</div>
 
-    <hr />
-}
-
-@if (isEventOver && !userHasPostedReview)
-{
-    <h4>Add a Review</h4>
-    <form asp-action="CreateReview" asp-controller="Event" method="post" enctype="multipart/form-data">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="EventId" value="@Model.EventId" />
-
-        <div class="form-group">
-            <label for="Title">Title</label>
-            <input type="text" id="Title" name="Title" class="form-control" required />
+<!-- Modale Bootstrap -->
+<div class="modal fade custom-like-modal" id="likeModal" tabindex="-1" aria-labelledby="likeModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-like-dialog">
+        <div class="modal-content custom-like-content">
+            <div class="modal-header custom-like-header">
+                <h5 class="modal-title" id="likeModalLabel">Piaciuto da:</h5>
+                <button type="button" class="noBtn text-white" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i></button>
+            </div>
+            <div class="modal-body custom-like-body">
+                <ul id="likeList" class="list-group custom-like-list">
+                    <!-- La lista dei like sarà inserita qui -->
+                </ul>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="Description">Description</label>
-            <textarea id="Description" name="Description" class="form-control" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="Rating">Rating</label>
-            <input type="number" id="Rating" name="Rating" class="form-control" min="1" max="5" required />
-        </div>
-
-        <div class="form-group">
-            <label for="imageFiles">Upload Images</label>
-            <input type="file" name="imageFiles" multiple class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
-  
-    
-}
-else if (userHasPostedReview)
-{
-    <p><strong>You have already reviewed this event.</strong></p>
-}
-else
-{
-    <p>You can post a review after the event is over.</p>
-}
-
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -375,7 +395,7 @@ else
         var eventAddress = '@(Model.Location?.LocationName + " " + Model.Location?.AddressGoogleApi)';
     </script>
 
-    <script src="~/js/event_details.js"></script>
+    <script src="/js/event_details.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&loading=async&callback=initMap&libraries=places" ></script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

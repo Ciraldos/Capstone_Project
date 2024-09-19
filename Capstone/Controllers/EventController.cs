@@ -28,14 +28,14 @@ namespace Capstone.Controllers
         }
 
         // GET: Event
-        public async Task<ActionResult> List()
+        public async Task<IActionResult> List()
         {
             var events = await _eventSvc.GetAllEventsAsync();
             return View(events);
         }
 
         // GET: Event/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var eventDetails = await _eventSvc.GetEventByIdAsync(id);
             var reviews = await _reviewSvc.GetReviewsByEventIdAsync(id);
@@ -50,7 +50,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Event/Create
-        public async Task<ActionResult> Create()
+        public async Task<IActionResult> Create()
         {
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
             ViewBag.DJs = await _djSvc.GetAllDjAsync();
@@ -62,7 +62,7 @@ namespace Capstone.Controllers
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
+        public async Task<IActionResult> Create(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Event/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var eventToEdit = await _eventSvc.GetEventByIdAsync(id);
 
@@ -96,7 +96,7 @@ namespace Capstone.Controllers
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds)
+        public async Task<IActionResult> Edit(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds)
         {
             // Percorsi per i file di immagine
             var replaceImagePaths = new List<string>();
@@ -132,7 +132,7 @@ namespace Capstone.Controllers
             try
             {
                 await _eventSvc.UpdateEventAsync(eventModel, djIds, selectedGenres, replaceImagePaths, additionalImagePaths, ticketTypesIds);
-                return RedirectToAction("List");
+                return RedirectToAction("Details", new { id = eventModel.EventId });
             }
             catch (ArgumentException ex)
             {
@@ -172,7 +172,7 @@ namespace Capstone.Controllers
 
 
         // GET: Event/Delete/5
-        public async Task<ActionResult> Delete(int id, bool confirm = false)
+        public async Task<IActionResult> Delete(int id, bool confirm = false)
         {
             if (confirm)
             {
@@ -239,13 +239,21 @@ namespace Capstone.Controllers
             });
         }
 
-        // POST: Review/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteReview(int reviewId, int eventId)
+        public async Task<IActionResult> DeleteReview(int reviewId)
         {
-            await _reviewSvc.DeleteReviewAsync(reviewId);
-            return RedirectToAction("Details", new { id = eventId });
+            try
+            {
+                await _reviewSvc.DeleteReviewAsync(reviewId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details here if needed
+                return Json(new { success = false, error = ex.Message });
+            }
         }
+
     }
 }

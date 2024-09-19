@@ -1,0 +1,156 @@
+﻿@using System.Security.Claims
+@model Capstone.Models.Comment
+@{
+    var currentUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<div class="col-12 @(Model.ParentCommentId != null ? "reply-comment" : "main-comment mt-5")">
+    <!-- Comment Content -->
+    <div class="row align-items-center w-100 justify-content-start comment-content">
+        <div class="col-1 d-flex align-items-start me-4 me-lg-0">
+            @if (Model.User.Img != null)
+            {
+                var base64Image = Convert.ToBase64String(Model.User.Img);
+                var imgSrc = $"data:image/png;base64,{base64Image}";
+                <img src="@imgSrc" alt="User img" style="height:40px; width:40px; object-fit:cover" class="rounded-circle " />
+            }
+            else
+            {
+                <span>No cover image</span>
+            }
+        </div>
+        <div class="@(Model.ParentCommentId != null ? "reply" : "review") col-8 col-xxl-5 my-2 ms-3 ms-md-0">
+            <div class="row align-items-center">
+                <!-- Attached GIF -->
+                @if (!string.IsNullOrEmpty(Model.GifUrl))
+                {
+                    <div class="col-6">
+                        @if (Model.ParentCommentId != null)
+                        {
+                            <div class="parent-comment-preview mb-2">
+                                <strong class="myTextReply">In risposta a <span class="text-danger">@Model.ParentComment.User.Username:</span></strong>
+                                <span class="small text-light">"@Model.ParentComment.Description"</span>
+                            </div>
+                        }
+                        <strong class="text-white">@Model.User.Username</strong>
+                        <div id="comment-content-@Model.CommentId" data-description="@Model.Description">
+                            <p class="text-white m-0" id="comment-description-@Model.CommentId">@Model.Description</p>
+                        </div>
+                        <span class="date" style="font-size:0.7em!important">@Model.PublishedAt.ToShortDateString()</span>
+                    </div>
+                    <div class="col-6 attached-gif justify-content-end d-flex">
+                        <img src="@Model.GifUrl" alt="Comment GIF" class="img-fluid" style="border-radius:15px" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        @if (Model.ParentCommentId != null)
+                        {
+                            <div class="parent-comment-preview mb-2">
+                                <strong class="myTextReply">In risposta a <span class="text-danger">@Model.ParentComment.User.Username:</span></strong>
+                                <span class="small text-light">"@Model.ParentComment.Description"</span>
+                            </div>
+                        }
+                        <strong class="text-white">@Model.User.Username</strong>
+                        <div id="comment-content-@Model.CommentId" data-description="@Model.Description">
+                            <p class="text-white m-0" id="comment-description-@Model.CommentId">@Model.Description</p>
+                        </div>
+                        <span class="date" style="font-size:0.7em!important">@Model.PublishedAt.ToShortDateString()</span>
+
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-end p-0">
+                    <!-- Like & Reply Buttons -->
+                    <div class="action-buttons d-flex justify-content-end align-items-center mt-2 position-relative">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="like-button noBtn myText" data-comment-id="@Model.CommentId">
+                                <span class="like-count me-1" id="spanLike-@Model.CommentId" data-comment-id="@Model.CommentId"></span>
+                                <i class="fa-solid fa-thumbs-up myActions fs-5"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="noBtn myText like-button" disabled data-comment-id="@Model.CommentId">
+                                <span class="like-count me-1" id="spanLike-@Model.CommentId" data-comment-id="@Model.CommentId"></span>
+                                <i class="fa-solid fa-thumbs-up myActions fs-5"></i>
+                            </button>
+                        }
+
+                        <button class="noBtn myText" id="open-like-modal-btn-@Model.CommentId" data-bs-toggle="modal" data-bs-target="#likeModal" data-comment-id="@Model.CommentId">
+                            <i class="bi bi-people-fill myActions fs-5"></i>
+                        </button>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="noBtn reply-button" data-comment-id="@Model.CommentId">
+                                <i class="fa-solid fa-reply myActions fs-5"></i>
+                            </button>
+                        }
+                        @if (currentUserIdString == Model.User.UserId.ToString())
+                        {
+                            <button class="noBtn myText editCommentBtn" data-comment-id="@Model.CommentId">
+                                <i class="bi bi-pencil-fill myActions fs-5"></i>
+                            </button>
+
+                            <button class="noBtn myText deleteCommentBtn" data-comment-id="@Model.CommentId">
+                                <i class="bi bi-trash3-fill myActions fs-5"></i>
+                            </button>
+                        }
+                    </div>
+                    <form id="csrf-token-form" style="display:none;">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Comment Form (Hidden by Default) -->
+    <div id="edit-comment-form-@Model.CommentId" class="col-12 col-md-10 col-lg-8 my-4 d-none" style="margin-top:15px;">
+        <form method="post" action="@Url.Action("EditComment", "Comment")" onsubmit="return submitEditCommentForm(@Model.CommentId);">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="EventId" value="@Model.EventId" />
+            <input type="hidden" name="CommentId" value="@Model.CommentId" />
+
+            <div class="form-group mt-4">
+                <label for="Description-@Model.CommentId" class="mb-1 ps-2">Modifica descrizione:</label>
+                <textarea id="Description-@Model.CommentId" name="Description" class="form-control quantitybar shadow-none" required></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="myLink fs-1 me-2 noBtn" id="toggleEditCommentBtn-@Model.CommentId"><i class="bi bi-x-circle"></i></button>
+                <button type="submit" class="myLink fs-1 noBtn"><i class="bi bi-send"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Reply Form (Hidden by default) -->
+    <div class="reply-form row mt-3 justify-content-center" id="replyForm-@Model.CommentId" style="display:none;">
+        <div class="col-12 col-8">
+            <h5>Rispondi a @Model.User.Username</h5>
+            <form asp-action="Reply" asp-controller="Comment" method="post">
+                <div class="form-group my-2">
+                    <textarea id="replyDescription" name="Description" class="form-control border-0 shadow-none pt-3 place px-3 quantitybar" placeholder="Scrivi la tua risposta.." required></textarea>
+                </div>
+                <input type="hidden" name="ParentCommentId" value="@Model.CommentId" />
+                <input type="hidden" name="EventId" value="@Model.EventId" />
+                <button type="submit" class="myLink fs-1 noBtn"><i class="bi bi-send"></i></button>
+                <button type="button" class="myLink fs-1 me-2 noBtn cancel-reply" data-comment-id="@Model.CommentId"><i class="bi bi-x-circle"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display Replies -->
+    @if (Model.Replies != null && Model.Replies.Count > 0)
+    {
+        <div class="col-12 ms-3">
+            @foreach (var reply in Model.Replies)
+            {
+                @Html.Partial("_CommentPartial", reply)
+            }
+        </div>
+    }
+</div>

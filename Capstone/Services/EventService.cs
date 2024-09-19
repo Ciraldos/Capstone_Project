@@ -1,5 +1,6 @@
 ﻿using Capstone.Context;
 using Capstone.Models;
+using Capstone.Models.ViewModels;
 using Capstone.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,21 @@ namespace Capstone.Services
                 .Include(e => e.Djs)
                 .Include(e => e.EventImgs)
                 .Include(e => e.Genres)
+                .ToListAsync();
+        }
+
+        public async Task<List<Event>> GetPopularEventsAsync()
+        {
+            return await _ctx.Events
+                .Include(e => e.Location)
+                .Include(e => e.Djs)
+                .Include(e => e.EventImgs)
+                .Include(e => e.Genres)
+                .Include(e => e.Comments)
+                .Include(e => e.TicketTypes)
+                .OrderByDescending(e => e.DateFrom)
+                .Take(4)
+                .Where(e => e.Comments.Count > 2)
                 .ToListAsync();
         }
 
@@ -225,6 +241,34 @@ namespace Capstone.Services
 
             await _ctx.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<EventViewModel>> SearchEventsAsync(string name)
+        {
+            try
+            {
+                var events = await _ctx.Events
+                    .Where(e => e.Name.Contains(name) || e.Description.Contains(name))
+                    .Select(e => new EventViewModel
+                    {
+                        EventId = e.EventId,
+                        Name = e.Name,
+                        Description = e.Description,
+                        DateFrom = e.DateFrom,
+                        DateTo = e.DateTo,
+                        Location = e.Location.LocationName,
+                        ImageUrl = e.EventImgs.FirstOrDefault().FilePath // Se ci sono immagini
+                    })
+                    .ToListAsync();
+
+                return events;
+            }
+            catch (Exception ex)
+            {
+                // Log dell'eccezione
+                Console.WriteLine(ex.ToString());
+                throw; // Rilancia l'eccezione per gestirla nel controller
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Capstone.Models
         public required string Name { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(1000)]
         public required string Description { get; set; }
 
         [Required]
