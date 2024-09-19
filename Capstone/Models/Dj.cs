@@ -19,6 +19,9 @@ namespace Capstone.Models
         [StringLength(255)]
         public required string ArtistSpotifyId { get; set; }
 
+        public string? ArtistDescription { get; set; }
+
+
         // EF reference
 
         public List<Event> Events { get; set; } = [];

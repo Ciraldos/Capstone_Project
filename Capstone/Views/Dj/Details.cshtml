@@ -1,0 +1,99 @@
+﻿@model Capstone.Models.ViewModels.DjDetailsViewModel
+
+<link rel="stylesheet" href="/css/dj_details.css" />
+
+<div class="row bg-black justify-content-between py-4 px-1 p-md-5">
+
+    <div class="col-12 col-md-6">
+        <h3 class="myTitle myText">Artista</h3>
+        <h1 class="myTitle text-white">@Model.Dj.ArtistName</h1>
+        <p class="text-white" style="font-size:0.9rem">@Model.Dj.ArtistDescription</p>
+    </div>
+    <div class="col-12 d-flex justify-content-center col-md-3 mb-3 mb-md-0">
+        <img src="@Model.Dj.Img" alt="@Model.Dj.ArtistName's Image" @* class="img-fluid"  *@id="artistImg" />
+
+    </div>
+    <div class="col-12">
+        <h3 class="myTitle myText mt-5">Ascolta <span class="text-white fs-1">@Model.Dj.ArtistName</span></h3>
+        <iframe class="mt-4" style="border-radius:12px"
+                src="https://open.spotify.com/embed/artist/@Model.Dj.ArtistSpotifyId?utm_source=generator"
+                width="100%"
+                height="352"
+                frameborder="0"
+                allowfullscreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+        </iframe>
+    </div>
+</div>
+<div class="row px-1 p-md-5 ">
+    <h3 class="text-dark mt-5">Eventi con @Model.Dj.ArtistName</h3>
+    <div class="col-12 ">
+        <div class="normal-events-wrapper" id="scrollableDiv">
+            @if (Model.Dj.Events != null && Model.Dj.Events.Any())
+            {
+                @foreach (var item in Model.Dj.Events)
+                {
+                    <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
+                       class="normal-event col-12 col-md-6 col-xl-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+                        <div class="text-center" style="width:200px">
+                            <span class="bg-info rounded text-decoration-none text-white" id="pill"><i class="bi bi-music-note"></i></span>
+                            <img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" />
+                            <div class="event-text text-start mt-1">
+                                <h4 class="text-dark">@item.Name</h4>
+                                <small class="event-date text-dark">@item.DateFrom.Day/@item.DateFrom.Month - @item.DateTo.Day/@item.DateTo.Month</small><br />
+                                <small class="event-location myText">@item.Location.LocationName</small>
+                                <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+            else
+            {
+                <p>Nessun evento con @Model.Dj.ArtistName.</p>
+            }
+        </div>
+    </div>
+</div>
+<div class="bg-black row text-white justify-content-center px-1 p-md-5">
+    <h3 class="mt-5">Eventi Correlati</h3>
+    <div class="row justify-content-center">
+        @if (Model.RelatedEvents != null && Model.RelatedEvents.Any())
+        {
+            <div class="related-events-wrapper" id="scrollableRelatedDiv">
+                @foreach (var item in Model.RelatedEvents)
+                {
+                    <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
+                       class="related-event col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+                        <div class=" text-center relative" style="width:200px">
+                            <span class="bg-warning rounded text-decoration-none text-white" id="pill">
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                            </span>
+                            <img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" />
+                            <div class="event-text text-start mt-1">
+                                <h4 class="text-white">@item.Name</h4>
+                                <small class="event-date text-white">@item.DateFrom.Day/@item.DateFrom.Month - @item.DateTo.Day/@item.DateTo.Month</small><br />
+                                <small class="event-location myText">@item.Location.LocationName</small>
+                                <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <p>Nessun evento correlato trovato.</p>
+        }
+    </div>
+</div>
+
+
+
+    <div class="text-center">
+        <a asp-action="Edit" asp-route-id="@Model.Dj.DjId" class="btn btn-primary">Edit</a>
+        <a asp-action="List" class="btn btn-secondary">Back to List</a>
+    </div>
+
+<script src="/js/dj_details.js"></script>

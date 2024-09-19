@@ -9,5 +9,8 @@ namespace Capstone.Services.Interfaces
         Task<List<Dj>> GetAllDjAsync();
         Task<Dj> UpdateDjAsync(Dj dj);
         Task<bool> DeleteDjAsync(int id);
+        Task<List<Dj>> SearchDjsAsync(string name);
+        Task<List<Event>> GetRelatedEventsAsync(int djId);
+
     }
 }

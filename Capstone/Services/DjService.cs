@@ -116,12 +116,63 @@ namespace Capstone.Services
 
             existingDj.ArtistName = dj.ArtistName;
             existingDj.ArtistSpotifyId = dj.ArtistSpotifyId;
+            existingDj.ArtistDescription = dj.ArtistDescription;
             existingDj.Img = await GetSpotifyArtistImageUrlAsync(existingDj.ArtistSpotifyId);
 
-            // Salva le modifiche nel database
             await _ctx.SaveChangesAsync();
 
             return existingDj;
+        }
+
+        public async Task<List<Event>> GetRelatedEventsAsync(int djId)
+        {
+            // Ottieni il DJ con gli eventi e i generi associati
+            var dj = await _ctx.Djs
+            .Include(d => d.Events)
+                .ThenInclude(e => e.EventImgs)
+            .Include(d => d.Events)
+                .ThenInclude(e => e.Location)
+            .Include(d => d.Events)
+                .ThenInclude(e => e.TicketTypes)
+            .Include(d => d.Events)
+                .ThenInclude(e => e.Genres)
+            .FirstOrDefaultAsync(d => d.DjId == djId);
+
+            if (dj == null)
+            {
+                throw new KeyNotFoundException("DJ not found");
+            }
+
+            // Trova i generi degli eventi dell'artista
+            var genreIds = dj.Events
+                .SelectMany(e => e.Genres)
+                .Select(g => g.GenreId)
+                .Distinct()
+                .ToList();
+
+            if (!genreIds.Any())
+            {
+                return new List<Event>(); // Nessun genere trovato, ritorna una lista vuota
+            }
+
+            // Trova gli eventi con gli stessi generi, escludendo quelli già associati al DJ
+            var relatedEvents = await _ctx.Events
+                .Where(e => e.Genres.Any(g => genreIds.Contains(g.GenreId)))
+                .Where(e => !dj.Events.Select(evt => evt.EventId).Contains(e.EventId))
+                .Include(e => e.EventImgs) // Include immagini evento
+                .Include(e => e.Location) // Include location
+                .Include(e => e.TicketTypes) // Include tipi di biglietti
+                .ToListAsync();
+
+            return relatedEvents;
+        }
+
+
+        public async Task<List<Dj>> SearchDjsAsync(string name)
+        {
+            return await _ctx.Djs
+                .Where(d => d.ArtistName.Contains(name))
+                .ToListAsync();
         }
     }
 }

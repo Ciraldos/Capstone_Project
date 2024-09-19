@@ -30,9 +30,16 @@
                 <input asp-for="ArtistSpotifyId" id="artistSpotifyId" class="form-control" />
                 <span asp-validation-for="ArtistSpotifyId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ArtistDescription" class="control-label"></label>
+                <input type="text" asp-for="ArtistDescription" class="form-control" />
+                <span asp-validation-for="ArtistDescription" class="text-danger"></span>
+            </div>
+
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="submit" class="btn btn-primary" />Salva </button>
+
             </div>
         </form>
 

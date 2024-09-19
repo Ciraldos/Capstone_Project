@@ -38,7 +38,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DjId">Edit</a> |
-                <a asp-action="Detail" asp-route-id="@item.DjId">Detail</a> |
+                <a asp-action="Details" asp-route-id="@item.DjId">Details</a> |
                     <form asp-action="DeleteDj" asp-route-id="@item.DjId" method="post">
                     <input type="submit" value="Elimina"> 
                 </form>
@@ -47,3 +47,4 @@
 }
     </tbody>
 </table>
+

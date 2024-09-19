@@ -1,4 +1,5 @@
 ﻿using Capstone.Models;
+using Capstone.Models.ViewModels;
 using Capstone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
@@ -24,13 +25,27 @@ public class DjController : Controller
     public async Task<IActionResult> Create(Dj dj)
     {
         var createdDj = await _djSvc.CreateDjAsync(dj);
-        return RedirectToAction("Detail", new { id = createdDj.DjId });
+        return RedirectToAction("Details", new { id = createdDj.DjId });
     }
 
-    public async Task<IActionResult> Detail(int id)
+    public async Task<IActionResult> Details(int id)
     {
         var dj = await _djSvc.GetDjByIdAsync(id);
-        return View(dj);
+
+        if (dj == null)
+        {
+            return NotFound();
+        }
+
+        var relatedEvents = await _djSvc.GetRelatedEventsAsync(id);
+
+        var viewModel = new DjDetailsViewModel
+        {
+            Dj = dj,
+            RelatedEvents = relatedEvents
+        };
+
+        return View(viewModel);
     }
 
     public async Task<IActionResult> List()
@@ -65,7 +80,7 @@ public class DjController : Controller
         try
         {
             var updatedDj = await _djSvc.UpdateDjAsync(dj);
-            return RedirectToAction("List");
+            return RedirectToAction("Details", new { id = dj.DjId });
         }
 
         catch (Exception ex)

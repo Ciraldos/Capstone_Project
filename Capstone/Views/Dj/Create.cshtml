@@ -15,7 +15,7 @@
 
             <div class="form-group">
                 <label for="searchArtist" class="control-label">Search for Artist</label>
-                <input type="text" id="searchArtist" class="form-control" placeholder="Type artist name" />             
+                <input type="text" id="searchArtist" class="form-control" placeholder="Type artist name" />
             </div>
 
             <div class="form-group">
@@ -28,6 +28,11 @@
                 <label asp-for="ArtistSpotifyId" class="control-label"></label>
                 <input asp-for="ArtistSpotifyId" id="artistSpotifyId" class="form-control" />
                 <span asp-validation-for="ArtistSpotifyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArtistDescription" class="control-label"></label>
+                <input type="text" asp-for="ArtistDescription" class="form-control" />
+                <span asp-validation-for="ArtistDescription" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -46,6 +51,4 @@
     <a asp-action="List">Back to List</a>
 </div>
 
-@section Scripts {
-    <script src="~/js/dj_create.js"></script>
-}
+<script src="/js/dj_create.js"></script>

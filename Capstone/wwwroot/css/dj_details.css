@@ -1,0 +1,55 @@
+﻿#artistImg{
+    border-radius: 50%;
+    width:350px;
+
+    height:350px;
+
+    object-fit:cover;
+}
+/* Eventi Correlati */
+.related-events-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.related-event {
+    flex: 0 0 auto; /* Prevent shrinking */
+}
+
+/* Eventi Normali */
+.normal-events-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.normal-event {
+    flex: 0 0 auto; /* Prevent shrinking */
+}
+
+/* Scrollbar styling */
+.related-events-wrapper::-webkit-scrollbar, .normal-events-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.related-events-wrapper::-webkit-scrollbar-thumb, .normal-events-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.related-events-wrapper::-webkit-scrollbar-thumb:hover, .normal-events-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+#scrollableDiv {
+    overflow-x: auto;
+    scroll-behavior: smooth; 
+}
+
+#scrollableRelatedDiv {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
