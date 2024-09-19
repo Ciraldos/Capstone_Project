@@ -13,7 +13,7 @@ namespace Capstone.Services
         {
             _ctx = dataContext;
         }
-        public async Task<(int likeCount, List<string> likes)> GetCommentLikesAsync(int commentId)
+        public async Task<(int likeCount, IEnumerable<User> likes, bool userHasLiked)> GetCommentLikesAsync(int commentId, int userId)
         {
             var comment = await _ctx.Comments
                 .Include(c => c.CommentLikes)
@@ -22,14 +22,16 @@ namespace Capstone.Services
 
             if (comment == null)
             {
-                return (0, new List<string>());
+                return (0, Enumerable.Empty<User>(), false);
             }
 
+            var userHasLiked = comment.CommentLikes.Any(cl => cl.UserId == userId);
             var likeCount = comment.CommentLikes.Count;
-            var likes = comment.CommentLikes.Select(cl => cl.User.Username).ToList();
+            var likes = comment.CommentLikes.Select(cl => cl.User);
 
-            return (likeCount, likes);
+            return (likeCount, likes, userHasLiked);
         }
+
 
 
         public async Task<bool> ToggleLikeAsync(int commentId, int userId)

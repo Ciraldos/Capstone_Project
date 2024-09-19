@@ -1,9 +1,12 @@
-﻿namespace Capstone.Services.Interfaces
+﻿using Capstone.Models;
+
+namespace Capstone.Services.Interfaces
 {
     public interface ICommentLikeService
     {
         Task<bool> ToggleLikeAsync(int commentId, int userId);
-        Task<(int likeCount, List<string> likes)> GetCommentLikesAsync(int commentId);
+        Task<(int likeCount, IEnumerable<User> likes, bool userHasLiked)> GetCommentLikesAsync(int commentId, int userId);
+
 
 
     }

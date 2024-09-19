@@ -36,6 +36,46 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> EditComment(Comment model)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return Json(new { success = false, error = "Unable to retrieve User ID." });
+            }
+
+            model.UserId = userId; // Assign the UserId to the comment
+
+            var updatedcomment = await _commentSvc.UpdateCommentAsync(model);
+
+            return Json(new
+            {
+                success = true,
+                comment = new
+                {
+                    description = updatedcomment.Description,
+                    gifUrl = updatedcomment.GifUrl
+                }
+            });
+        }
+
+        // POST: Review/Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            try
+            {
+                await _commentSvc.DeleteCommentAsync(commentId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Reply(Comment comment, int parentCommentId)
         {
             // Recupera l'ID dell'utente loggato (es. da User.Identity)
@@ -66,17 +106,21 @@ namespace Capstone.Controllers
             }
 
             // Restituisci i dati aggiornati
-            var (likeCount, likes) = await _commentLikeSvc.GetCommentLikesAsync(id);
+            var (likeCount, likes, userHasLiked) = await _commentLikeSvc.GetCommentLikesAsync(id, userId);
 
-            return Json(new { likeCount, likes });
+            return Json(new { likeCount, userHasLiked });
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetCommentLikes(int commentId)
         {
-            var (likeCount, likes) = await _commentLikeSvc.GetCommentLikesAsync(commentId);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int.TryParse(userIdString, out int userId);
 
-            return Json(new { likeCount, likes });
+            var (likeCount, likes, userHasLiked) = await _commentLikeSvc.GetCommentLikesAsync(commentId, userId);
+
+            return Json(new { likeCount, likes, userHasLiked });
         }
     }
 }
