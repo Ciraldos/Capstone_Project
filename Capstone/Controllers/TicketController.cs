@@ -19,6 +19,9 @@ namespace Capstone.Controllers
             var userId = _userSvc.GetUserId(); // Ottieni l'ID dell'utente loggato
             var tickets = await _ctx.Tickets
                 .Include(t => t.Event)       // Assicurati che l'evento sia caricato
+                .ThenInclude(t => t.EventImgs)
+                .Include(t => t.Event)       // Assicurati che l'evento sia caricato
+                .ThenInclude(t => t.Location)
                 .Include(t => t.TicketType)  // Assicurati che il tipo di biglietto sia caricato
                 .Where(t => t.UserId == userId)
                 .ToListAsync();

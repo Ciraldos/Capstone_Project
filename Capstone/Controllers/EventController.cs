@@ -31,6 +31,7 @@ namespace Capstone.Controllers
         public async Task<IActionResult> List()
         {
             var events = await _eventSvc.GetAllEventsAsync();
+            ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View(events);
         }
 
@@ -254,6 +255,5 @@ namespace Capstone.Controllers
                 return Json(new { success = false, error = ex.Message });
             }
         }
-
     }
 }

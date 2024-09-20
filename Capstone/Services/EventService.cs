@@ -21,11 +21,15 @@ namespace Capstone.Services
                 .Include(e => e.Djs)
                 .Include(e => e.EventImgs)
                 .Include(e => e.Genres)
+                .Include(e => e.TicketTypes)
                 .ToListAsync();
         }
 
+        // Funzione per ottenere gli eventi più popolari basati sui commenti degli ultimi 3 giorni
         public async Task<List<Event>> GetPopularEventsAsync()
         {
+            var threeDaysAgo = DateTime.Now.AddDays(-3);
+
             return await _ctx.Events
                 .Include(e => e.Location)
                 .Include(e => e.Djs)
@@ -33,9 +37,9 @@ namespace Capstone.Services
                 .Include(e => e.Genres)
                 .Include(e => e.Comments)
                 .Include(e => e.TicketTypes)
+                .Where(e => e.Comments.Count(c => c.PublishedAt >= threeDaysAgo) >= 3) // Controlla i commenti degli ultimi 3 giorni
                 .OrderByDescending(e => e.DateFrom)
-                .Take(4)
-                .Where(e => e.Comments.Count > 2)
+                .Take(3)
                 .ToListAsync();
         }
 

@@ -54,11 +54,18 @@ public class DjController : Controller
         return View(djList);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> DeleteDj(int id)
+    // GET: Dj/Delete/5
+    public async Task<IActionResult> Delete(int id, bool confirm = false)
     {
-        await _djSvc.DeleteDjAsync(id);
-        return RedirectToAction("List");
+        if (confirm)
+        {
+            await _djSvc.DeleteDjAsync(id);
+            return RedirectToAction("List");
+        }
+
+        var djToDelete = await _djSvc.GetDjByIdAsync(id);
+
+        return View(djToDelete);
     }
 
     public async Task<IActionResult> Edit(int id)
