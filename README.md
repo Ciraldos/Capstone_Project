@@ -36,6 +36,8 @@ L'obiettivo principale è creare una piattaforma che simuli l'esperienza di un c
 ### Integrazioni API
 - 🌍 **Google Maps API**: Per gestire la localizzazione degli eventi e fornire mappe dettagliate.
 - 🎧 **Spotify API**: Per integrare playlist musicali negli eventi, migliorando l'esperienza degli utenti.
+- 🎞️ **Giphy API**: Per consentire agli utenti di cercare e inserire GIF nei commenti, rendendo l'interazione più divertente.
+- 💳 **Stripe API**: Per gestire i pagamenti sicuri e veloci per l'acquisto di biglietti degli eventi, offrendo una transazione fluida e integrata.
 
 ## 🚀 Come Iniziare
 Per iniziare con questo progetto, puoi clonare il repository e seguire le istruzioni di configurazione.
