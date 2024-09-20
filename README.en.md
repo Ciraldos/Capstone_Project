@@ -37,6 +37,8 @@ The primary objective is to create a platform that simulates the experience of a
 ### API Integrations
 - 🌍 **Google Maps API**: For managing event localization and providing detailed maps.
 - 🎧 **Spotify API**: To integrate music playlists into events, enhancing user experience.
+- 🎞️ **Giphy API**: To allow users to search and insert GIFs in comments, making interactions more fun.
+- 💳 **Stripe API**: To handle secure and fast payments for event ticket purchases, offering a smooth and integrated transaction process.
 
 ## 🚀 Getting Started
 To get started with this project, you can clone the repository and follow the setup instructions.
