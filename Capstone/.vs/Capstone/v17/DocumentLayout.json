@@ -7,20 +7,24 @@
       "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:views\\event\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\views\\ticket\\list.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:views\\ticket\\list.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\wwwroot\\css\\event_details.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:wwwroot\\css\\event_details.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\wwwroot\\js\\event_details.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:wwwroot\\js\\event_details.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|c:\\users\\andre\\desktop\\epicode1\\capstone_private\\capstone_private\\capstone\\wwwroot\\css\\ticket_list.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{1304CC76-0E48-4D3E-A5A8-1C2BEA6C51D5}|Capstone.csproj|solutionrelative:wwwroot\\css\\ticket_list.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,50 +34,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "wwwroot\\css\\site.css",
-              "ViewState": "AQIAAKABAAAAAAAAAAAowL8BAAAkAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-09-19T02:30:15.809Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "event_details.css",
-              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\event_details.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\event_details.css",
-              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\event_details.css",
-              "RelativeToolTip": "wwwroot\\css\\event_details.css",
-              "ViewState": "AQIAAJ4AAAAAAAAAAAAAALQAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-09-19T02:05:33.763Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EventController.cs",
-              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Controllers\\EventController.cs",
-              "RelativeDocumentMoniker": "Controllers\\EventController.cs",
-              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Controllers\\EventController.cs",
-              "RelativeToolTip": "Controllers\\EventController.cs",
-              "ViewState": "AQIAAOgAAAAAAAAAAAAqwP4AAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T23:32:00.056Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -83,22 +48,74 @@
               "RelativeDocumentMoniker": "Views\\Event\\Details.cshtml",
               "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Views\\Event\\Details.cshtml",
               "RelativeToolTip": "Views\\Event\\Details.cshtml",
-              "ViewState": "AQIAAFEAAAAAAAAAAADgv2cAAAAJAQAA",
+              "ViewState": "AQIAAEYAAAAAAAAAAAAIwFkAAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-18T22:29:09.857Z",
+              "WhenOpened": "2024-09-20T03:16:04.702Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAIwFoAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-20T03:12:03.943Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AQIAAG8AAAAAAAAAAAAAAB8AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-09-20T02:31:02.37Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "event_details.js",
-              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\js\\event_details.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\event_details.js",
-              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\js\\event_details.js",
-              "RelativeToolTip": "wwwroot\\js\\event_details.js",
-              "ViewState": "AQIAALUAAAAAAAAAAAAjwNEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-09-18T16:31:53.075Z",
+              "Title": "TicketController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Controllers\\TicketController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TicketController.cs",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Controllers\\TicketController.cs",
+              "RelativeToolTip": "Controllers\\TicketController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-20T01:37:14.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ticket_list.css",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\ticket_list.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\ticket_list.css",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\wwwroot\\css\\ticket_list.css",
+              "RelativeToolTip": "wwwroot\\css\\ticket_list.css",
+              "ViewState": "AQIAACkAAAAAAAAAAAAwwDIAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-09-20T00:21:29.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "List.cshtml",
+              "DocumentMoniker": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Views\\Ticket\\List.cshtml",
+              "RelativeDocumentMoniker": "Views\\Ticket\\List.cshtml",
+              "ToolTip": "C:\\Users\\andre\\Desktop\\Epicode1\\Capstone_Private\\Capstone_Private\\Capstone\\Views\\Ticket\\List.cshtml",
+              "RelativeToolTip": "Views\\Ticket\\List.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-19T21:02:30.812Z",
               "EditorCaption": ""
             }
           ]
