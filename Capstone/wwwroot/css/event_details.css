@@ -77,49 +77,12 @@
         object-fit: cover;
     }
 
-.genre {
-    border-radius: 2em;
-    border: none;
-    padding: 0.4em 1em;
-    color: white;
-    font-size: 0.8rem;
-    background-color: #393939c9;
-}
-
 #quantity{
         width: 70px;
     text-align: center;
 
 }
-
-.myBtnCart {
-    font-family: 'Montserrat', sans-serif !important;
-
-    border-radius: 2em;
-    border: none;
-    padding: 0.5em 1em;
-    color: white;
-    transition: 350ms;
-    text-decoration: none;
-}
-
-    .myBtnCart:hover {
-        background-color: #ff515173!important;
-        transition: 350ms;
-    }
-
-    .quantitybar{
-        background-color: #0303038b;
-        border-radius: 30px;
-        color: white;
-        border: 1px solid #666666;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .quantitybar:focus {
-        color: white;
-        background-color: #0303038b;
-    }
+   
 
     #ticket{
         background-color: #5757573f;

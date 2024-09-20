@@ -1,0 +1,80 @@
+﻿.card-flip {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 300px;
+    height: 400px;
+}
+
+.card-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 1.2s;
+    transform-style: preserve-3d;
+}
+
+.card-flip:hover .card-flip-inner {
+    transform: rotateY(180deg);
+}
+
+.card-flip-front, .card-flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.card-flip-front {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.event-img {
+    position: relative; /* Necessario per l'overlay */
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+}
+
+/* Overlay scuro sopra l'immagine */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Scuro con opacità del 50% */
+    border-radius: 20px;
+    z-index: 1; /* Assicura che l'overlay sia sopra l'immagine ma sotto il testo */
+}
+
+.event-name {
+    position: absolute;
+    z-index: 2; /* Assicura che il testo sia sopra l'overlay */
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-flip-back {
+    background-color: white;
+    transform: rotateY(180deg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 20px;
+}
+    .card-flip-back p {
+        font-size:0.8em;
+    }

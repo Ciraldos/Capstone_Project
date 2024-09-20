@@ -1,0 +1,11 @@
+﻿.active-genre {
+    background-color: #d7a400ff !important; /* Cambia il colore di sfondo */
+}
+
+.active-genre:hover{
+    background-color: #d7a400ff !important; /* Cambia il colore di sfondo */
+}
+
+    .active-genre:focus {
+        background-color: #d7a400ff !important; /* Cambia il colore di sfondo */
+    }

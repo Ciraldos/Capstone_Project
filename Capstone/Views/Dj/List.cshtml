@@ -4,47 +4,39 @@
     ViewData["Title"] = "DjList";
 }
 
-<h1>DjList</h1>
+<div class="row bg-black py-4 px-1 p-md-5">
+    @if (User.IsInRole("master") || User.IsInRole("admin"))
+    {
+    <div class="mb-4">
+        <a asp-action="Create" class="editBtn">Crea artista</a>
+    </div>
+        
+    }
+    <h3 class="myTitle myText">I nostri artisti</h3>
+    <div class="col-12 col-lg-6 my-4 ">
+        <p class="text-white">Scopri i nostri DJ partner e lasciati trasportare dai migliori artisti della scena elettronica, house e techno. Dalle leggende internazionali ai talenti emergenti, i nostri DJ ti faranno vivere esperienze musicali uniche. Esplora i loro profili, segui i loro eventi e preparati per una serata indimenticabile!</p>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ArtistName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Img)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArtistSpotifyId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArtistName)
-            </td>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.Img)" alt="Dj image" width="150px" height="150px" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArtistSpotifyId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DjId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DjId">Details</a> |
-                    <form asp-action="DeleteDj" asp-route-id="@item.DjId" method="post">
-                    <input type="submit" value="Elimina"> 
-                </form>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="col-12 d-flex justify-content-center">
+            <div class="row justify-content-center w-100">
+            <div class="col-12 mt-2 mb-4 d-flex justify-content-center">
+                <div class="col-10 col-md-6">
+                    <input type="text" id="djSearch" placeholder="Cerca artista per nome..." class="form-control inputBar">
+                    <div id="noResultsMessage" class="text-center text-white my-4 d-none">
+                        Nessun artista trovato
+                    </div>
+                </div>
+            </div>
+                @foreach (var item in Model)
+                {
+                        <div class="col-6 col-md-4 col-lg-3 d-flex align-items-center  flex-column my-4 dj-item">
+                            <a asp-action="Details" asp-route-id="@item.DjId"><img src="@item.Img" alt="Dj image" width="150px" height="150px" style="border-radius: 50%; object-fit: cover" /></a>
+                        <h4 class="text-white mt-2">@item.ArtistName</h4>
+                        </div>
+                }
+            </div>
+    </div>
+</div>
 
+
+<script src="/js/dj_list.js"></script>

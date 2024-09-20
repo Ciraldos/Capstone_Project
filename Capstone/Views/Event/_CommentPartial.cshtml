@@ -117,7 +117,7 @@
 
             <div class="form-group mt-4">
                 <label for="Description-@Model.CommentId" class="mb-1 ps-2">Modifica descrizione:</label>
-                <textarea id="Description-@Model.CommentId" name="Description" class="form-control quantitybar shadow-none" required></textarea>
+                <textarea id="Description-@Model.CommentId" name="Description" class="form-control inputBar shadow-none" required></textarea>
             </div>
 
             <div class="d-flex justify-content-end">
@@ -133,7 +133,7 @@
             <h5>Rispondi a @Model.User.Username</h5>
             <form asp-action="Reply" asp-controller="Comment" method="post">
                 <div class="form-group my-2">
-                    <textarea id="replyDescription" name="Description" class="form-control border-0 shadow-none pt-3 place px-3 quantitybar" placeholder="Scrivi la tua risposta.." required></textarea>
+                    <textarea id="replyDescription" name="Description" class="form-control border-0 shadow-none pt-3 place px-3 inputBar" placeholder="Scrivi la tua risposta.." required></textarea>
                 </div>
                 <input type="hidden" name="ParentCommentId" value="@Model.CommentId" />
                 <input type="hidden" name="EventId" value="@Model.EventId" />

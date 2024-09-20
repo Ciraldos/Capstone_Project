@@ -5,7 +5,16 @@
 <div class="row bg-black justify-content-between py-4 px-1 p-md-5">
 
     <div class="col-12 col-md-6">
-        <h3 class="myTitle myText">Artista</h3>
+        @if (User.IsInRole("master") || User.IsInRole("admin"))
+        {
+            <div class="mb-4">
+                <a asp-action="Edit" asp-route-id="@Model.Dj.DjId" class="editBtn">Modifica</a>
+                <a class="btn-danger myBtnCart mx-1 " href="@Url.Action("Delete", "Dj", new { id = Model.Dj.DjId})">Elimina</a>
+            </div>
+
+        }
+        <a asp-action="List" class="eventBtn">Lista Artisti</a>
+        <h3 class="myTitle myText mt-3">Artista</h3>
         <h1 class="myTitle text-white">@Model.Dj.ArtistName</h1>
         <p class="text-white" style="font-size:0.9rem">@Model.Dj.ArtistDescription</p>
     </div>
@@ -34,19 +43,20 @@
             {
                 @foreach (var item in Model.Dj.Events)
                 {
-                    <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
-                       class="normal-event col-12 col-md-6 col-xl-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+                   
+                       <div class="normal-event col-12 col-md-6 col-xl-4 my-3 d-flex flex-column text-decoration-none align-items-center">
                         <div class="text-center" style="width:200px">
                             <span class="bg-info rounded text-decoration-none text-white" id="pill"><i class="bi bi-music-note"></i></span>
-                            <img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" />
+                             <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"><img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" /></a>
                             <div class="event-text text-start mt-1">
                                 <h4 class="text-dark">@item.Name</h4>
-                                <small class="event-date text-dark">@item.DateFrom.Day/@item.DateFrom.Month - @item.DateTo.Day/@item.DateTo.Month</small><br />
+                                <small class="event-date text-dark">@(item.DateFrom.Day < 10 ? "0" + item.DateFrom.Day : item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
                                 <small class="event-location myText">@item.Location.LocationName</small>
                                 <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
                             </div>
                         </div>
-                    </a>
+                        </div>
+                   
                 }
             }
             else
@@ -64,21 +74,22 @@
             <div class="related-events-wrapper" id="scrollableRelatedDiv">
                 @foreach (var item in Model.RelatedEvents)
                 {
-                    <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
-                       class="related-event col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+                    
+                       <div class="related-event col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
                         <div class=" text-center relative" style="width:200px">
                             <span class="bg-warning rounded text-decoration-none text-white" id="pill">
                                 <i class="bi bi-hand-thumbs-up-fill"></i>
                             </span>
-                            <img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" />
+                            <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"><img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" /></a>
                             <div class="event-text text-start mt-1">
                                 <h4 class="text-white">@item.Name</h4>
-                                <small class="event-date text-white">@item.DateFrom.Day/@item.DateFrom.Month - @item.DateTo.Day/@item.DateTo.Month</small><br />
+                                <small class="event-date text-white">@(item.DateFrom.Day < 10 ? "0" + item.DateFrom.Day : item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
                                 <small class="event-location myText">@item.Location.LocationName</small>
                                 <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
                             </div>
                         </div>
-                    </a>
+                        </div>
+                  
                 }
             </div>
         }
@@ -89,11 +100,5 @@
     </div>
 </div>
 
-
-
-    <div class="text-center">
-        <a asp-action="Edit" asp-route-id="@Model.Dj.DjId" class="btn btn-primary">Edit</a>
-        <a asp-action="List" class="btn btn-secondary">Back to List</a>
-    </div>
 
 <script src="/js/dj_details.js"></script>

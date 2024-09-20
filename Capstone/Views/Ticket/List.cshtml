@@ -4,36 +4,61 @@
     ViewData["Title"] = "MyTickets";
 }
 
-<h1>I tuoi biglietti</h1>
-<div>
-    @if (Model != null && Model.Any())
-    {
-        foreach (var ticket in Model)
-        {
-            if (ticket.QRCodeImage != null)
-            {
-                <div class="ticket-card">
-                    <h2>Biglietto per: <a asp-action="Details" asp-controller="Event" asp-route-id="@ticket.Event.EventId">@ticket.Event.Name</a></h2>
-                    <p>Tipo Biglietto: @ticket.TicketType.TicketTypeName</p>
-                    <p>Descrizione Biglietto: @ticket.TicketType.TicketTypeDescription</p>
-                    <p>Data di acquisto: @ticket.PurchaseDate.ToShortDateString()</p>
-                    <p>Numero del biglietto: @ticket.NumTicket</p>
-                    <img src="data:image/png;base64,@Convert.ToBase64String(ticket.QRCodeImage)" alt="QR Code" />
+
+<link rel="stylesheet" href="~/css/ticket_list.css" />
+
+<div class="row bg-black py-4 justify-content-center px-1 p-md-5">
+    <h3 class="myTitle myText mb-5">I tuoi tickets</h3>
+    <div class="col-12 col-md-8 ">
+                <div class="row">
+                    @foreach (var ticket in Model)
+                    {
+                 
+                    <div class="col-12 col-md-6 col-xl-4 my-3 d-flex justify-content-center">
+                        <div class="card-flip">
+                            <div class="card-flip-inner">
+                                <!-- Front of the card -->
+                                <div class="card-flip-front">
+                                    <div class="event-img" style="background-image: url('@ticket.Event.EventImgs.FirstOrDefault().FilePath');">
+                                        <!-- Overlay scuro sopra l'immagine -->
+                                        <div class="overlay"></div>
+                                        <div class="event-name">
+                                                <h3 class="text-start">@ticket.Event.Name.ToUpper()</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back of the card -->
+                                <div class="card-flip-back text-center d-flex align-items-center">
+                                    <p>@ticket.TicketType.TicketTypeDescription</p>
+                                    <p>@(ticket.Event.DateFrom.Day < 10 ? "0" + ticket.Event.DateFrom.Day : ticket.Event.DateFrom.Day)/@(ticket.Event.DateFrom.Month < 10 ? "0" + ticket.Event.DateFrom.Month : ticket.Event.DateFrom.Month) - @ticket.Event.DateFrom.DayOfWeek @ticket.Event.DateFrom.TimeOfDay</p>
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(ticket.QRCodeImage)" alt="QR Code" style="border-radius:10px; max-width:180px">
+                                    <p>N° Ticket: @ticket.NumTicket</p>
+                                    <p>@ticket.Event.Location.LocationName</p>
+                                    @if(DateTime.Now > ticket.Event.DateFrom)
+                                    {
+                                        <p class="text-danger mt-2">Evento scaduto</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-info mt-2">Da attivare</p>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
                 </div>
-            }
-            else
-            {
-                <div class="ticket-card">
-                    <h2>Biglietto per: @ticket.Event.Name</h2>
-                    <p>Data di acquisto: @ticket.PurchaseDate.ToShortDateString()</p>
-                    <p>Numero del biglietto: @ticket.NumTicket</p>
-                    <p>QR Code non disponibile</p>
-                </div>
-            }
-        }
-    }
-    else
-    {
-        <p>Non hai biglietti.</p>
-    }
+            </div>
+        </div>
+
+<div class="row bg-black justify-content-center align-items-center">
+    <div class="col-12 col-md-6 my-3">
+        <h2 class="text-white">Non hai ancora un biglietto?</h2>
+        <h3 class="mb-3 myText fs-5">Scopri gli eventi in programma e acquista il tuo biglietto!</h3>
+        <a asp-action="List" asp-controller="Event" class="btn-danger myBtnCart">Scopri gli eventi</a>
+    </div>
+    <div class="col-12 col-md-4">
+        <img src="/images/Logos.png" class="img-fluid" />
+    </div>
 </div>

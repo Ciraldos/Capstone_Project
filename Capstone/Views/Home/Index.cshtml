@@ -62,31 +62,34 @@
 
 <div class="row justify-content-center">
     <h1 class="text-center my-5 myTitle">Trending <i class="bi bi-graph-up-arrow fs-3"></i></h1>
-
-    @foreach (var item in Model)
+    @if (Model.Count == 0)
     {
-        <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"
-            class="col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
-            <div class="event-wrapper text-center relative" style="width:200px">
-                <span class="bg-danger rounded text-decoration-none text-white" id="pill"><i class="bi bi-fire"></i></span>
-                <img src="@item.EventImgs.FirstOrDefault().FilePath" alt="img" class="event-img" />
-                <div class="event-text text-start mt-1">
-                    <h4 class="text-dark">@item.Name</h4>
-                    <small class="event-date text-dark">@item.DateFrom.Day/@item.DateFrom.Month -
-                        @item.DateTo.Day/@item.DateTo.Month</small><br />
-                    <small class="event-location myText">@item.Location.LocationName</small>
-                    <p class="event price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault().Price
-                    </p>
+        <h3 class="text-center my-5 myTitle">Nessun evento in tendenza al momento.</h3>
+    }
+    else{
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4 my-3 d-flex flex-column text-decoration-none align-items-center">
+                <div class="event-wrapper text-center relative" style="width:200px">
+                    <span class="bg-danger rounded text-decoration-none text-white" id="pill"><i class="bi bi-fire"></i></span>
+                    <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"><img src="@item.EventImgs.FirstOrDefault().FilePath" alt="img" class="event-img" /></a>
+                    <div class="event-text text-start mt-1">
+                        <h4 class="text-dark">@item.Name</h4>
+                        <small class="event-date text-dark">@(item.DateFrom.Day < 10 ? "0" + item.DateFrom.Day : item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
+                        <small class="event-location myText">@item.Location.LocationName</small>
+                        <p class="event price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault().Price
+                        </p>
+                    </div>
                 </div>
             </div>
-        </a>
+        }
     }
 </div>
 <div class="row flex-md-row flex-column-reverse px-4 justify-content-center align-items-center mt-5 mybg py-4">
     <div class="col-12 col-md-4">
         <h1 class="text-white">Scarica la nostra app</h1>
-        <p class="text-light">Scarica l'app TON?GHT e resta aggiornato sugli eventi esclusivi ovunque ti trovi. La festa è sempre con te!</p>
-        <a href="#" class="myBtn btn-danger mt-3 px-4 py-2 fw-bolder">Scarica ora</a>
+        <p class="text-light mb-3">Scarica l'app TON?GHT e resta aggiornato sugli eventi esclusivi ovunque ti trovi. La festa è sempre con te!</p>
+        <a href="#" class="myBtnCart btn-danger ">Scarica ora</a>
     </div>
     <div class="col-2"></div>
     <div class="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">

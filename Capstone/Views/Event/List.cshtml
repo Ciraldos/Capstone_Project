@@ -2,48 +2,78 @@
 
 @{
     ViewBag.Title = "Event List";
+    var genres = ViewBag.Genres as List<Genre>;
 }
 
-<h2>Event List</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Date From</th>
-            <th>Date To</th>
-            <th>Host Name</th>
-            <th>Genres</th>
-            <th>Location</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var eventItem in Model)
-        {
-            <tr>
-                <td>@eventItem.Name</td>
-                <td>@eventItem.Description</td>
-                <td>@eventItem.DateFrom.ToShortDateString()</td>
-                <td>@eventItem.DateTo.ToShortDateString()</td>
-                <td>@eventItem.HostName</td>
-                <td>
-                    @foreach(var eventGenre in eventItem.Genres)
+
+<link rel="stylesheet" href="/css/event_list.css" />
+
+<div class="row bg-black py-4 px-1 p-md-5">
+    @if (User.IsInRole("master") || User.IsInRole("admin"))
+    {
+        <div class="mb-4">
+            <a asp-action="Create" class="editBtn">Crea Evento</a>
+        </div>
+
+    }
+    <h3 class="myTitle myText">I nostri eventi</h3>
+    <div class="col-12 col-lg-6 my-4 ">
+        <p class="text-white">
+            Scopri i nostri eventi esclusivi e vivi la magia della musica elettronica, house e techno come mai prima d'ora. Ogni evento è curato nei minimi dettagli per offrirti un'esperienza sonora e visiva senza pari. Dalle serate in club vibranti ai festival open-air mozzafiato, abbiamo qualcosa per tutti gli amanti della musica. Unisciti a noi per serate indimenticabili, con performance di DJ di fama mondiale e talenti emergenti che sapranno farti ballare tutta la notte. Esplora il nostro calendario, acquista i tuoi biglietti e preparati a vivere momenti straordinari. Non perdere l'opportunità di partecipare ai migliori eventi della scena musicale elettronica!
+        </p>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 mt-2 mb-4 d-flex justify-content-center">
+                <div class="col-10 d-flex flex-wrap flex-column flex-md-row justify-content-center align-items-center">
+                    @foreach(var g in genres)
                     {
-                        <li>@eventGenre.Name</li>
+                        <button class="eventBtn mx-1 my-1 my-md-0 filter-genre" data-genre="@g.Name">@g.Name</button>
                     }
+                    <button type="button" class="myLink fs-2 my-1 my-md-0 me-2 noBtn" id="cancelFilterBtn"><i class="bi bi-x-circle"></i></button>
 
-                </td>
-                <td>@eventItem.Location?.LocationName</td>
-                <td>
-                    <a class="btn btn-info" href="@Url.Action("Details", "Event", new { id = eventItem.EventId })">Details</a>
-                    <a class="btn btn-warning" href="@Url.Action("Edit", "Event", new { id = eventItem.EventId })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Event", new { id = eventItem.EventId })">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </div>
+            </div>
+                <div id="noResultsMessage" class="text-center text-white my-4 d-none">
+                        Nessun artista trovato
+                    </div>
+            <div class="col-12 col-md-8">
+                <div class="row justify-content-center">
+                    @foreach (var item in Model)
+                    {
 
-<a class="btn btn-primary" href="@Url.Action("Create", "Event")">Create New Event</a>
+                        <div class="related-event col-12 col-md-6 col-lg-4 col-xxl-3 my-3 d-flex flex-column text-decoration-none align-items-center"
+                             data-genres="@string.Join(',', item.Genres.Select(genre => genre.Name))">
+                            <div class=" text-center relative" style="width:200px">
+                                <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"><img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" /></a>
+                                <div class="event-text text-start mt-1">
+                                    <h4 class="text-white">@item.Name</h4>
+                                    <small class="event-date text-white">@(item.DateFrom.Day< 10 ? "0" + item.DateFrom.Day: item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
+                                    <small class="event-location myText">@item.Location.LocationName</small>
+                                    <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
+                                    <p>
+                                        <i class="bi bi-tags-fill me-2 text-white">
+
+                                            @foreach (var genre in item.Genres)
+                                            {
+                                                <span class="genreEvent text-nowrap">@genre.Name</span>
+                                            }
+                                        </i>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/event_list.js"></script>
+
+
+
