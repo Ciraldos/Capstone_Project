@@ -1,5 +1,6 @@
 ﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Capstone.Controllers
@@ -14,6 +15,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Genre
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> List()
         {
             var genres = await _genreSvc.GetAllGenresAsync();
@@ -30,6 +33,8 @@ namespace Capstone.Controllers
         //}
 
         // GET: Genre/Create
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public ActionResult Create()
         {
             return View();
@@ -38,6 +43,8 @@ namespace Capstone.Controllers
         // POST: Genre/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Create(Genre genre)
         {
             if (ModelState.IsValid)
@@ -49,6 +56,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Genre/Edit/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Edit(int id)
         {
             var genre = await _genreSvc.GetGenreByIdAsync(id);
@@ -60,6 +69,8 @@ namespace Capstone.Controllers
         // POST: Genre/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Edit(Genre genre)
         {
             if (ModelState.IsValid)
@@ -72,6 +83,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Genre/Delete/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Delete(int id, bool confirm = false)
         {
             if (confirm)
