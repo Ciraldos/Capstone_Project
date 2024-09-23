@@ -4,6 +4,7 @@ let autocomplete;
 
 function initMap() {
     const defaultLocation = { lat: 41.9028, lng: 12.4964 }; // Default to Rome if no location is provided
+
     map = new google.maps.Map(document.getElementById("map"), {
         center: defaultLocation,
         zoom: 13,
@@ -25,33 +26,41 @@ function initMap() {
             return;
         }
 
-        // Update map and marker location
+        // Update map and marker position
         map.setCenter(place.geometry.location);
         map.setZoom(15);
         marker.setPosition(place.geometry.location);
 
-        // Populate address field
+        // Populate the address field
         document.getElementById("addressGoogleApi").value = place.formatted_address;
     });
 
-    // If the location is already set, initialize with that location
-    const locationName = '@Model.LocationName';
-    const addressGoogleApi = '@Model.AddressGoogleApi';
+    // Retrieve values from data attributes
+    const locationInput = document.getElementById('locationName');
+    const locationName = locationInput.dataset.locationName;
+    const addressGoogleApi = document.getElementById('addressGoogleApi').dataset.addressGoogleApi;
 
     if (locationName && addressGoogleApi) {
-        autocomplete.setBounds(map.getBounds());
-        document.getElementById('locationName').value = locationName;
+        locationInput.value = locationName;
         document.getElementById('addressGoogleApi').value = addressGoogleApi;
 
-        // Perform a search to update the map and marker
+        // Geocode the existing address to update the map
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: addressGoogleApi }, function (results, status) {
             if (status === 'OK') {
                 map.setCenter(results[0].geometry.location);
                 marker.setPosition(results[0].geometry.location);
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
             }
         });
     }
 }
 
-window.onload = initMap;
+window.onload = function () {
+    if (typeof google !== 'undefined') {
+        initMap();
+    } else {
+        console.error('Google Maps API is not loaded');
+    }
+};

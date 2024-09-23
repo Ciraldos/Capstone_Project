@@ -1,5 +1,6 @@
 ﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Capstone.Controllers
@@ -16,22 +17,19 @@ namespace Capstone.Controllers
         }
 
         // GET: Location
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> List()
         {
             var locations = await _locationSvc.GetAllLocationsAsync();
             return View(locations);
         }
 
-        // GET: Location/Details/5
-        public async Task<ActionResult> Details(int id)
-        {
-            var location = await _locationSvc.GetLocationByIdAsync(id);
 
-
-            return View(location);
-        }
 
         // GET: Location/Create
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public ActionResult Create()
         {
             var googleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
@@ -42,6 +40,8 @@ namespace Capstone.Controllers
         // POST: Location/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Create(Location location)
         {
             if (ModelState.IsValid)
@@ -53,6 +53,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Location/Edit/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Edit(int id)
         {
             var location = await _locationSvc.GetLocationByIdAsync(id);
@@ -64,6 +66,8 @@ namespace Capstone.Controllers
         // POST: Location/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Edit(Location location)
         {
             if (ModelState.IsValid)
@@ -77,6 +81,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Location/Delete/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<ActionResult> Delete(int id, bool confirm = false)
         {
             if (confirm)
@@ -87,6 +93,8 @@ namespace Capstone.Controllers
 
             var locationToDelete = await _locationSvc.GetLocationByIdAsync(id);
 
+            var googleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
+            ViewBag.GoogleMapsApiKey = googleMapsApiKey;
             return View(locationToDelete);
         }
     }

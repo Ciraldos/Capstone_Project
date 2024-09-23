@@ -1,20 +1,40 @@
 ﻿@model Capstone.Models.Location
 
 @{
-    ViewBag.Title = "Delete Location";
+    ViewData["Title"] = "Elimina Location";
 }
 
-<h2>Delete Location</h2>
+<div class="row min-heigth justify-content-center align-items-center p-4 p-md-0">
+    <div class="col-12">
+        <div class="row justify-content-md-around justify-content-lg-center p-1 p-md-5 bg-black">
+            <div class="col-12 col-md-6  col-xl-4 d-flex justify-content-center align-items-center">
+                <!-- Map container -->
+                <div id="map" style="height: 400px; width: 100%;border-radius:25px"></div>
+            </div>
+            <div class="col-12 col-md-5 d-flex flex-column justify-content-center">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center myText">Sicuro di voler eliminare <span class="text-danger fw-bolder">@Model.LocationName</span> dalla lista delle Location?</h1>
+                        <p class="mt-4 text-center fs-5 myText">
+                            Indirizzo: <span class="text-danger fw-bolder">@Model.AddressGoogleApi</span>
+                        </p>
 
-<h3>Are you sure you want to delete this location?</h3>
-<div>
-    <h4>@Model.LocationName</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Address</dt>
-        <dd class="col-sm-10">@Model.AddressGoogleApi</dd>
-    </dl>
+                        <div class="text-center mt-5">
+                            <a href="@Url.Action("Delete", "Location", new { id = Model.LocationId, confirm = true })" class="btn-danger myBtnCart mx-2">Elimina</a>
+                            <a href="@Url.Action("List", "Location")" class="eventBtn mx-2">Annulla</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<a href="@Url.Action("Delete", "Location", new { id = Model.LocationId, confirm = true })" class="btn btn-danger">Delete</a>
-<a href="@Url.Action("List", "Location")" class="btn btn-secondary">Cancel</a>
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&libraries=places"></script>
+    <script>
+        // Pass the address from Razor to JavaScript
+        const locationAddress = '@Model.AddressGoogleApi';
+    </script>
+    <script src="~/js/location_delete.js"></script>
+}
