@@ -66,10 +66,13 @@
                     <div class="action-buttons d-flex justify-content-end align-items-center mt-2 position-relative">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <button class="like-button noBtn myText" data-comment-id="@Model.CommentId">
-                                <span class="like-count me-1" id="spanLike-@Model.CommentId" data-comment-id="@Model.CommentId"></span>
-                                <i class="fa-solid fa-thumbs-up myActions fs-5"></i>
-                            </button>
+                            <form>
+                                @Html.AntiForgeryToken()
+                                <button class="like-button noBtn myText" data-comment-id="@Model.CommentId">
+                                    <span class="like-count me-1" id="spanLike-@Model.CommentId" data-comment-id="@Model.CommentId"></span>
+                                    <i class="fa-solid fa-thumbs-up myActions fs-5"></i>
+                                </button>
+                            </form>
                         }
                         else
                         {
@@ -94,15 +97,18 @@
                             <button class="noBtn myText editCommentBtn" data-comment-id="@Model.CommentId">
                                 <i class="bi bi-pencil-fill myActions fs-5"></i>
                             </button>
-
-                            <button class="noBtn myText deleteCommentBtn" data-comment-id="@Model.CommentId">
-                                <i class="bi bi-trash3-fill myActions fs-5"></i>
-                            </button>
                         }
+                        @if (currentUserIdString == Model.User.UserId.ToString() || User.IsInRole("Admin") || User.IsInRole("Master"))
+                        {                            
+                            <form>
+                                @Html.AntiForgeryToken()
+                                <button class="noBtn myText deleteCommentBtn" data-comment-id="@Model.CommentId">
+                                    <i class="bi bi-trash3-fill myActions fs-5"></i>
+                                </button>
+                            </form>
+                        }
+
                     </div>
-                    <form id="csrf-token-form" style="display:none;">
-                        @Html.AntiForgeryToken()
-                    </form>
                 </div>
             </div>
         </div>

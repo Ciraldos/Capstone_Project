@@ -135,7 +135,7 @@ namespace Capstone.Services
 
 
 
-        public async Task<Event> UpdateEventAsync(Event eventModel, List<int> djIds, List<int> selectedGenres, List<string> replaceImagePaths, List<string> additionalImagePaths, List<int> ticketTypesId)
+        public async Task<Event> UpdateEventAsync(Event eventModel, List<int> djIds, List<int> selectedGenres, List<string> replaceImagePaths, List<string> additionalImagePaths, List<int> ticketTypesId, List<int> ticketQuantities)
         {
             var existingEvent = await _ctx.Events
                 .Include(e => e.Djs)
@@ -143,6 +143,7 @@ namespace Capstone.Services
                 .Include(e => e.EventImgs)
                 .Include(e => e.TicketTypes)
                 .Include(e => e.Genres)
+                .Include(e => e.EventTicketType)
                 .FirstOrDefaultAsync(e => e.EventId == eventModel.EventId);
 
             var existingLocation = await _ctx.Locations.FindAsync(eventModel.LocationId);
@@ -160,9 +161,20 @@ namespace Capstone.Services
             existingEvent.Genres.AddRange(genres);
 
             // Aggiornamento dei tipi di biglietti
-            var ticketTypes = await _ctx.TicketTypes.Where(t => ticketTypesId.Contains(t.TicketTypeId)).ToListAsync();
-            existingEvent.TicketTypes.Clear();
-            existingEvent.TicketTypes.AddRange(ticketTypes);
+            existingEvent.EventTicketType.Clear();  // Svuota la tabella ponte EventTicketType
+            for (int i = 0; i < ticketTypesId.Count; i++)
+            {
+                var ticketTypeId = ticketTypesId[i];
+                var quantity = ticketQuantities[i];
+
+                // Aggiungi una nuova riga nella tabella ponte per ogni tipo di biglietto
+                existingEvent.EventTicketType.Add(new EventTicketType
+                {
+                    EventId = existingEvent.EventId,
+                    TicketTypeId = ticketTypeId,
+                    AvailableQuantity = quantity
+                });
+            }
 
             // Aggiornamento delle informazioni dell'evento
             existingEvent.Name = eventModel.Name;

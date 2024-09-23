@@ -1,5 +1,6 @@
 ﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -51,6 +52,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Event/Create
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Locations = await _locationSvc.GetAllLocationsAsync();
@@ -63,11 +65,12 @@ namespace Capstone.Controllers
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         public async Task<IActionResult> Create(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
         {
             try
             {
-                await _eventSvc.CreateEventAsync(eventModel, selectedGenres, djIds, imageFiles, ticketTypesIds, ticketQuantities);
+                await _eventSvc.CreateEventAsync(eventModel, djIds, selectedGenres, imageFiles, ticketTypesIds, ticketQuantities);
                 return RedirectToAction("List");
             }
             catch (Exception ex)
@@ -83,6 +86,8 @@ namespace Capstone.Controllers
         }
 
         // GET: Event/Edit/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> Edit(int id)
         {
             var eventToEdit = await _eventSvc.GetEventByIdAsync(id);
@@ -96,8 +101,9 @@ namespace Capstone.Controllers
 
         // POST: Event/Edit/5
         [HttpPost]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds)
+        public async Task<IActionResult> Edit(Event eventModel, List<int> djIds, List<int> selectedGenres, List<IFormFile> imageFiles, List<IFormFile> additionalImageFiles, List<int> ticketTypesIds, List<int> ticketQuantities)
         {
             // Percorsi per i file di immagine
             var replaceImagePaths = new List<string>();
@@ -132,7 +138,8 @@ namespace Capstone.Controllers
 
             try
             {
-                await _eventSvc.UpdateEventAsync(eventModel, djIds, selectedGenres, replaceImagePaths, additionalImagePaths, ticketTypesIds);
+                // Passa anche le quantità di biglietti al servizio di aggiornamento
+                await _eventSvc.UpdateEventAsync(eventModel, djIds, selectedGenres, replaceImagePaths, additionalImagePaths, ticketTypesIds, ticketQuantities);
                 return RedirectToAction("Details", new { id = eventModel.EventId });
             }
             catch (ArgumentException ex)
@@ -146,6 +153,7 @@ namespace Capstone.Controllers
             ViewBag.Genres = await _genreSvc.GetAllGenresAsync();
             return View(eventModel);
         }
+
 
         // Metodo di supporto per salvare le immagini nel file system
         private async Task<string> SaveImageToFileSystem(IFormFile imageFile, string folder, int eventId)
@@ -173,6 +181,8 @@ namespace Capstone.Controllers
 
 
         // GET: Event/Delete/5
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> Delete(int id, bool confirm = false)
         {
             if (confirm)
@@ -216,6 +226,7 @@ namespace Capstone.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditReview(Review reviewModel, List<IFormFile> imageFiles)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);

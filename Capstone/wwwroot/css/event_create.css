@@ -1,0 +1,41 @@
+﻿#genresCheckboxes .btn {
+    display: inline-block;
+    margin: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.eventBtn.selected {
+    background-color: #c7a70eff;
+    color: white;
+}
+
+.form-check {
+    padding-left: 0 !important;
+}
+
+    .form-check .form-check-input {
+        float: none;
+        margin-left: 0!important;
+    }
+
+.form-check-inline {
+    margin-right: 0 !important;
+}
+
+#djIds::-webkit-scrollbar-track, #graphs::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: transparent !important;
+}
+
+
+
+#djIds::-webkit-scrollbar, #graphs::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent !important;
+}
+
+#djIds::-webkit-scrollbar-thumb, #graphs::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #666666;
+}

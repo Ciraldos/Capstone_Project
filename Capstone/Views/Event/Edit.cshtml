@@ -8,133 +8,145 @@
     var genres = ViewBag.Genres as List<Genre>;
 }
 
-<h2>Edit Event</h2>
+<link rel="stylesheet" href="/css/event_create.css" />
 
-<form action="/Event/Edit" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="EventId" value="@Model.EventId" />
+<div class="row bg-black justify-content-center align-items-center py-md-3 p-4 px-md-0">
+    <div class="col-12 col-md-10">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7 bg px-5">
+                <h3 class="text-white">Modifica Evento</h3>
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="EventId" value="@Model.EventId" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="form-group">
-        <label for="Name">Event Name</label>
-        <input type="text" id="Name" name="Name" class="form-control" placeholder="Enter event name" value="@Model?.Name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+                    <div class="form-group">
+                        <label for="Name" class="text-white">Nome Evento</label>
+                        <input type="text" id="Name" name="Name" class="form-control inputBar" placeholder="Inserisci nome evento" value="@Model?.Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label for="Description">Event Description</label>
-        <textarea id="Description" name="Description" class="form-control" placeholder="Enter event description">@Model?.Description</textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+                    <div class="form-group mt-2">
+                        <label for="Description" class="text-white">Descrizione Evento</label>
+                        <textarea id="Description" name="Description" class="form-control inputBar" placeholder="Inserisci descrizione evento">@Model?.Description</textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label for="DateFrom">Start Date</label>
-        <input type="date" id="DateFrom" name="DateFrom" class="form-control" value="@Model?.DateFrom.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="DateFrom" class="text-danger"></span>
-    </div>
+                    <div class="form-group mt-2">
+                        <label for="DateFrom" class="text-white">Data Inizio</label>
+                        <input type="date" id="DateFrom" name="DateFrom" class="form-control inputBar" value="@Model?.DateFrom.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="DateFrom" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label for="DateTo">End Date</label>
-        <input type="date" id="DateTo" name="DateTo" class="form-control" value="@Model?.DateTo.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="DateTo" class="text-danger"></span>
-    </div>
+                    <div class="form-group mt-2">
+                        <label for="DateTo" class="text-white">Data Fine</label>
+                        <input type="date" id="DateTo" name="DateTo" class="form-control inputBar" value="@Model?.DateTo.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="DateTo" class="text-danger"></span>
+                    </div>
 
+                    <div class="form-group mt-2">
+                        <label for="HostName" class="text-white">Nome Host</label>
+                        <input type="text" id="HostName" name="HostName" class="form-control inputBar" placeholder="Inserisci nome host" value="@Model?.HostName" />
+                        <span asp-validation-for="HostName" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label for="HostName">Host Name</label>
-        <input type="text" id="HostName" name="HostName" class="form-control" placeholder="Enter host name" value="@Model?.HostName" />
-        <span asp-validation-for="HostName" class="text-danger"></span>
-    </div>
+                    <div class="form-group mt-2">
+                        <label for="LocationId" class="text-white">Location</label>
+                        <select id="LocationId" name="LocationId" class="form-control inputBar">
+                            <option value="" disabled >Select Location</option>
+                            @foreach (var l in locations)
+                            {
+                                if (l.LocationId == Model?.LocationId)
+                                {
+                                    <option value="@l.LocationId" selected="selected">@l.LocationName</option>
+                                }
+                                else
+                                {
+                                    <option value="@l.LocationId">@l.LocationName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label for="LocationId">Location</label>
-        <select id="LocationId" name="LocationId" class="form-control">
-            <option value="">Select Location</option>
-            @foreach (var l in locations)
-            {
-                if (l.LocationId == Model?.LocationId)
-                {
-                    <option value="@l.LocationId" selected="selected">@l.LocationName</option>
-                }
-                else
-                {
-                    <option value="@l.LocationId">@l.LocationName</option>
-                }
-            }
-        </select>
-        <span asp-validation-for="LocationId" class="text-danger"></span>
-    </div>
+                    <div class="form-group mt-2">
+                        <label for="djIds" class="text-white">Seleziona DJs</label>
+                        <select id="djIds" name="djIds" multiple class="form-control inputBar">
+                            @foreach (var dj in djs)
+                            {
+                                bool isSelected = Model.Djs.Any(d => d.DjId == dj.DjId);
+                                if (isSelected)
+                                {
+                                    <option value="@dj.DjId" selected="selected">@dj.ArtistName </option>
+                                }
+                                else
+                                {
+                                    <option value="@dj.DjId">@dj.ArtistName </option>
+                                }
+                            }
+                        </select>
+                    </div>
 
-    <div class="form-group">
-        <label for="djIds">Select DJs</label>
-        <select id="djIds" name="djIds" multiple class="form-control">
-            @foreach (var dj in djs)
-            {
-                bool isSelected = Model.Djs.Any(d => d.DjId == dj.DjId);
-                if (isSelected)
-                {
-                    <option value="@dj.DjId" selected="selected">@dj.ArtistName </option>
-                }
-                else
-                {
-                    <option value="@dj.DjId">@dj.ArtistName </option>
-                }
-            }
-        </select>
-    </div>
-    <div class="form-group mt-3">
-        <label class="control-label mb-1">Inserisci generi musicali :</label>
-        <div id="genresCheckboxes">
-            @foreach (var g in genres)
-            {
-                bool isSelected = Model.Genres.Any(eg => eg.GenreId == g.GenreId);
-                <div class="form-check">
-                    <input type="checkbox"
-                           class="form-check-input"
-                           id="genre-@g.GenreId"
-                           name="SelectedGenres"
-                           value="@g.GenreId"
-                    @(isSelected ? "checked" : "") />
-                    <label class="form-check-label" for="genre-@g.GenreId">
-                        @g.Name
-                    </label>
-                </div>
-            }
+                    <div class="form-group mt-3">
+                        <label class="control-label mb-1 text-white">Inserisci generi musicali:</label>
+                        <div id="genresCheckboxes" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var g in genres)
+                            {
+                                bool isSelected = Model.Genres.Any(eg => eg.GenreId == g.GenreId);
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input d-none" id="genre-@g.GenreId" name="SelectedGenres" value="@g.GenreId" @(isSelected ? "checked" : "") />
+                                    <label class="btn eventBtn" for="genre-@g.GenreId">@g.Name</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="Genres" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group my-5">
+                        <label for="ticketTypeQuantities" class="text-white">Modifica Tipi di Biglietti e Quantità Disponibili:</label>
+                        <div id="ticketTypeQuantities">
+                            @for (int i = 0; i < ticketTypes.Count; i++)
+                            {
+                                var ticketType = ticketTypes[i];
+                                var eventTicketType = Model.EventTicketType.FirstOrDefault(et => et.TicketTypeId == ticketType.TicketTypeId);
+                                int availableQuantity = eventTicketType?.AvailableQuantity ?? 0;
+
+                                <div class="form-row mt-2">
+                                    <div class="col">
+                                        <input type="checkbox" id="ticketType_@ticketType.TicketTypeId" name="ticketTypesIds" value="@ticketType.TicketTypeId" @(eventTicketType != null ? "checked" : "") />
+                                        <label for="ticketType_@ticketType.TicketTypeId" class="text-white">@ticketType.TicketTypeName - @ticketType.TicketTypeDescription</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" id="ticketQuantity_@ticketType.TicketTypeId" name="ticketQuantities[@i]" class="form-control inputBar" value="@availableQuantity" placeholder="Inserisci quantità disponibile" min="0" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label for="additionalImageFiles" class="text-white">Carica Immagini Aggiuntive (saranno aggiunte alle immagini esistenti)</label>
+                        <input type="file" id="additionalImageFiles" name="additionalImageFiles" class="form-control inputBar" multiple />
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="imageFiles" class="text-white">Carica Nuove Immagini (le immagini esistenti saranno sostituite se vengono caricate nuove immagini)</label>
+                        <input type="file" id="imageFiles" name="imageFiles" class="form-control inputBar" multiple />
+                    </div>
+
+                    <div class="form-group mt-3 mb-2 text-end">
+                        <input type="submit" value="Salva" class="btn-danger myBtnCart mt-3" />
+                        <a href="@Url.Action("List", "Event")" class="eventBtn">Torna alla lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <span asp-validation-for="Genres" class="text-danger"></span>
     </div>
-
-    <div class="form-group">
-        <label for="ticketTypesIds">Select Ticket Types:</label>
-        <select id="ticketTypesIds" name="ticketTypesIds" multiple class="form-control">
-            @foreach (var t in ticketTypes)
-            {
-                bool isSelected = Model.TicketTypes.Any(t => t.TicketTypeId == t.TicketTypeId);
-                if (isSelected)
-                {
-                    <option value="@t.TicketTypeId" selected="selected">@t.TicketTypeName - @t.TicketTypeDescription</option>
-                }
-                else
-                {
-                    <option value="@t.TicketTypeId">@t.TicketTypeName - @t.TicketTypeDescription</option>
-                }
-            }
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="additionalImageFiles">Add Additional Images (these will be added to the existing images)</label>
-        <input type="file" id="additionalImageFiles" name="additionalImageFiles" class="form-control" multiple />
-    </div>
-    <div class="form-group">
-        <label for="imageFiles">Upload New Images (existing images will be replaced if new images are uploaded)</label>
-        <input type="file" id="imageFiles" name="imageFiles" class="form-control" multiple />
-    </div>
-    <button type="submit" class="btn btn-primary" />Salva </button>
-    <a href="@Url.Action("List", "Event")" class="btn btn-secondary">Back to List</a>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/event_edit.js"></script>
+
     }
 }

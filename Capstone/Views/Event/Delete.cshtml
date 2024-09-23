@@ -1,32 +1,57 @@
 ﻿@model Capstone.Models.Event
 
 @{
-    ViewBag.Title = "Delete Event";
+    ViewData["Title"] = "Elimina Evento";
 }
 
-<h2>Delete Event</h2>
 
-<h3>Are you sure you want to delete this event?</h3>
-<div>
-    <h4>@Model.Name</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
+<div class="row min-heigth justify-content-center align-items-center p-4 p-md-0">
+    <div class="col-12">
+        <div class="row  justify-content-md-around justify-content-lg-center p-1 p-md-5 bg-black">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
+                @if (Model.EventImgs != null && Model.EventImgs.Any())
+                {
+                <img src="@Model.EventImgs.FirstOrDefault().FilePath" alt="@Model.Name Image" />
+                }
+            </div>
+            <div class="col-12 col-md-5 d-flex flex-column justify-content-center">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center myText">Sicuro di voler eliminare <span class="text-danger fw-bolder">@Model.Name</span> dalla lista degli Eventi?</h1>
+                        <p class="mt-4 text-center fs-5 myText">
+                            Location: <span class="text-danger fw-bolder">@Model.Location.LocationName</span>
+                        </p>
+                        <p class="text-center fs-5 mt-3 myText">
+                            Descrizione: <span class="text-danger fw-bolder">@Model.Description</span>
+                        </p>
+                        <p class="text-center fs-5 mt-3 myText">
+                            Data:
+                            <span class="text-danger fw-bolder">
+                                @Model.DateFrom.ToString("dd-MM-yyyy")
+                            </span>
+                            @if (Model.DateFrom != Model.DateTo)
+                            {
+                                <span class="text-danger fw-bolder">
+                                    - @Model.DateTo.ToString("dd-MM-yyyy")
+                                </span>
+                            }
+                        </p>
 
-        <dt class="col-sm-2">Date From</dt>
-        <dd class="col-sm-10">@Model.DateFrom.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-2">Date To</dt>
-        <dd class="col-sm-10">@Model.DateTo.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-2">Host Name</dt>
-        <dd class="col-sm-10">@Model.HostName</dd>
-
-        <dt class="col-sm-2">Location</dt>
-        <dd class="col-sm-10">@Model.Location?.LocationName</dd>
-    </dl>
+                        <p class="text-center fs-5 mt-3 myText">
+                            Organizzatore: <span class="text-danger fw-bolder">@Model.HostName</span>
+                        </p>
+                        <div class="text-center mt-5">
+                            <a href="@Url.Action("Delete", "Event", new { id = Model.EventId, confirm = true })" class="btn-danger myBtnCart mx-2">Elimina</a>
+                            <a href="@Url.Action("List", "Event")" class="eventBtn mx-2">Annulla</a>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<a href="@Url.Action("Delete", "Event", new { id = Model.EventId, confirm = true })" class="btn btn-danger">Delete</a>
-<a href="@Url.Action("List", "Event")" class="btn btn-secondary">Cancel</a>
+
+
+    

@@ -349,7 +349,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteButtons = document.querySelectorAll('.deleteCommentBtn');
 
     deleteButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Previene il submit del form
             const commentId = this.getAttribute('data-comment-id');
 
             if (confirm('Sei sicuro di voler eliminare questo commento?')) {
@@ -411,10 +412,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Funzione per aggiungere o rimuovere un like ad un commento
-    function toggleLike(commentId) {
+    function toggleLike(commentId, antiForgeryToken) {
         fetch(`/Comment/ToggleLike/${commentId}`, {
             method: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': antiForgeryToken // Includi il token
+            },
+            body: JSON.stringify({}) // Se hai bisogno di passare dati aggiuntivi
         })
             .then(response => response.json())
             .then(data => {
@@ -445,8 +451,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const commentId = button.getAttribute('data-comment-id');
         updateLikeCount(commentId);
 
-        button.addEventListener('click', function () {
-            toggleLike(commentId);
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Previene il submit del form
+            const commentId = this.dataset.commentId;
+            const form = this.closest('form'); // Trova il form più vicino
+            const antiForgeryToken = form.querySelector('input[name="__RequestVerificationToken"]').value; // Ottieni il token dal form
+
+            toggleLike(commentId, antiForgeryToken); // Passa il token alla funzione
         });
     });
 

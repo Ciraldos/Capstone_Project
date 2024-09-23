@@ -9,7 +9,7 @@ namespace Capstone.Services.Interfaces
         Task<Event> GetEventByIdAsync(int eventId);
         Task<IEnumerable<Event>> GetAllEventsAsync();
         Task<List<Event>> GetPopularEventsAsync();
-        Task<Event> UpdateEventAsync(Event eventModel, List<int> djIds, List<int> selectedGenres, List<string> replaceImagePaths, List<string> additionalImagePaths, List<int> ticketTypesId);
+        Task<Event> UpdateEventAsync(Event eventModel, List<int> djIds, List<int> selectedGenres, List<string> replaceImagePaths, List<string> additionalImagePaths, List<int> ticketTypesId, List<int> ticketQuantities);
         Task<bool> DeleteEventAsync(int eventId);
         Task<List<EventViewModel>> SearchEventsAsync(string query);
 
