@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\cart.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\dj_create.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\dj_details.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\list_genre.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\login.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\profile.css" />
   </ItemGroup>
 
   <ItemGroup>
