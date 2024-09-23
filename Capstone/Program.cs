@@ -29,7 +29,7 @@ namespace Capstone
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Auth/Login";
-                    options.AccessDeniedPath = "/Home/AccessDenied";
+                    options.AccessDeniedPath = "/Home/Index";
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });
 
@@ -40,6 +40,15 @@ namespace Capstone
                 options.AddPolicy("MasterPolicy", policy =>
                 {
                     policy.RequireClaim(ClaimTypes.Role, "master"); // [Authorize(Policy = "MasterPolicy")]
+                });
+                // Admin Policy
+                options.AddPolicy("AdminPolicy", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "admin"); // [Authorize(Policy = "AdminPolicy")]
+                });
+                options.AddPolicy("AdminOrMasterPolicy", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "admin", "master");
                 });
             });
 
