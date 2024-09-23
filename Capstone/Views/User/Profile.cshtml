@@ -4,184 +4,180 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>Profile</h1>
-
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.UserId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.User.UserId) 
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Username)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Username)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            <span>Password</span>
-        </dt>
-        <dd class = "col-sm-10">
-           <span>********</span>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Surname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.BirthDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.BirthDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Country)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.PostalCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.PostalCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.PhoneNum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.PhoneNum)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Img)
-        </dt>
-
-        <dd class="col-sm-10">
-            @if (Model.User != null && Model.User.Img != null && Model.User.Img.Length > 0)
-            {
-                var base64String = Convert.ToBase64String(Model.User.Img);
-                var imgSrc = $"data:image/png;base64,{base64String}";
-                <img src="@imgSrc" alt="Img Profile" style="width: 100px; height: auto;" />
-            }
-            else
-            {
-                <p>No image available</p>
-            }
-        </dd>
+<link rel="stylesheet" href="~/css/profile.css" />
 
 
-        <h1>Generi Preferiti</h1>
-        <hr />
-        <form asp-action="UpdateFavoriteGenres" method="post">
-            @Html.AntiForgeryToken()
-            <div class="form-group">
-                @if (ViewBag.AvailableGenres != null && ViewBag.AvailableGenres.Count > 0)
-                {
-                    foreach (var genre in ViewBag.AvailableGenres)
+<div class="row bg-black justify-content-center align-items-center py-md-3 p-4 px-md-0">
+    <div class="col-12 col-md-8 bg ">
+         <h1 class="text-center text-white ">Scheda profilo</h1>
+         <hr class="mt-2 mb-4 myText"/>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 position-relative my-3 my-md-0">
+                <div class="d-flex justify-content-center position-sticky" style="top:90px">
+                    @if (Model.User != null && Model.User.Img != null && Model.User.Img.Length > 0)
                     {
-                        var isChecked = Model.SelectedGenreIds.Contains(genre.GenreId);
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="genre-@genre.GenreId"
-                                   name="SelectedGenreIds"
-                                   value="@genre.GenreId"
-                            @(isChecked ? "checked" : "") />
-                            <label class="form-check-label" for="genre-@genre.GenreId">
-                                @genre.Name
-                            </label>
+                        var base64String = Convert.ToBase64String(Model.User.Img);
+                        var imgSrc = $"data:image/png;base64,{base64String}";
+                        <img src="@imgSrc" alt="Img Profile" class="img-fluid" style="border-radius:15px" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div>
+                    <h4 class="text-white">Username</h4>
+                    <p class="myText">@Model.User.Username</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Email</h4>
+                    <p class="myText">@Model.User.Email</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Password</h4>
+                    <p class="myText">********</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Nome</h4>
+                    <p class="myText">@Model.User.Name</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Cognome</h4>
+                    <p class="myText">@Model.User.Surname</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Data di nascita</h4>
+                    <p class="myText">@Model.User.BirthDate.ToString("dd/MM/yyyy")</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Sesso</h4>
+                    <p class="myText">@Model.User.Gender</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Paese</h4>
+                    <p class="myText">@Model.User.Country</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Città</h4>
+                    <p class="myText">@Model.User.City</p
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">CAP</h4>
+                    <p class="myText">@Model.User.PostalCode</p>
+                </div>
+                <div class="mt-4">
+                    <h4 class="text-white">Telefono</h4>
+                    <p class="myText">@Model.User.PhoneNum</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-5 bg">
+                <h3 class="mb-3 text-white">Aggiorna generi musicali preferiti</h3>
+                    <form asp-action="UpdateFavoriteGenres" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                    @if (ViewBag.AvailableGenres != null && ViewBag.AvailableGenres.Count > 0)
+                    {
+                        <div id="genresCheckboxes" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var genre in ViewBag.AvailableGenres)
+                            {
+                                var isChecked = Model.SelectedGenreIds.Contains(genre.GenreId);
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox"
+                                           class="form-check-input d-none"
+                                           id="genre-@genre.GenreId"
+                                           name="SelectedGenreIds"
+                                           value="@genre.GenreId"
+                                           @(isChecked ? "checked" : "") />
+                                    <label class="btn eventBtn" for="genre-@genre.GenreId">
+                                        @genre.Name
+                                    </label>
+                                </div>
+                            }
                         </div>
                     }
-                }
-                else
-                {
-                    <p>No genres available</p>
-                }
+                    else
+                    {
+                        <p>No genres available</p>
+}
+                    </div>
+                    <div class="form-group mt-3 ">
+                        <input type="submit" value="Aggiorna" class="btn-danger myBtnCart" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Aggiorna Generi Preferiti" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-5 bg">
+                <h3 class="mb-3 text-white">Aggiorna immagine del profilo</h3>
+                <form asp-action="UpdateProfileImage" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="text-white" for="imageFile">Seleziona un'immagine:</label>
+                        <input type="file" id="imgInput" name="imageFile" class="form-control d-none" />
+                    </div>
+                    <div class="mt-2">
+                            <!-- Collegare la label con for="imgInput" all'input -->
+                            <label for="imgInput" class="editBtn ms-1" style="cursor:pointer">Scegli file</label>
+                        </div>
+                    <img id="imgPreview" src="#" alt="Anteprima immagine" class="img-fluid mt-2 d-none" style="height: 200px; width:200px; object-fit:contain;" />
 
-        <h1 class="mt-4">Aggiungi/Modifica Immagine del Profilo</h1>
-        <form asp-action="UpdateProfileImage" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="imageFile">Seleziona un'immagine</label>
-                <input type="file" name="imageFile" class="form-control" />
 
+                    <div class="form-group mt-1">
+                        <input type="submit" value="Aggiorna" class="btn-danger myBtnCart mt-4" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group mt-1">
-                <input type="submit" value="Aggiorna Immagine" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-5 bg">
+                <h3 class="mb-3 text-white">Aggiorna indirizzo email</h3>
+                <form asp-action="ChangeEmail" method="post">
+                    <input type="hidden" asp-for="User.UserId" />
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="User.Email" class="control-label text-white">Vecchio indirizzo email</label>
+                            <input asp-for="User.Email" type="text" class="form-control inputBar" readonly />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="NewEmail" class="control-label text-white">Nuovo indirizzo email</label>
+                            <input asp-for="NewEmail" type="email" class="form-control inputBar" />
+                            <span asp-validation-for="NewEmail" class="text-danger"></span>
+                        </div>
 
-        <h1 class="mt-4">Cambia Password</h1>
-        <form asp-action="ChangePassword" method="post">     
-            <input type="hidden" asp-for="User.UserId" />
-            <div class="form-group">
-                <label asp-for="OldPassword" class="control-label"></label>
-                <input asp-for="OldPassword" type="password" class="form-control" />
-                <span asp-validation-for="OldPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-1">
+                        <input type="submit" value="Aggiorna" class="btn-danger myBtnCart mt-2" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="NewPassword" class="control-label"></label>
-                <input asp-for="NewPassword" type="password" class="form-control" />
-                <span asp-validation-for="NewPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-1">
-                <input type="submit" value="Cambia Password" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-5 bg">
+                <h3 class="mb-3 text-white">Aggiorna password</h3>
+                <form asp-action="ChangePassword" method="post">
+                    <input type="hidden" asp-for="User.UserId" />
+                    <div class="row">
+                        <div class="col-6">
+                            <label asp-for="OldPassword" class="control-label text-white">Vecchia password</label>
+                            <input asp-for="OldPassword" type="password" class="form-control inputBar" />
+                            <span asp-validation-for="OldPassword" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="NewPassword" class="control-label text-white">Nuova password</label>
+                            <input asp-for="NewPassword" type="password" class="form-control inputBar" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
 
-        <h1 class="mt-4">Cambia Email</h1>
-        <form asp-action="ChangeEmail" method="post">
-            <input type="hidden" asp-for="User.UserId" />
-
-            <div class="form-group">
-                <label asp-for="User.Email" class="control-label">Old Email</label>
-                <input asp-for="User.Email" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="form-group mt-1">
+                        <input type="submit" value="Aggiorna" class="btn-danger myBtnCart mt-2" />
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label asp-for="NewEmail" class="control-label">New Email</label>
-                <input asp-for="NewEmail" type="email" class="form-control" />
-                <span asp-validation-for="NewEmail" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mt-1">
-                <input type="submit" value="Cambia Email" class="btn btn-primary" />
-            </div>
-        </form>
-    </dl>
+        </div>
+    </div>
 </div>
-
+<script src="~/js/profile.js"></script>

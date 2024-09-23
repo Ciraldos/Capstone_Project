@@ -1,0 +1,30 @@
+﻿
+@media (max-width: 768px) {
+    html{
+        font-size:0.8rem!important;
+    }
+}
+
+#genresCheckboxes .btn {
+    display: inline-block;
+    margin: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #c7a70eff!important; /* Colore di sfondo quando selezionato */
+    color: white; /* Colore del testo quando selezionato */
+}
+
+.form-check {
+    padding-left: 0 !important;
+}
+
+.form-check-inline {
+    margin-right: 0 !important;
+}
+
+.form-check-input{
+    margin-left: 0!important;
+}
