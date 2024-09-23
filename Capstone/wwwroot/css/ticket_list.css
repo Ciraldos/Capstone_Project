@@ -78,3 +78,6 @@
     .card-flip-back p {
         font-size:0.8em;
     }
+.myBtnCart:hover {
+    background-color: indianred!important;
+}

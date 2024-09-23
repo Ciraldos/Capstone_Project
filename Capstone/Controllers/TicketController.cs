@@ -27,5 +27,20 @@ namespace Capstone.Controllers
                 .ToListAsync();
             return View(tickets);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ticket = await _ctx.Tickets.FindAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            _ctx.Tickets.Remove(ticket);
+            await _ctx.SaveChangesAsync();
+            return Json(new { success = true });
+        }
     }
 }
