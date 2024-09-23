@@ -1,5 +1,6 @@
 ﻿using Capstone.Models;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 
@@ -17,12 +18,43 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddToCart(int eventId, int ticketTypeId, int quantity)
         {
             var userId = _userSvc.GetUserId(); // Ottieni l'ID dell'utente loggato
             await _cartSvc.AddToCartAsync(userId, eventId, ticketTypeId, quantity);
             return RedirectToAction("List", "Event");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int eventId, int ticketTypeId)
+        {
+            var userId = _userSvc.GetUserId();
+            var result = await _cartSvc.RemoveFromCartAsync(userId, eventId, ticketTypeId);
+
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Errore nel rimuovere elemento dal carrello" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCart(int eventId, int ticketTypeId)
+        {
+            var userId = _userSvc.GetUserId();
+            var result = await _cartSvc.UpdateCartAsync(userId, eventId, ticketTypeId);
+
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Non ci sono biglietti disponibili" });
+        }
+
+
 
         public async Task<IActionResult> Cart()
         {

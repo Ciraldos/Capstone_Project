@@ -4,39 +4,110 @@
     ViewBag.Title = "Carrello";
 }
 
-<h2>Carrello</h2>
+<link rel="stylesheet" href="/css/cart.css" />
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Evento</th>
-                <th>Tipo di Biglietto</th>
-                <th>Quantità</th>
-                <th>Prezzo Unitario</th>
-                <th>Prezzo Totale</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cartItem in Model)
-            {
-                <tr>
-                    <td>@cartItem.Event.Name</td>
-                    <td>@cartItem.TicketType.TicketTypeName</td>
-                    <td>@cartItem.Quantity</td>
-                    <td>@cartItem.TicketType.Price.ToString("C")</td>
-                    <td>€@(cartItem.Quantity * cartItem.TicketType.Price)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="row bg-black px-1 p-md-5 py-4">
+    <div class="col-12">
+        <h3 class="myText">Il mio carrello</h3>
+        <form id="cart-form">
+            @Html.AntiForgeryToken()
+            <div class="row justify-content-center my-5">
+                <div class="col-11 col-md-6 bg " id="divBg">
+                    <div id="noEvents" class="d-none bg">
+                        <h3 class="text-white">Il tuo carrello è vuoto!</h3>
+                        <h4 class="text-white my-3">
+                            Inizia ad esplorare i nostri eventi e aggiungi i tuoi biglietti preferiti.
+                        </h4>
+                        <a asp-action="List" asp-controller="Event" class="btn-danger myBtnCart">Scopri eventi</a>
+                    </div>
+                        @foreach (var cartItem in Model)
+                        {
+                            <div id="cart-item-@cartItem.EventId-@cartItem.TicketTypeId" class="event-card row">
+                                <div class="date-box col-6 col-md-2">
+                                    <div class="date">
+                                        @(cartItem.Event.DateFrom.Day < 10 ? "0" + cartItem.Event.DateFrom.Day : cartItem.Event.DateFrom.Day)
+                                        <div class="month">
+                                            @cartItem.Event.DateFrom.ToString("MMM").ToUpper()
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="event-image col-6 col-md-2" style="background-image:url('@cartItem.Event.EventImgs.FirstOrDefault().FilePath'); background-size:cover; background-position:center"></div>
+                                <div class="event-body col-12 col-md-8">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="event-name">
+                                                <p>@cartItem.Event.Name.ToUpper()</p>
+                                            </div>
+                                            <div class="d-flex">
+                                                @if(cartItem.TicketType.TicketTypeName == "Bronze")
+                                                {
+                                                    <i class="bi bi-ticket-perforated-fill bronze me-1"></i>
+                                                    <p class="bronze">@cartItem.TicketType.TicketTypeName</p>
+                                                }
+                                                else if (cartItem.TicketType.TicketTypeName == "Silver")
+                                                {
+                                                    <i class="bi bi-ticket-perforated-fill silver me-1"></i>
+                                                    <p class="silver">@cartItem.TicketType.TicketTypeName</p>
+                                                }
+                                                else if (cartItem.TicketType.TicketTypeName == "Gold")
+                                                {
+                                                <i class="bi bi-ticket-perforated-fill gold me-1"></i>
+                                                    <p class="gold">@cartItem.TicketType.TicketTypeName</p>
+                                                }
+                                                else if (cartItem.TicketType.TicketTypeName == "Diamond")
+                                                {
+                                                <i class="bi bi-gem diamond me-1"></i>
+                                                    <p class="diamond">@cartItem.TicketType.TicketTypeName</p>
+                                                }
+                                                else
+                                                {
+                                                <i class="bi bi-ticket-perforated-fill text-dark me-1"></i>
+                                                    <p class="text-dark">@cartItem.TicketType.TicketTypeName</p>
+                                                }
+                                        
+                                            </div>
+                                        </div>
+                                
+                                
+                                    <div class="location">
+                                        @cartItem.Event.DateFrom.ToString("HH:mm") | @cartItem.Event.Location.LocationName
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="event-price">
+                                            <p class="fs-5">
+                                                <i class="fa fa-male me-1"></i> €@cartItem.TicketType.Price
+                                            </p>
+                                        </div>
+                                        <div class="event-quantity d-flex">
+                                            <button class="myBtnCart btn-danger remove-item-btn me-2"
+                                                    data-event-id="@cartItem.EventId"
+                                                    data-ticket-type-id="@cartItem.TicketTypeId">
+                                                <i class="bi bi-dash-lg"></i>
+                                            </button>
+                                            <p class="fs-4 fw-bold ">X @cartItem.Quantity</p>
+                                            <button class="myBtnCart btn-danger add-item-btn ms-2"
+                                                    data-event-id="@cartItem.EventId"
+                                                    data-ticket-type-id="@cartItem.TicketTypeId">
+                                                <i class="bi bi-plus-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                </div>
+                </form>
+                <div class="col-11 col-md-2 my-3 my-md-0">
+                    <div class="bg">
+                        <h1 class="text-white">Prezzo</h1>
+                        <p class="text-white" id="price"></p>
+                            <form asp-action="Purchase" method="post">
+                                <button type="submit" class="btn-danger myBtnCart mt-2 disabled" id="checkoutButton">Checkout</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
 
-    <form asp-action="Purchase" method="post">
-        <button type="submit" class="btn btn-primary">Acquista Biglietti</button>
-    </form>
-}
-else
-{
-    <p>Il tuo carrello è vuoto.</p>
-}
+<script src="/js/cart.js"></script>

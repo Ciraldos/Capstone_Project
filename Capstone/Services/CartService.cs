@@ -22,6 +22,9 @@ namespace Capstone.Services
             return await _ctx.CartItems
                 .Where(ci => ci.Cart.UserId == userId)
                 .Include(ci => ci.Event)
+                .ThenInclude(ci => ci.EventImgs)
+                .Include(ci => ci.Event)
+                .ThenInclude(ci => ci.Location)
                 .Include(ci => ci.TicketType)
                 .ToListAsync();
         }
@@ -34,10 +37,9 @@ namespace Capstone.Services
         }
         public async Task<Cart> AddToCartAsync(int userId, int eventId, int ticketTypeId, int quantity)
         {
-            // Trova il carrello dell'utente dentro il database. Se non esiste lo creo.
             var cart = await _ctx.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
-
             var user = await _ctx.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
             if (cart == null)
             {
                 cart = new Cart { User = user };
@@ -45,45 +47,128 @@ namespace Capstone.Services
                 await _ctx.SaveChangesAsync();
             }
 
-            // Controlla la disponibilità dei biglietti
             var eventTicketType = await _ctx.EventTicketType
                 .FirstOrDefaultAsync(et => et.EventId == eventId && et.TicketTypeId == ticketTypeId);
 
-            if (eventTicketType == null || eventTicketType.AvailableQuantity < quantity)
+            if (eventTicketType == null)
             {
-                throw new InvalidOperationException("Non ci sono abbastanza biglietti disponibili per il tipo di biglietto selezionato.");
+                throw new InvalidOperationException("Il tipo di biglietto selezionato non esiste.");
             }
 
-            // Se il biglietto esiste già nel carrello, aggiorna la quantità
+            // Controlla se la quantità richiesta è maggiore della disponibilità corrente
+            int availableToAdd = eventTicketType.AvailableQuantity;
+
+            if (availableToAdd <= 0)
+            {
+                throw new InvalidOperationException("Non ci sono più biglietti disponibili.");
+            }
+
+            // Limita la quantità da aggiungere solo ai biglietti disponibili
+            int ticketsToAdd = Math.Min(quantity, availableToAdd);
+
             var cartItem = await _ctx.CartItems
                 .FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
 
             if (cartItem != null)
             {
-                if (eventTicketType.AvailableQuantity < cartItem.Quantity + quantity)
-                {
-                    throw new InvalidOperationException("Non ci sono abbastanza biglietti disponibili per il tipo di biglietto selezionato.");
-                }
-                cartItem.Quantity += quantity;
+                // Aggiungi solo i biglietti disponibili al carrello
+                cartItem.Quantity += ticketsToAdd;
             }
             else
             {
                 cartItem = new CartItem
                 {
                     Cart = cart,
-                    Quantity = quantity,
+                    Quantity = ticketsToAdd, // Aggiungi solo quelli disponibili
                     Event = await _ctx.Events.FindAsync(eventId),
                     TicketType = await _ctx.TicketTypes.FindAsync(ticketTypeId)
                 };
                 _ctx.CartItems.Add(cartItem);
             }
 
-            // Riduci la quantità disponibile nel database
-            eventTicketType.AvailableQuantity -= quantity;
+            // Aggiorna la quantità disponibile nel database
+            eventTicketType.AvailableQuantity -= ticketsToAdd;
 
             await _ctx.SaveChangesAsync();
+
+            // Ritorna il carrello aggiornato
             return cart;
         }
+
+
+        public async Task<bool> RemoveFromCartAsync(int userId, int eventId, int ticketTypeId)
+        {
+            var cart = await _ctx.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+            if (cart == null) return false;
+
+            var cartItem = await _ctx.CartItems
+                .FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
+
+            if (cartItem == null) return false;
+
+            var eventTicketType = await _ctx.EventTicketType
+                .FirstOrDefaultAsync(et => et.EventId == eventId && et.TicketTypeId == ticketTypeId);
+
+            if (eventTicketType != null)
+            {
+                eventTicketType.AvailableQuantity++; // Incrementa la quantità disponibile di biglietti
+            }
+
+            // Decrementa la quantità nel carrello
+            if (cartItem.Quantity > 1)
+            {
+                cartItem.Quantity--; // Solo decremento se c'è più di 1 biglietto
+            }
+            else
+            {
+                _ctx.CartItems.Remove(cartItem); // Rimuove l'articolo solo se la quantità diventa zero
+            }
+
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateCartAsync(int userId, int eventId, int ticketTypeId)
+        {
+            var cart = await _ctx.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+            if (cart == null) return false;
+
+            var cartItem = await _ctx.CartItems
+                .FirstOrDefaultAsync(ci => ci.CartId == cart.CartId && ci.EventId == eventId && ci.TicketTypeId == ticketTypeId);
+
+            if (cartItem == null) return false; // Assumi che l'elemento esista già, ma in caso contrario, esci
+
+            var eventTicketType = await _ctx.EventTicketType
+                .FirstOrDefaultAsync(et => et.EventId == eventId && et.TicketTypeId == ticketTypeId);
+
+            if (eventTicketType == null) return false; // Tipo di biglietto non trovato
+
+            // Totale biglietti disponibili per l'evento (inclusi quelli già nel carrello)
+            var totalAvailableIncludingCart = eventTicketType.AvailableQuantity + cartItem.Quantity;
+
+            // Verifica che l'utente non abbia già raggiunto il limite di biglietti disponibili
+            if (cartItem.Quantity < totalAvailableIncludingCart)
+            {
+                // Incrementa la quantità nel carrello
+                cartItem.Quantity++;
+
+                // Decrementa la disponibilità solo se l'operazione è andata a buon fine
+                eventTicketType.AvailableQuantity--;
+            }
+            else
+            {
+                return false; // Non ci sono abbastanza biglietti disponibili
+            }
+
+            await _ctx.SaveChangesAsync();
+            return true; // Quantità aggiornata con successo
+        }
+
+
+
+
+
+
 
 
         public async Task PurchaseCartAsync(int userId)
@@ -103,7 +188,57 @@ namespace Capstone.Services
                 throw new InvalidOperationException("Nessun articolo nel carrello");
 
             var user = await _ctx.Users.FindAsync(userId);
-            string emailBody = "<h1>Grazie per il tuo acquisto!</h1><ul>";
+            string emailBody = @"
+                <!DOCTYPE html>
+                <html lang='it'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        .container {
+                            max-width: 600px;
+                            margin: auto;
+                            background: white;
+                            border-radius: 8px;
+                            padding: 20px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            color: #333;
+                        }
+                        ul {
+                            list-style-type: none;
+                            padding: 0;
+                        }
+                        li {
+                            background: #e9e9e9;
+                            margin: 10px 0;
+                            padding: 15px;
+                            border-radius: 5px;
+                        }
+                        .ticket-info {
+                            color: #555;
+                            border-radius: 15px;
+                        }
+                        .footer {
+                            margin-top: 20px;
+                            text-align: center;
+                            font-size: 0.9em;
+                            color: #888;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h1>Grazie per il tuo acquisto!</h1>
+                        <p>I tuoi biglietti sono stati generati con successo. Ecco i dettagli:</p>
+                        <ul>";
 
             var generatedTickets = new List<Ticket>();
 
@@ -127,11 +262,28 @@ namespace Capstone.Services
                     generatedTickets.Add(ticket);  // Aggiungi il biglietto alla lista dei biglietti generati
 
                     // Aggiungi dettagli del biglietto all'email
-                    emailBody += $"<li>Biglietto per {cartItem.Event.Name}, Tipo: {cartItem.TicketType.TicketTypeName} ,Descrizione:  {cartItem.TicketType.TicketTypeDescription}, Codice: {ticketNumber}</li>";
+                    emailBody += $@"
+                                <li>
+                                    <div class='ticket-info'>
+                                        Biglietto per: <strong>{cartItem.Event.Name}</strong><br>
+                                        Tipo: <strong>{cartItem.TicketType.TicketTypeName}</strong><br>
+                                        Descrizione: <strong>{cartItem.TicketType.TicketTypeDescription}</strong><br>
+                                        Codice: <strong>{ticketNumber}</strong>
+                                    </div>
+                                </li>";
                 }
             }
 
-            emailBody += "</ul>";
+            emailBody += @"
+                        </ul>
+                        <p>Grazie per aver scelto il nostro servizio! I tuoi biglietti saranno disponibili nel tuo profilo.</p>
+                        <div class='footer'>
+                            <p>Se hai domande, non esitare a contattarci.</p>
+                            <p>&copy; 2024 Ton?ght. Tutti i diritti riservati.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
 
             _ctx.CartItems.RemoveRange(cartItems);
             await _ctx.SaveChangesAsync();
@@ -139,6 +291,7 @@ namespace Capstone.Services
             // Invia l'email con i QR code dei biglietti generati
             await _emailService.SendEmailAsync(user.Email, "I tuoi biglietti", emailBody, generatedTickets);
         }
+
 
 
 

@@ -1,7 +1,7 @@
-﻿@{
-    ViewBag.Title = "Order Confirmation";
-}
-
-<h2>Thank You!</h2>
-<p>Your payment was successful. Your tickets are being processed and will be available soon.</p>
-<a href="/Ticket/List">Vedi i biglietti</a>
+﻿<div class="row bg-black justify-content-center px-1 p-md-5">
+    <div class="col-10 col-md-8 bg my-2 text-white text-center p-4">
+        <h2 class="text-white mb-4">Grazie!</h2>
+        <p class="mb-4">Il tuo pagamento è stato effettuato con successo. I tuoi biglietti sono in fase di elaborazione e saranno disponibili a breve.</p>
+        <a asp-action="List" asp-controller="Ticket" class="btn-danger myBtnCart">Vedi i biglietti</a>
+    </div>
+</div>

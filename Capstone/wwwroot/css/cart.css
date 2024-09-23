@@ -1,0 +1,62 @@
+﻿.event-card {
+	background-color: white;
+	display: flex;
+	margin-bottom: 18px;
+}
+
+.date-box {
+	background: #dc3545;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: inherit;
+}
+
+.date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 2.8rem;
+}
+
+.month {
+	font-size: 1rem !important;
+}
+
+
+.event-body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 15px;
+	font-size: 15px;
+}
+
+	.event-body .event-name {
+		font-size: 1.3rem;
+		font-weight: bold;
+		color: #202020;
+		margin-bottom: 3px;
+	}
+
+.location {
+	color: grey;
+	font-weight: 300;
+}
+
+.bronze {
+	color:#CD7F32;
+}
+
+.silver{
+	    color:#aaaaaa;
+}
+
+.gold{
+        color:#FFD700;
+}
+
+.diamond{
+        color:#6ce4ff;
+}
