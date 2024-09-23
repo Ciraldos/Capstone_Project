@@ -12,7 +12,6 @@ namespace Capstone.Controllers
         {
             _adminSvc = adminService;
         }
-
         public IActionResult Dashboard()
         {
             var model = new DashboardViewModel

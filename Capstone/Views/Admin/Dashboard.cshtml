@@ -1,130 +1,157 @@
 ﻿@model Capstone.Models.AdminControllerModels.DashboardViewModel
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Amministrativa</title>
+
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
+    <link rel="stylesheet" href="~/css/admin_dashboard.css" />
 
-        .card-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-        }
 
-        .card-body {
-            padding: 1.5rem;
-        }
+    <div class="row bg-black">
+    <div class="col-12 d-md-none">
+        <button class="editBtn my-3" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-expanded="false" aria-controls="navbarDropdown">
+            Menu
+        </button>
+    </div>
+    <div class="col-12 col-md-2 bg-black text-white " id="scrollStyle">
+            <div class="collapse d-md-block" id="navbarDropdown">
+                <ul class="list-unstyled ps-3 pb-4">
+                    <li class="text-white my-2">ARTISTI</li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Dj" asp-action="Create">Aggiungi Artista</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Dj" asp-action="List">Lista Artisti</a>
+                    </li>
 
-        .chart-container {
-            position: relative;
-            height: 400px;
-            width: 100%;
-        }
+                    <li class="text-white mt-5 mb-2">EVENTI</li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Event" asp-action="Create">Aggiungi Evento</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Event" asp-action="List">Lista Eventi</a>
+                    </li>
 
-        .dashboard-card {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin: 15px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Dashboard Amministrativa</h2>
+                    <li class="text-white mt-5 mb-2">GENERI MUSICALI</li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Genre" asp-action="Create">Aggiungi Genere</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Genre" asp-action="List">Lista Generi</a>
+                    </li>
 
-        <div class="row">
-            <!-- Biglietti Venduti per Giorno -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Biglietti Venduti per Giorno</h3>
-                    <div id="chart_tickets_per_day" class="chart-container"></div>
-                </div>
-            </div>
 
-            <!-- Commenti Aggiunti Questa Settimana -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Commenti Aggiunti Questa Settimana</h3>
-                    <p>@Model.CommentsThisWeek</p>
-                </div>
-            </div>
+                    <li class="text-white mt-5 mb-2">LOCATIONS</li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Location" asp-action="Create">Aggiungi Location</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Location" asp-action="List">Lista Locations</a>
+                    </li>
 
-            <!-- Numero di Recensioni per Evento -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Numero di Recensioni per Evento</h3>
-                    <div id="chart_reviews_per_event" class="chart-container"></div>
-                </div>
-            </div>
-
-            <!-- Mi Piace per Commento -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Mi Piace per Commento</h3>
-                    <div id="chart_likes_per_comment" class="chart-container"></div>
-                </div>
-            </div>
-
-            <!-- Numero di Eventi per DJ -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Numero di Eventi per DJ</h3>
-                    <div id="chart_events_per_dj" class="chart-container"></div>
-                </div>
-            </div>
-
-            <!-- Vendite per Tipo di Biglietto -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Vendite per Tipo di Biglietto</h3>
-                    <div id="chart_sales_by_type" class="chart-container"></div>
-                </div>
-            </div>
-
-            <!-- Recensioni per Tipo di Evento -->
-            <div class="col-md-6 col-lg-4">
-                <div class="dashboard-card">
-                    <h3>Recensioni per Tipo di Evento</h3>
-                    <div id="chart_reviews_per_event_type" class="chart-container"></div>
-                </div>
-            </div>
-
-            <!-- Eventi Futuri e Passati -->
-            <div class="col-md-12">
-                <div class="dashboard-card">
-                    <h3>Eventi Futuri e Passati</h3>
-                    <p>Eventi Futuri: @Model.EventsStatus.FutureEvents</p>
-                    <p>Eventi Passati: @Model.EventsStatus.PastEvents</p>
-                </div>
-            </div>
-
-            <!-- Popolarità dei DJ -->
-            <div class="col-md-12">
-                <div class="dashboard-card">
-                    <h3>Popolarità dei DJ</h3>
-                    <div id="chart_dj_popularity" class="chart-container"></div>
-                </div>
+                    <li class="text-white mt-5 mb-2">TICKET TYPES</li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="TicketType" asp-action="Create">Aggiungi Ticket Type</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="TicketType" asp-action="List">Lista Ticket Type</a>
+                    </li>
+                    @if (User.IsInRole("master"))
+                    {
+                        <li class="text-white mt-5 mb-2">RUOLI</li>
+                        <li class="nav-item">
+                            <a class="fs-5 myLinkTwo text-decoration-none" asp-area="" asp-controller="Master" asp-action="MasterDashboard">Gestisci Ruoli</a>
+                        </li>
+                    }
+                    
+                </ul>
             </div>
         </div>
-    </div>
+        <div class="col-12 col-md-10 " id="graphs">
+                <div class="row px-5 ">
+                <h2 class="my-3 text-white">Dashboard Amministrativa</h2>
+                    <!-- Biglietti Venduti per Giorno -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card ">
+                            <h3>Biglietti Venduti per Giorno</h3>
+                            <div id="chart_tickets_per_day" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Commenti Aggiunti Questa Settimana -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Commenti Aggiunti Questa Settimana</h3>
+                            <p>@Model.CommentsThisWeek</p>
+                        </div>
+                    </div>
+
+                    <!-- Numero di Recensioni per Evento -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Numero di Recensioni per Evento</h3>
+                            <div id="chart_reviews_per_event" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Mi Piace per Commento -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Mi Piace per Commento</h3>
+                            <div id="chart_likes_per_comment" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Numero di Eventi per DJ -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Numero di Eventi per DJ</h3>
+                            <div id="chart_events_per_dj" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Vendite per Tipo di Biglietto -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Vendite per Tipo di Biglietto</h3>
+                            <div id="chart_sales_by_type" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Recensioni per Tipo di Evento -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="dashboard-card">
+                            <h3>Recensioni per Tipo di Evento</h3>
+                            <div id="chart_reviews_per_event_type" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Popolarità dei DJ -->
+                    <div class="col-md-8">
+                        <div class="dashboard-card">
+                            <h3>Popolarità dei DJ</h3>
+                            <div id="chart_dj_popularity" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Eventi Futuri e Passati -->
+                    <div class="col-md-12">
+                        <div class="dashboard-card">
+                            <h3>Eventi Futuri e Passati</h3>
+                            <p>Eventi Futuri: @Model.EventsStatus.FutureEvents</p>
+                            <p>Eventi Passati: @Model.EventsStatus.PastEvents</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+</div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', { packages: ['corechart'] });
+        
         google.charts.setOnLoadCallback(drawCharts);
+        
+        window.addEventListener('resize', drawCharts);
 
         function drawCharts() {
             drawTicketsPerDayChart();
@@ -136,137 +163,185 @@
             drawDjPopularityChart();
         }
 
-        function drawTicketsPerDayChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Giorno', 'Biglietti Venduti'],
-        @foreach (var item in Model.TicketSalesPerDay)
-        {
-            @:['@item.Day.ToString("yyyy-MM-dd")', @item.TicketsSold],
-        }
-                    ]);
+    function drawTicketsPerDayChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Giorno', 'Biglietti Venduti'],
+    @foreach (var item in Model.TicketSalesPerDay)
+    {
+        @:['@item.Day.ToString("dd/MM/yy")', @item.TicketsSold],
+    }
+        ]);
 
-            var options = {
-                title: 'Biglietti Venduti per Giorno',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Biglietti Venduti per Giorno',
+            backgroundColor: '#333', // colore di sfondo
+            titleTextStyle: { color: '#fff' }, // colore del testo del titolo
+            legend: { position: 'bottom', textStyle: { color: '#fff' } }, // colore del testo della legenda
+            hAxis: {
+                textStyle: { color: '#fff' } // colore del testo dell'asse orizzontale
+            },
+            vAxis: {
+                textStyle: { color: '#fff' } // colore del testo dell'asse verticale
+            },
+            colors: ['#dc3545'], // colore dei dati
+        };
 
-            var chart = new google.visualization.LineChart(document.getElementById('chart_tickets_per_day'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.LineChart(document.getElementById('chart_tickets_per_day'));
+        chart.draw(data, options);
+    }
 
-        function drawReviewsPerEventChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Evento', 'Recensioni'],
-        @foreach (var item in Model.ReviewsPerEvent)
-        {
-            @:['@item.EventName', @item.ReviewsCount],
-        }
-                    ]);
+    function drawReviewsPerEventChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Evento', 'Recensioni'],
+    @foreach (var item in Model.ReviewsPerEvent)
+    {
+        @:['@item.EventName', @item.ReviewsCount],
+    }
+        ]);
 
-            var options = {
-                title: 'Recensioni per Evento',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Recensioni per Evento',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#fff' },
+            legend: { position: 'bottom', textStyle: { color: '#fff' } },
+            colors: ['#c7a70e', '#dc3545'],
+        };
 
-            var chart = new google.visualization.PieChart(document.getElementById('chart_reviews_per_event'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.PieChart(document.getElementById('chart_reviews_per_event'));
+        chart.draw(data, options);
+    }
 
-        function drawLikesPerCommentChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Commento', 'Mi Piace'],
-        @foreach (var item in Model.LikesPerComment)
-        {
-            @:['@item.CommentDescription', @item.LikesCount],
-        }
-                    ]);
+    function drawLikesPerCommentChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Commento', 'Mi Piace'],
+    @foreach (var item in Model.LikesPerComment)
+    {
+        @:['@item.CommentDescription', @item.LikesCount],
+    }
+        ]);
 
-            var options = {
-                title: 'Mi Piace per Commento',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Mi Piace per Commento',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#fff' },
+            legend: { position: 'bottom', textStyle: { color: '#fff' } },
+            hAxis: {
+                textStyle: { color: '#fff' }
+            },
+            vAxis: {
+                textStyle: { color: '#fff' }
+            },
+            colors: ['#dc3545'],
+        };
 
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_likes_per_comment'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_likes_per_comment'));
+        chart.draw(data, options);
+    }
 
-        function drawEventsPerDjChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['DJ', 'Eventi'],
-        @foreach (var item in Model.EventsPerDj)
-        {
-            @:['@item.DjName', @item.EventsCount],
-        }
-                    ]);
+    function drawEventsPerDjChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['DJ', 'Eventi'],
+    @foreach (var item in Model.EventsPerDj)
+    {
+        @:['@item.DjName', @item.EventsCount],
+    }
+        ]);
 
-            var options = {
-                title: 'Eventi per DJ',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Eventi per DJ',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#fff' },
+            legend: { position: 'bottom', textStyle: { color: '#FFFFFF' } },
+            hAxis: {
+                textStyle: { color: '#FFFFFF' }
+            },
+            vAxis: {
+                textStyle: { color: '#FFFFFF' }
+            },
+            colors: ['#dc3545'],
+        };
 
-            var chart = new google.visualization.BarChart(document.getElementById('chart_events_per_dj'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.BarChart(document.getElementById('chart_events_per_dj'));
+        chart.draw(data, options);
+    }
 
-        function drawSalesByTypeChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Tipo di Biglietto', 'Biglietti Venduti'],
-        @foreach (var item in Model.TicketSalesByType)
-        {
-            @:['@item.TicketTypeName', @item.TicketsSold],
-        }
-                    ]);
+    function drawSalesByTypeChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Tipo di Biglietto', 'Biglietti Venduti'],
+    @foreach (var item in Model.TicketSalesByType)
+    {
+        @:['@item.TicketTypeName', @item.TicketsSold],
+    }
+        ]);
 
-            var options = {
-                title: 'Vendite per Tipo di Biglietto',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Vendite per Tipo di Biglietto',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#fff' },
+            legend: { position: 'bottom', textStyle: { color: '#fff' } },
+            colors: ['#4CAF50', '#dc3545', '#c7a70e'],
+        };
 
-            var chart = new google.visualization.PieChart(document.getElementById('chart_sales_by_type'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.PieChart(document.getElementById('chart_sales_by_type'));
+        chart.draw(data, options);
+    }
 
-        function drawReviewsPerEventTypeChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Tipo di Evento', 'Recensioni'],
-        @foreach (var item in Model.ReviewsPerEventType)
-        {
-            @:['@item.EventType', @item.ReviewsCount],
-        }
-                    ]);
+    function drawReviewsPerEventTypeChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Tipo di Evento', 'Recensioni'],
+    @foreach (var item in Model.ReviewsPerEventType)
+    {
+        @:['@item.EventType', @item.ReviewsCount],
+    }
+        ]);
 
-            var options = {
-                title: 'Recensioni per Tipo di Evento',
-                legend: { position: 'bottom' }
-            };
+        var options = {
+            title: 'Recensioni per Tipo di Evento',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#fff' },
+            legend: { position: 'bottom', textStyle: { color: '#fff' } },
+            hAxis: {
+                textStyle: { color: '#FFFFFF' }
+            },
+            vAxis: {
+                textStyle: { color: '#FFFFFF' }
+            },
+            colors: ['#dc3545'],
+        };
 
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_reviews_per_event_type'));
-            chart.draw(data, options);
-        }
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_reviews_per_event_type'));
+        chart.draw(data, options);
+    }
 
-        function drawDjPopularityChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['DJ', 'Eventi', 'Recensioni'],
-        @foreach (var item in Model.DjPopularity)
-        {
-            @:['@item.DjName', @item.EventsCount, @item.ReviewsCount],
-        }
-                    ]);
+    function drawDjPopularityChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['DJ', 'Eventi', 'Recensioni'],
+    @foreach (var item in Model.DjPopularity)
+    {
+        @:['@item.DjName', @item.EventsCount, @item.ReviewsCount],
+    }
+        ]);
 
-            var options = {
-                title: 'Popolarità dei DJ',
-                hAxis: { title: 'DJ' },
-                vAxis: { title: 'Numero' },
-                seriesType: 'bars',
-                series: {
-                    1: {
-                        type:
-                            'line'
-                    }
+        var options = {
+            title: 'Popolarità dei DJ',
+            backgroundColor: '#333',
+            titleTextStyle: { color: '#FFFFFF' },
+            hAxis: { title: 'DJ', textStyle: { color: '#FFFFFF' } },
+            vAxis: { title: 'Numero', textStyle: { color: '#FFFFFF' } },
+            seriesType: 'bars',
+            series: {
+                1: {
+                    type: 'line',
+                    color: '#4CAF50'
                 }
-            };
-            var chart = new google.visualization.ComboChart(document.getElementById('chart_dj_popularity'));
-            chart.draw(data, options);
-        }
+            },
+            colors: ['#dc3545', '#c7a70e'], // Colori delle barre e della linea
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_dj_popularity'));
+        chart.draw(data, options);
+    }
     </script>
- </body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 

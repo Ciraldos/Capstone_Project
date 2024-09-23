@@ -1,0 +1,99 @@
+﻿#scrollStyle {
+    height: calc(100vh - 74px); /* Altezza per desktop */
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    #scrollStyle {
+        height: auto; /* Altezza automatica per mobile */
+    }
+}
+
+#scrollStyle::-webkit-scrollbar-track, #graphs::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: transparent !important;
+}
+
+
+
+#scrollStyle::-webkit-scrollbar, #graphs::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent !important;
+}
+
+#scrollStyle::-webkit-scrollbar-thumb, #graphs::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #666666;
+}
+
+#graphs {
+    height: calc(100vh - 74px);
+    overflow-y: auto;
+}
+
+.myCard{
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #333;
+    color:white;
+}
+
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 15px;
+    width: 100%;
+    background-color: #333;
+    color: white;
+}
+
+/* Media query per schermi piccoli */
+@media (max-width: 768px) {
+    .dashboard-card {
+        margin: 10px 0;
+        padding: 15px;
+    }
+
+    .chart-container {
+        height: 200px; /* Riduco l'altezza dei grafici su schermi piccoli */
+    }
+}
+
+@media (max-width: 576px) {
+    .chart-container {
+        height: 150px; /* Riduco ulteriormente l'altezza per schermi molto piccoli */
+    }
+
+    h3 {
+        font-size: 1.25rem; /* Riduce la dimensione dei titoli */
+    }
+}
+
+.myLinkTwo {
+    color: #646464;
+    transition: 350ms;
+    text-decoration: none;
+}
+
+    .myLinkTwo:hover {
+        color: #dc3545;
+        transition: 350ms;
+    }
