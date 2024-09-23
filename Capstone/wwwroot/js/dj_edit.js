@@ -25,7 +25,9 @@ function searchSpotifyArtist(query) {
                 data.artists.items.forEach(artist => {
                     // Create the list item
                     let li = document.createElement("li");
-                    li.classList.add("list-group-item", "d-flex", "align-items-center");
+                    li.classList.add("list-group-item", "d-flex", "align-items-center", "bg-black", "px-4");
+                    li.style.cursor = "pointer";
+
 
                     // Create the artist image (if available)
                     let img = document.createElement("img");
@@ -36,12 +38,14 @@ function searchSpotifyArtist(query) {
                     }
                     img.alt = artist.name;
                     img.classList.add("img-thumbnail", "mr-3");
-                    img.style.width = "50px";
-                    img.style.height = "50px";
+                    img.style.width = "70px";
+                    img.style.height = "70px";
 
                     // Create the artist name element
                     let artistName = document.createElement("span");
                     artistName.textContent = artist.name;
+                    artistName.classList.add("text-light", "ms-4");
+
 
                     // Add event listener to populate input fields when clicked and hide results
                     li.addEventListener("click", function () {
@@ -59,7 +63,7 @@ function searchSpotifyArtist(query) {
                     searchResults.appendChild(li);
                 });
             } else {
-                searchResults.innerHTML = '<li class="list-group-item">No artists found.</li>';
+                searchResults.innerHTML = '<li class="list-group-item">Nessun artista trovato.</li>';
             }
         })
         .catch(error => {

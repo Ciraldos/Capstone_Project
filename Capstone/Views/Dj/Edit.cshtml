@@ -4,53 +4,56 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<link rel="stylesheet" href="/css/dj_create.css" />
 
-<h4>Dj</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DjId" />
+<div class="row bg-black justify-content-center  px-1 p-md-5">
+    <h3 class="myText myTitle">Modifica artista</h3>
+    <div class="col-10 col-md-6 bg my-2">
+        <div class="row">
+            <div class="col-12">
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="DjId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label for="searchArtist" class="control-label">Search for Artist</label>
-                <input type="text" id="searchArtist" class="form-control" placeholder="Type artist name" />
+                    <div class="form-group">
+                        <label for="searchArtist" class="control-label text-white">Cerca artista </label>
+                        <input type="text" id="searchArtist" class="form-control inputBar" placeholder="Scrivi nome artista..." />
+                    </div>
+                    <div class="form-group">
+                        <!-- Search Results -->
+                        <ul id="searchResults" class="list-group"></ul>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label asp-for="ArtistName" class="control-label text-white">Nome artista <span class="text-danger">(automatico)</span></label>
+                        <input asp-for="ArtistName" id="artistName" class="form-control inputBar " />
+                        <span asp-validation-for="ArtistName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label asp-for="ArtistSpotifyId" class="control-label text-white">ID Spotify artista <span class="text-danger">(automatico)</span></label>
+                        <input asp-for="ArtistSpotifyId" id="artistSpotifyId" class="form-control inputBar " />
+                        <span asp-validation-for="ArtistSpotifyId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label asp-for="ArtistDescription" class="control-label text-white">Descrizione artista</label>
+                        <textarea asp-for="ArtistDescription" class="form-control inputBar px-3 py-1" rows="6" id="textAreaDescription"></textarea>
+                        <span asp-validation-for="ArtistDescription" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Salva" class="btn-danger myBtnCart" />
+                        <a asp-action="List" class="eventBtn">Torna alla lista</a>
+                    </div>
+                </form>
+
             </div>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="ArtistName" class="control-label"></label>
-                <input asp-for="ArtistName" id="artistName" class="form-control" />
-                <span asp-validation-for="ArtistName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ArtistSpotifyId" class="control-label"></label>
-                <input asp-for="ArtistSpotifyId" id="artistSpotifyId" class="form-control" />
-                <span asp-validation-for="ArtistSpotifyId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ArtistDescription" class="control-label"></label>
-                <input type="text" asp-for="ArtistDescription" class="form-control" />
-                <span asp-validation-for="ArtistDescription" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" />Salva </button>
-
-            </div>
-        </form>
-
-        <!-- Search Results -->
-        <ul id="searchResults" class="list-group"></ul>
     </div>
 </div>
 
-<div>
-    <a asp-action="List">Back to List</a>
-</div>
 
 @section Scripts {
     <script src="~/js/dj_edit.js"></script>

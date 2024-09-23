@@ -1,0 +1,44 @@
+﻿#searchResults {
+    max-height: 300px; /* Imposta un'altezza massima */
+    overflow-y: auto; /* Abilita lo scrolling verticale */
+    margin-top: 10px;
+}
+
+    #searchResults::-webkit-scrollbar-track, #graphs::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: transparent !important;
+    }
+
+
+
+    #searchResults::-webkit-scrollbar, #graphs::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent !important;
+    }
+
+    #searchResults::-webkit-scrollbar-thumb, #graphs::-webkit-scrollbar-thumb {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #666666;
+    }
+
+    #textAreaDescription::-webkit-scrollbar-track, #graphs::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: transparent !important;
+    }
+
+
+
+    #textAreaDescription::-webkit-scrollbar, #graphs::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent !important;
+    }
+
+    #textAreaDescription::-webkit-scrollbar-thumb, #graphs::-webkit-scrollbar-thumb {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #666666;
+    }
+
+    .list-group-item:hover {
+        background-color: #201b1c !important;
+        transition: background-color 0.2s ease-in-out;
+    }

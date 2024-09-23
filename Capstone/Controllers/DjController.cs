@@ -1,6 +1,7 @@
 ﻿using Capstone.Models;
 using Capstone.Models.ViewModels;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 
@@ -16,12 +17,15 @@ public class DjController : Controller
         _httpClientFactory = httpClientFactory;
     }
 
+    [Authorize(Policy = "AdminOrMasterPolicy")]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Policy = "AdminOrMasterPolicy")]
     public async Task<IActionResult> Create(Dj dj)
     {
         var createdDj = await _djSvc.CreateDjAsync(dj);
@@ -55,6 +59,7 @@ public class DjController : Controller
     }
 
     // GET: Dj/Delete/5
+    [Authorize(Policy = "AdminOrMasterPolicy")]
     public async Task<IActionResult> Delete(int id, bool confirm = false)
     {
         if (confirm)
@@ -68,6 +73,8 @@ public class DjController : Controller
         return View(djToDelete);
     }
 
+    [Authorize(Policy = "AdminOrMasterPolicy")]
+
     public async Task<IActionResult> Edit(int id)
     {
         var dj = await _djSvc.GetDjByIdAsync(id);
@@ -77,6 +84,9 @@ public class DjController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOrMasterPolicy")]
+    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Edit(int id, Dj dj)
     {
         if (id != dj.DjId)
@@ -98,6 +108,7 @@ public class DjController : Controller
 
 
     [HttpGet]
+    [Authorize(Policy = "AdminOrMasterPolicy")]
     public async Task<IActionResult> SearchSpotifyArtist(string query)
     {
         if (string.IsNullOrEmpty(query))
@@ -115,7 +126,7 @@ public class DjController : Controller
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             // Costruisci l'endpoint di ricerca con il parametro query
-            var searchEndpoint = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(query)}&type=artist&limit=8";
+            var searchEndpoint = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(query)}&type=artist&limit=30";
             var response = await client.GetAsync(searchEndpoint);
 
             // Verifica se la richiesta è andata a buon fine
