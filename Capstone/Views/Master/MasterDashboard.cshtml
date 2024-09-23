@@ -3,100 +3,112 @@
 @{
     ViewData["Title"] = "Users and Roles Management";
 }
+<style>
+    td{
+        border: none!important;
+    }
+</style>
 
-<h2>Users Management</h2>
-<div asp-validation-summary="All" class="text-danger"></div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Current Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td>@user.Username</td>
-                <td>@user.Email</td>
-                <td>@user.Name</td>
-                <td>@user.Surname</td>
-                <td>
-                    <form asp-action="RemoveRoleFromUser" method="post" class="d-inline">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="userId" value="@user.UserId" />
-                        <select name="roleId" class="form-control d-inline w-auto">
-                            @foreach (var role in user.Roles)
-                            {
-                                <option value="@role.RoleId">@role.RoleName</option>
-                            }
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-danger">Remove Role</button>
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="AddRoleToUser" method="post" class="d-inline">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="userId" value="@user.UserId" />
-                        <select name="roleId" class="form-control d-inline w-auto">
-                            @foreach (var role in Model.Roles)
-                            {
-                                <option value="@role.RoleId">@role.RoleName</option>
-                            }
-                        </select>
-                        <button type="submit" class="btn btn-primary">Add Role</button>
-                    </form>
-                    <a asp-action="DeleteUser" asp-route-id="@user.UserId" class="btn btn-danger">Delete user</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="row bg-black justify-content-center px-1 p-md-5">
+    <div class="col-10 col-md-9 bg my-2">
+        <h3 class="myText text-center mb-4">Gestione Utenti</h3>
 
-<h2 class="mt-5">Roles Management</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-white" style="border-collapse: separate; border-spacing: 0 10px;">
+                <thead class="thead-dark">
+                    <tr style="border-bottom: 2px solid #666666;">
+                        <th class="text-center" style="padding: 15px;">Username</th>
+                        <th class="text-center" style="padding: 15px;">Email</th>
+                        <th class="text-center" style="padding: 15px;">Nome</th>
+                        <th class="text-center" style="padding: 15px;">Cognome</th>
+                        <th class="text-center" style="padding: 15px;">Ruoli Attuali</th>
+                        <th class="text-center" style="padding: 15px;">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="bg-dark" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px;">@user.Username</td>
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px;">@user.Email</td>
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px;">@user.Name</td>
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px;">@user.Surname</td>
+                            <td class="text-center align-middle" style="padding: 15px;">
+                                <form asp-action="RemoveRoleFromUser" method="post" class="d-flex justify-content-center">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@user.UserId" />
+                                    <select name="roleId" class="inputBar form-control d-inline w-auto">
+                                        @foreach (var role in user.Roles)
+                                        {
+                                            <option value="@role.RoleId">@role.RoleName</option>
+                                        }
+                                    </select>
+                                    <button type="submit" class="btn-danger myBtnCart ms-2">Rimuovi Ruolo</button>
+                                </form>
+                            </td>
+                            <td class="text-center d-flex flex-column flex-md-row justify-content-center align-middle" style="padding: 15px;">
+                                <form asp-action="AddRoleToUser" method="post" class="d-flex">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@user.UserId" />
+                                    <select name="roleId" class="inputBar form-control d-inline w-auto">
+                                        @foreach (var role in Model.Roles)
+                                        {
+                                            <option value="@role.RoleId">@role.RoleName</option>
+                                        }
+                                    </select>
+                                    <button type="submit" class="editBtn btn mx-1 my-1 my-md-0">Aggiungi Ruolo</button>
+                                </form>
+                                <a asp-action="DeleteUser" asp-route-id="@user.UserId" class="btn btn-danger myBtnCart mx-1 my-1 my-md-0">Elimina Utente</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-<h3 class="mb-0">Create New Role</h3>
-<form asp-action="CreateRole" method="post">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label for="RoleName">Role Name</label>
-        <input type="text" class="form-control" id="RoleName" name="RoleName" required>
+        <h3 class="myText text-center mt-5">Gestione Ruoli</h3>
+
+        <div class="table-responsive">
+            <form asp-action="CreateRole" method="post">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label for="RoleName" class="text-white">Nome Ruolo</label>
+                    <input type="text" class="inputBar form-control" id="RoleName" name="RoleName" required>
+                </div>
+                <button type="submit" class="editBtn mt-2">Crea Ruolo</button>
+            </form>
+
+            <h3 class="myText text-center mt-3">Ruoli Esistenti</h3>
+
+            <table class="table table-bordered table-hover text-white" style="border-collapse: separate; border-spacing: 0 10px;">
+                <thead class="thead-dark">
+                    <tr style="border-bottom: 2px solid #666666;">
+                        <th class="text-center" style="padding: 15px;">Nome Ruolo</th>
+                        <th class="text-center" style="padding: 15px;">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <tr class="bg-dark" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                            <form asp-action="UpdateRole" method="post" class="d-flex justify-content-center align-items-center">
+                                @Html.AntiForgeryToken()
+                            <td class="text-center align-middle">
+                                <input type="hidden" asp-for="@role.RoleId" />
+                                <input asp-for="@role.RoleName" class="inputBar form-control" />
+                            </td>
+                            <td class="text-center align-middle">
+                                <input type="submit" value="Aggiorna" class="editBtn btn mx-1">
+                                <a asp-action="DeleteRole" asp-route-id="@role.RoleId" class="btn btn-danger myBtnCart mx-1">Elimina</a>
+                            </td>
+                            </form>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary mt-1">Create Role</button>
-</form>
-
-<h3 class="mb-0 mt-3">Existing Roles</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Role Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var role in Model.Roles)
-        {
-            <tr>
-                <form asp-action="UpdateRole" method="post">
-                    @Html.AntiForgeryToken()
-                <td>
-                    <input type="hidden" asp-for="@role.RoleId" />
-                    <input asp-for="@role.RoleName" class="form-control" />
-                </td>
-                <td>
-                    <input type="submit" value="Update" class="btn btn-primary" />
-                    <a asp-action="DeleteRole" asp-route-id="@role.RoleId" class="btn btn-danger">Delete</a>
-                </td>
-                </form>
-            </tr>
-        }
-    </tbody>
-</table>
-
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

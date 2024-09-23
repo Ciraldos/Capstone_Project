@@ -1,6 +1,7 @@
 ﻿using Capstone.Models;
 using Capstone.Models.ViewModels;
 using Capstone.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Capstone.Controllers
@@ -19,6 +20,8 @@ namespace Capstone.Controllers
             _roleSvc = roleSvc;
         }
 
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> MasterDashboard()
         {
             var users = await _userSvc.GetAllUsersAsync();
@@ -35,6 +38,7 @@ namespace Capstone.Controllers
         }
 
         // Delete User
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userSvc.DeleteUserAsync(id);
@@ -43,6 +47,7 @@ namespace Capstone.Controllers
 
         // Create Role
         [HttpPost]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRole(Role role)
         {
@@ -58,6 +63,8 @@ namespace Capstone.Controllers
         // Update Role
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> UpdateRole(Role role)
         {
             if (!ModelState.IsValid)
@@ -70,6 +77,7 @@ namespace Capstone.Controllers
         }
 
         // Delete Role
+        [Authorize(Policy = "AdminOrMasterPolicy")]
         public async Task<IActionResult> DeleteRole(int id)
         {
             await _roleSvc.DeleteRoleAsync(id);
@@ -79,6 +87,8 @@ namespace Capstone.Controllers
         // Add Role to User
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> AddRoleToUser(int userId, int roleId)
         {
             await _masterSvc.AddRoleToUserAsync(userId, roleId);
@@ -88,6 +98,8 @@ namespace Capstone.Controllers
         // Remove Role from User
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOrMasterPolicy")]
+
         public async Task<IActionResult> RemoveRoleFromUser(int userId, int roleId)
         {
             var viewModel = new MasterViewModel
