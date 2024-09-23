@@ -52,6 +52,10 @@ body {
 
 }
 
+.min-heigth{
+    min-height: calc(100vh - 74px);
+}
+
 #bg{
 
     background-image:url(/images/wallpaperflare.com_wallpaper.jpg);
@@ -463,6 +467,13 @@ body {
         background-color: #0303038b !important;
     }
 
+    input.inputBar:-webkit-autofill {
+        background-color: black !important;
+        -webkit-box-shadow: 0 0 0 1000px black inset !important;
+        color: white !important;
+        -webkit-text-fill-color: white !important;
+    }
+
 .myBtnCart {
     font-family: 'Montserrat', sans-serif !important;
     border-radius: 2em;
@@ -496,3 +507,8 @@ body {
     background-color: #393939c9;
 }
 
+.bg {
+    background-color: #5757573f;
+    border-radius: 30px;
+    padding: 2em;
+}
