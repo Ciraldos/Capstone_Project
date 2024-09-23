@@ -4,33 +4,36 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>TicketType</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TicketTypeName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TicketTypeName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TicketTypeDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TicketTypeDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.TicketTypeId">Edit</a> |
-    <a asp-action="List">Back to List</a>
+<div class="row bg-black justify-content-center px-1 p-md-5">
+    <h3 class="myText myTitle">Dettagli Tipologia Biglietto</h3>
+    <div class="col-10 col-md-6 bg my-2">
+        <div>
+            <h4 class="text-white">TicketType</h4>
+            <hr class="myText"/>
+            <dl class="row text-white">
+                <dt class="col-sm-4">
+                    Nome biglietto
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.TicketTypeName)
+                </dd>
+                <dt class="col-sm-4">
+                    Descrizione
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.TicketTypeDescription)
+                </dd>
+                <dt class="col-sm-4">
+                    Prezzo
+                </dt>
+                <dd class="col-sm-8">
+                   €@Html.DisplayFor(model => model.Price)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.TicketTypeId" class="editBtn">Modifica</a>
+            <a asp-action="List" class="eventBtn">Vai alla lista</a>
+        </div>
+    </div>
 </div>

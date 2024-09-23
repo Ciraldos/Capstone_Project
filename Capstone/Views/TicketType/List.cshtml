@@ -4,46 +4,51 @@
     ViewData["Title"] = "List";
 }
 
-<h1>List</h1>
+<div class="row bg-black justify-content-center px-1 p-md-5">
+    <div class="col-10 col-md-8 bg my-2">
+        <h3 class="myText text-center mb-4">Tipi di Biglietti</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TicketTypeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TicketTypeDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketTypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketTypeDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TicketTypeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TicketTypeId">Details</a> |
-                    <form asp-action="Delete" method="post" asp-route-id="@item.TicketTypeId">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+       
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-white" style="border-collapse: separate; border-spacing: 0 10px;">
+                <thead class="thead-dark">
+                    <tr style="border-bottom: 2px solid #666666;">
+                        <th class="text-center" style="padding: 15px; border-color: #666666;">
+                            <h4 class="fs-5">Nome Tipo</h4>
+                        </th>
+                        <th class="text-center" style="padding: 15px; border-color: #666666;">
+                            <h4 class="fs-5">Descrizione</h4>
+                        </th>
+                        <th class="text-center" style="padding: 15px; border-color: #666666;">
+                            <h4 class="fs-5">Prezzo</h4>
+                        </th>
+                        <th class="text-center" style="padding: 15px; border-color: #666666;">
+                            <h4 class="fs-5">Azioni</h4>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="bg-dark" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px; border: none;">@item.TicketTypeName</td>
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px; border: none;">@item.TicketTypeDescription</td>
+                            <td class="text-center text-white align-middle" style="padding: 20px 15px; border: none;">@item.Price €</td>
+                            <td class="text-center d-flex flex-column flex-md-row justify-content-center" style="padding: 15px; border: none;">
+                                <a asp-action="Edit" asp-route-id="@item.TicketTypeId" class="editBtn mx-1 btn btn-warning my-1 my-md-0">Modifica</a>
+                                <a asp-action="Details" asp-route-id="@item.TicketTypeId" class="eventBtn mx-1 btn my-1 my-md-0">Dettagli</a>
+                                <form asp-action="Delete" method="post" asp-route-id="@item.TicketTypeId" class="d-inline-block mx-1">
+                                    <button type="submit" class="btn-danger myBtnCart my-1 my-md-0">Elimina</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="text-end mb-3">
+                <a asp-action="Create" class="eventBtn">Crea Nuovo</a>
+            </div>
+        </div>
+    </div>
+</div>
