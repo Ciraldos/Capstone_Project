@@ -1,0 +1,48 @@
+﻿
+
+#relatiive{
+        position: relative;
+}
+
+@media(max-width: 768px) {
+    #relatiive{
+        position: static;
+        border-top: 1px solid #6666668c;
+    }
+}
+
+#fixed {
+    position: fixed;
+    top: 50%;
+    padding-left: 1.5em;
+}
+
+@media(max-width: 768px) {
+    #fixed {
+        position: static;
+        border-top: 1px solid #6666668c;
+        padding: 2em 0;
+
+    }
+}
+
+#genresCheckboxes .btn {
+    display: inline-block;
+    margin: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.eventBtn.selected {
+    background-color: #c7a70eff;
+    color: white;
+}
+
+    .form-check{
+        padding-left: 0!important;
+    }
+
+.form-check-inline {
+    
+    margin-right: 0!important;
+}

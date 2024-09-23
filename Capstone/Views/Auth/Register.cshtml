@@ -5,132 +5,160 @@
     var genres = ViewBag.Genres as List<Genre>;
 }
 
-<h1>Register</h1>
+<link rel="stylesheet" href="~/css/login.css" />
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register" method="post" enctype="multipart/form-data">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="User.Username" class="control-label"></label>
-                <input asp-for="User.Username" class="form-control" />
-                <span asp-validation-for="User.Username" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
-                <span asp-validation-for="User.Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.PasswordHash" class="control-label"></label>
-                <input asp-for="User.PasswordHash" class="form-control" />
-                <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" type="password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.Name" class="control-label"></label>
-                <input asp-for="User.Name" class="form-control" />
-                <span asp-validation-for="User.Name" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.Surname" class="control-label"></label>
-                <input asp-for="User.Surname" class="form-control" />
-                <span asp-validation-for="User.Surname" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.BirthDate" class="control-label"></label>
-                <input asp-for="User.BirthDate" class="form-control" />
-                <span asp-validation-for="User.BirthDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.Gender" class="control-label"></label>
-                <select asp-for="User.Gender" class="form-control">
-                    <option value="" selected disabled>Seleziona il genere</option>
-                    <option value="uomo">Uomo</option>
-                    <option value="donna">Donna</option>
-                    <option value="altro">Altro</option>
-                </select>
-                <span asp-validation-for="User.Gender" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.Country" class="control-label"></label>
-                <input asp-for="User.Country" class="form-control" />
-                <span asp-validation-for="User.Country" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.City" class="control-label"></label>
-                <input asp-for="User.City" class="form-control" />
-                <span asp-validation-for="User.City" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.PostalCode" class="control-label"></label>
-                <input asp-for="User.PostalCode" class="form-control" />
-                <span asp-validation-for="User.PostalCode" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="User.PhoneNum" class="control-label"></label>
-                <input asp-for="User.PhoneNum" class="form-control" />
-                <span asp-validation-for="User.PhoneNum" class="text-danger"></span>
-            </div>
-
-            <div class="form-group d-flex flex-column my-3">
-                <label asp-for="Img" class="control-label">Inserisci Immagine profilo:</label>
-                <input asp-for="Img" type="file" />
-                <span asp-validation-for="Img" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3">
-                <label class="control-label mb-1">Inserisci generi musicali preferiti:</label>
-                <div id="genresCheckboxes">
-                    @foreach (var g in genres)
-                    {
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="genre-@g.GenreId"
-                                   name="SelectedGenres"
-                                   value="@g.GenreId" />
-                            <label class="form-check-label" for="genre-@g.GenreId">
-                                @g.Name
-                            </label>
+<div class="row bg-black justify-content-center align-items-center py-md-3 p-4 px-md-0">
+    <div class="col-12 col-md-10">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7 bg px-5">
+                <h3 class="text-white">Crea il tuo account</h3>
+                <form asp-action="Register" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <h4 class="myText">Informazioni di accesso</h4>
+                        <div class="form-group col-6 mt-2">
+                            <label asp-for="User.Username" class="control-label mb-1 text-white"></label>
+                            <input asp-for="User.Username" class="form-control inputBar" />
+                            <span asp-validation-for="User.Username" class="text-danger"></span>
                         </div>
-                    }
+
+                        <div class="form-group col-6 mt-2">
+                            <label asp-for="User.Email" class="control-label mb-1 text-white"></label>
+                            <input asp-for="User.Email" class="form-control inputBar" />
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-6 mt-2">
+                            <label asp-for="User.PasswordHash" class="control-label mb-1 text-white">Password</label>
+                            <input asp-for="User.PasswordHash" class="form-control inputBar" type="password" />
+                            <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-6 mt-2">
+                            <label asp-for="ConfirmPassword" class="control-label mb-1 text-white">Conferma Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control inputBar" type="password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h4 class="myText mt-5">Dicci un po' chi sei</h4>
+                        <div class="form-group mt-2 col-6">
+                            <label asp-for="User.Name" class="control-label mb-1 text-white">Nome</label>
+                            <input asp-for="User.Name" class="form-control inputBar" />
+                            <span asp-validation-for="User.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mt-2 col-6">
+                            <label asp-for="User.Surname" class="control-label mb-1 text-white">Cognome</label>
+                            <input asp-for="User.Surname" class="form-control inputBar" />
+                            <span asp-validation-for="User.Surname" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mt-2 col-6">
+                            <label asp-for="User.BirthDate" class="control-label mb-1 text-white">Data di nascita</label>
+                            <input asp-for="User.BirthDate" class="form-control inputBar" />
+                            <span asp-validation-for="User.BirthDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mt-2 col-6">
+                            <label asp-for="User.Gender" class="control-label mb-1 text-white">Sesso</label>
+                            <select asp-for="User.Gender" class="form-control inputBar">
+                                <option value="" selected disabled>Seleziona il genere</option>
+                                <option value="uomo">Uomo</option>
+                                <option value="donna">Donna</option>
+                                <option value="altro">Altro</option>
+                            </select>
+                            <span asp-validation-for="User.Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-12 mt-2">
+                            <label asp-for="User.PhoneNum" class="control-label mb-1 text-white">N° Telefono</label>
+                            <input asp-for="User.PhoneNum" class="form-control inputBar" />
+                            <span asp-validation-for="User.PhoneNum" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h4 class="myText mt-5">Dove vivi?</h4>
+                        <div class="form-group col-6 mt-2">
+                            <label asp-for="User.Country" class="control-label mb-1 text-white">Paese</label>
+                            <input asp-for="User.Country" class="form-control inputBar" />
+                            <span asp-validation-for="User.Country" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-6 mt-2">
+                            <label asp-for="User.City" class="control-label mb-1 text-white">Città</label>
+                            <input asp-for="User.City" class="form-control inputBar" />
+                            <span asp-validation-for="User.City" class="text-danger"></span>
+                        </div>
+
+                            <div class="form-group col-12 mt-2">
+                            <label asp-for="User.PostalCode" class="control-label mb-1 text-white">CAP</label>
+                            <input asp-for="User.PostalCode" class="form-control inputBar" />
+                            <span asp-validation-for="User.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group d-flex flex-column mt-5">
+                        <label asp-for="Img" class="control-label text-white">Immagine profilo (Opzionale):</label>
+                        <input asp-for="Img" type="file" id="imgInput" class="text-white d-none" />
+                        <div class="mt-2">
+                            <!-- Collegare la label con for="imgInput" all'input -->
+                            <label for="imgInput" class="bg-danger myBtnCart ms-1" style="cursor:pointer">Scegli file</label>
+                        </div>
+
+                        <img id="imgPreview" src="#" alt="Anteprima immagine" class="img-fluid mt-2 d-none" style="height: 200px; width:200px; object-fit:contain;" />
+
+                        <span asp-validation-for="Img" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <label class="control-label mb-1 text-white">Generi musicali preferiti:</label>
+                        <!-- Contenitore con altezza limitata e scrollbar laterale -->
+                        <div id="genresCheckboxes" style="max-height: 200px; overflow-y: auto;">
+                            @foreach (var g in genres)
+                            {
+                                <!-- Trasforma i checkbox in bottoni con classe "editBtn" -->
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox"
+                                           class="form-check-input d-none"
+                                           id="genre-@g.GenreId"
+                                           name="SelectedGenres"
+                                           value="@g.GenreId" />
+                                    <label class="btn eventBtn" for="genre-@g.GenreId">
+                                        @g.Name
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="SelectedGenres" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-3 mb-2 text-end">
+                        <input type="submit" value="Registrati" class="btn-danger myBtnCart mt-3" />
+                    </div>
+                    <p class="text-white text-end" style="font-size:0.7em">
+                        *Registrandoti, dichiari di aver letto e accettato i Termini d'uso e la Privacy Policy</p>
+                </form>
+            </div>
+            <div class="col-12 col-md-5 px-3 mt-5 mt-md-0 d-flex flex-column" id="relative">
+                <div id="fixed">
+                    <h4 class="text-white">Hai già un account?</h4>
+                    <p class="text-white" style="font-size:0.9em">Accedi per approfittare delle nostre offerte esclusive e tenere traccia dei tuoi eventi.</p>
+                    <div class="mt-3">
+                        <a asp-action="Login" asp-controller="Auth" class="btn-danger myBtnCart">Accedi</a>
+                    </div>
                 </div>
-                <span asp-validation-for="SelectedGenres" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Registrati" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Login">Hai un account? Vai al login</a>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/register.js"></script>
     }
-    
 }

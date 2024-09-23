@@ -17,6 +17,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Comment comment)
         {
             // Recupera l'ID dell'utente loggato (es. da User.Identity)
@@ -36,6 +37,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditComment(Comment model)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -76,6 +78,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reply(Comment comment, int parentCommentId)
         {
             // Recupera l'ID dell'utente loggato (es. da User.Identity)
@@ -94,6 +97,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleLike(int id)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);

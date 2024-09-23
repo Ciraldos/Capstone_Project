@@ -25,7 +25,14 @@ namespace Capstone.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
             return View();
+
         }
 
         [HttpPost]
@@ -70,6 +77,10 @@ namespace Capstone.Controllers
         {
             var genres = await _genreSvc.GetAllGenresAsync();
             ViewBag.Genres = genres;
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

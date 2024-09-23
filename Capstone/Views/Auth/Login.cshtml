@@ -4,37 +4,48 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<link rel="stylesheet" href="~/css/login.css" />
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger"></div>
+<div class="row bg-black justify-content-center align-items-center p-4 p-md-0" style="height:calc(100vh - 74px)">
+    <div class="col-12 col-md-6 bg">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-5 px-3">
+            <h4 class="text-white">Accedi al tuo account</h4>
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+                    <div class="form-group mt-2">
+                        <label asp-for="Username" class="control-label mb-1 text-white"></label>
+                        <input asp-for="Username" class="form-control inputBar " />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Password" class="control-label mb-1 text-white"></label>
+                        <input asp-for="Password" type="password" class="form-control inputBar" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Accedi" class="btn-danger myBtnCart mt-3" />
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="col-2 d-none d-md-flex align-items-center" style="border-left: 1px solid #6666668c;border-right: 1px solid #6666668c">
+                <img src="/images/Logo-big.png" alt="logo" class="img-fluid"/>
             </div>
+            
+            <div class="col-12 col-md-5 px-3 mt-5 mt-md-0 d-flex flex-column justify-content-center ">
+                <h4 class="text-white">Nuovo su Ton?ght?</h4>
+                <p class="text-white my-2" style="font-size:0.8em">Registrati alla community di Ton?ght e non perderti i migliori eventi della scena musicale.</p>
+                <div class="mt-2">
 
-            <div class="form-group">
-                <input type="submit" value="Accedi" class="btn btn-primary" />
+                <a asp-action="Register" asp-controller="Auth" class="btn-danger myBtnCart  ">Registrati</a>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Register">Registrati</a>
 </div>
 
 @section Scripts {
