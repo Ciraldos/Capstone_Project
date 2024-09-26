@@ -152,5 +152,56 @@ document.getElementById('searchbarInput').addEventListener('input', function () 
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    function getCartItemsCount(id) {
+        fetch(`/Comment/getcommentlikes?commentId=${commentId}`)
+            .then(response => response.json())
+            .then(data => {
+                const spanLike = document.getElementById('spanLike-' + commentId);
+                const likeButton = document.querySelector(`.like-button[data-comment-id='${commentId}']`);
+                const icon = likeButton.querySelector('i');
 
+                if (spanLike) {
+                    spanLike.textContent = data.likeCount; // Aggiorna il numero di like
+                }
 
+                // Aggiorna la classe dell'icona
+                if (data.userHasLiked) {
+                    icon.classList.remove('myActions');
+                    icon.classList.add('text-danger');
+                } else {
+                    icon.classList.remove('text-danger');
+                    icon.classList.add('myActions');
+                }
+            })
+            .catch(error => {
+                console.error('Errore durante il recupero dei like:', error);
+            });
+    }
+});
+
+function getCartItemsCount() {
+    $.ajax({
+        url: '/Cart/GetCartItemsCount', 
+        type: 'GET',
+        success: function (response) {
+            if (response.success) { 
+                if (response.count > 0) {
+                    $('#cartItemsCount').text(response.count);
+                } else {
+                    $('#cartItemsCount').addClass('d-none');
+
+                }
+            } else {
+                console.log("Errore: " + response.message);
+            }
+        },
+        error: function (error) {
+            console.log("Errore nella richiesta AJAX", error);
+        }
+    });
+}
+
+$(document).ready(function () {
+    getCartItemsCount();
+});

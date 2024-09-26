@@ -11,5 +11,7 @@ namespace Capstone.Services.Interfaces
         Task<string> GenerateUniqueTicketNumberAsync();
         Task<List<CartItem>> GetCartItemsByUserIdAsync(int userId);
         Task<Cart> GetCartByUserIdAsync(int userId);
+        Task<int> GetCartItemsCount(int userId);
+
     }
 }

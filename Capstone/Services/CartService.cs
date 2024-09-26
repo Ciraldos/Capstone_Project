@@ -311,5 +311,14 @@ namespace Capstone.Services
             return ticketNumber;
         }
 
+        public async Task<int> GetCartItemsCount(int userId)
+        {
+            var cartItemsCount = await _ctx.CartItems
+                                           .Where(ci => ci.Cart.UserId == userId)
+                                           .SumAsync(ci => ci.Quantity);
+
+            return cartItemsCount;
+        }
+
     }
 }

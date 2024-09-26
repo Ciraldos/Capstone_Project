@@ -16,7 +16,7 @@ namespace Capstone.Services
 
         public async Task<IEnumerable<Location>> GetAllLocationsAsync()
         {
-            return await _ctx.Locations.ToListAsync();
+            return await _ctx.Locations.OrderBy(l => l.LocationName).ToListAsync();
         }
 
         public async Task<Location> GetLocationByIdAsync(int locationId)

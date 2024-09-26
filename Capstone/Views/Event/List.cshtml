@@ -50,7 +50,16 @@
                                 <a asp-action="Details" asp-controller="Event" asp-route-id="@item.EventId"><img src="@item.EventImgs.FirstOrDefault()?.FilePath" alt="img" class="event-img" /></a>
                                 <div class="event-text text-start mt-1">
                                     <h4 class="text-white">@item.Name</h4>
-                                    <small class="event-date text-white">@(item.DateFrom.Day< 10 ? "0" + item.DateFrom.Day: item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
+                                    @if(item.DateTo < DateTime.Now)
+                                    {
+                                        <span class="badge bg-danger text-red">Evento concluso</span><br />
+
+                                    }
+                                    else
+                                    {
+                                    
+                                        <small class="event-date text-white">@(item.DateFrom.Day< 10 ? "0" + item.DateFrom.Day: item.DateFrom.Day)/@(item.DateFrom.Month < 10 ? "0" + item.DateFrom.Month : item.DateFrom.Month) - @(item.DateTo.Day < 10 ? "0" + item.DateTo.Day : item.DateTo.Day)/@(item.DateTo.Month < 10 ? "0" + item.DateTo.Month : item.DateTo.Month)</small><br />
+                                    }
                                     <small class="event-location myText">@item.Location.LocationName</small>
                                     <p class="event-price text-danger fw-bolder text-end mt-1">Da €@item.TicketTypes.FirstOrDefault()?.Price</p>
                                     <p>

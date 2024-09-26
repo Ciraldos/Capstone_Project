@@ -23,7 +23,7 @@ namespace Capstone.Controllers
         {
             var userId = _userSvc.GetUserId(); // Ottieni l'ID dell'utente loggato
             await _cartSvc.AddToCartAsync(userId, eventId, ticketTypeId, quantity);
-            return RedirectToAction("List", "Event");
+            return RedirectToAction("Cart", "Cart");
         }
 
         [HttpPost]
@@ -144,5 +144,21 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetCartItemsCount()
+        {
+            var userId = _userSvc.GetUserId();
+
+
+            try
+            {
+                int count = await _cartSvc.GetCartItemsCount(userId); // Chiama il metodo nel servizio
+                return Json(new { success = true, count = count });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
     }
 }

@@ -2,26 +2,31 @@
 
 <link rel="stylesheet" href="/css/dj_details.css" />
 
-<div class="row bg-black justify-content-between py-4 px-1 p-md-5">
+<div class="row justify-content-between py-4 px-1 p-md-5 bgOverlay" id="bgEvent" style="--bg-image: url('@Model.Dj.Img');">
+    <div class="bgOverlay">
+        <div class="d-flex justify-content-between flex-column-reverse flex-md-row">
 
-    <div class="col-12 col-md-6">
-        @if (User.IsInRole("master") || User.IsInRole("admin"))
-        {
-            <div class="mb-4">
-                <a asp-action="Edit" asp-route-id="@Model.Dj.DjId" class="editBtn">Modifica</a>
-                <a class="btn-danger myBtnCart mx-1 " href="@Url.Action("Delete", "Dj", new { id = Model.Dj.DjId})">Elimina</a>
-            </div>
 
-        }
-        <a asp-action="List" class="eventBtn">Lista Artisti</a>
-        <h3 class="myTitle myText mt-3">Artista</h3>
-        <h1 class="myTitle text-white">@Model.Dj.ArtistName</h1>
-        <p class="text-white" style="font-size:0.9rem">@Model.Dj.ArtistDescription</p>
-    </div>
-    <div class="col-12 d-flex justify-content-center col-md-3 mb-3 mb-md-0">
-        <img src="@Model.Dj.Img" alt="@Model.Dj.ArtistName's Image" @* class="img-fluid"  *@id="artistImg" />
+            <div class="col-12 col-md-6">
+            @if (User.IsInRole("master") || User.IsInRole("admin"))
+            {
+                <div class="mb-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Dj.DjId" class="editBtn">Modifica</a>
+                    <a class="btn-danger myBtnCart mx-1 " href="@Url.Action("Delete", "Dj", new { id = Model.Dj.DjId})">Elimina</a>
+                </div>
 
-    </div>
+            }
+            <a asp-action="List" class="eventBtn">Lista Artisti</a>
+            <h3 class="myTitle myText mt-3">Artista</h3>
+            <h1 class="myTitle text-white">@Model.Dj.ArtistName</h1>
+            <p class="text-white" style="font-size:0.9rem">@Model.Dj.ArtistDescription</p>
+        </div>
+        <div class="col-12 d-flex justify-content-center col-md-3 mb-3 mb-md-0">
+            <img src="@Model.Dj.Img" alt="@Model.Dj.ArtistName's Image" @* class="img-fluid"  *@id="artistImg" />
+
+        </div>
+        </div>
+
     <div class="col-12">
         <h3 class="myTitle myText mt-5">Ascolta <span class="text-white fs-1">@Model.Dj.ArtistName</span></h3>
         <iframe class="mt-4" style="border-radius:12px"
@@ -35,6 +40,8 @@
         </iframe>
     </div>
 </div>
+</div>
+
 <div class="row px-1 p-md-5 ">
     <h3 class="text-dark mt-5">Eventi con @Model.Dj.ArtistName</h3>
     <div class="col-12 ">

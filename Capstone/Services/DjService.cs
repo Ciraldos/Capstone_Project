@@ -88,7 +88,7 @@ namespace Capstone.Services
 
         public async Task<List<Dj>> GetAllDjAsync()
         {
-            return await _ctx.Djs.Include(d => d.Events).ToListAsync();
+            return await _ctx.Djs.Include(d => d.Events).OrderBy(d => d.ArtistName).ToListAsync();
         }
 
         public async Task<Dj> GetDjByIdAsync(int id)

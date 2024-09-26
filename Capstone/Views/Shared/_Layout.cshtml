@@ -48,8 +48,18 @@
                              
                                 <li>
                                     <span data-bs-toggle="modal" class="nav-link d-none d-md-block  fs-4" style="cursor:pointer" data-bs-target="#searchModal">
-                                        <i class="bi bi-search text-white" ></i>
+                                        <i class="bi bi-search" ></i>
                                     </span>
+                                </li>
+                                <li class="nav-item m-0 ms-md-2">
+                                    <a asp-action="List" asp-controller="Event" class="nav-link d-none d-md-block fs-4">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item m-0 ms-md-2">
+                                    <a asp-action="List" asp-controller="Dj" class="nav-link d-none d-md-block fs-4">
+                                        <i class="bi bi-vinyl"></i>
+                                    </a>
                                 </li>
                             </ul>
 
@@ -66,7 +76,8 @@
                                         {
                                             <li class="nav-item m-0 ms-md-2">
                                                 <a asp-action="Cart" asp-controller="Cart" class="nav-link d-none d-md-block fs-4">
-                                                <i class="bi bi-cart-fill"></i>
+                                                <span id="cartItemsCount" class="text-white position-relative"></span>
+                                            <i class="bi bi-cart"></i>
                                                 </a>
                                             </li>
                                             <li>
@@ -87,6 +98,16 @@
                                             <li class="nav-item m-0 ms-md-2">
                                                 <a asp-action="Profile" asp-controller="User" class="nav-link d-none d-md-block fs-4">
                                                     <i class="bi bi-person-circle"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-action="List" asp-controller="Event" class="nav-link d-block d-md-none myTitle ">
+                                                    Eventi
+                                                </a>
+                                            </li>
+                                            <li>
+                                        <a asp-action="List" asp-controller="Dj" class="nav-link d-block d-md-none myTitle ">
+                                                    Artisti
                                                 </a>
                                             </li>
                                             <li>
@@ -115,7 +136,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a asp-action="Profile" asp-controller="User" class="nav-link d-block d-md-none myTitle">
+                                                <a asp-action="Login" asp-controller="Auth" class="nav-link d-block d-md-none myTitle">
                                                     Accedi
                                                 </a>
                                             </li>
