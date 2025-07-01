@@ -2,6 +2,9 @@
 
 # 🎉 Event Management Platform for Clubs and Discotheques
 
+## 📹 Demo Video
+Check out the 🎯 [presentation video on LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7254515732070236160/) to see the project in action!
+
 ## 📋 Project Description
 This project involves the development of an event management platform for clubs and discotheques. Users will be able to register, explore an event catalog, purchase tickets, and manage their profiles. The application will feature a user-friendly interface and provide essential functionalities for event management, reviews, and promotions.
 
