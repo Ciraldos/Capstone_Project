@@ -1,6 +1,9 @@
 [🏴 ENGLISH VERSION](README.en.md)
 # 🎉 Piattaforma di Gestione Eventi per Club e Discoteche
 
+## 📹 Video dimostrativo
+Guarda il 🎯 [video di presentazione su LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7254515732070236160/) per vedere il progetto in azione!
+
 ## 📋 Descrizione del Progetto
 Il progetto prevede lo sviluppo di una piattaforma di gestione eventi per club e discoteche. Gli utenti potranno registrarsi, esplorare un catalogo di eventi, acquistare biglietti e gestire il proprio profilo. L'applicazione sarà caratterizzata da un'interfaccia user-friendly e offrirà funzionalità essenziali per la gestione degli eventi, delle recensioni e della promozione.
 
